@@ -1,3 +1,4 @@
 <resources>
     <string name="app_name">MyJavaApplication</string>
+    <string name="default_web_client_id">696564922362-bq59t202m78ks2gg8inegivf5e5qr8ic.apps.googleusercontent.com</string>
 </resources>
