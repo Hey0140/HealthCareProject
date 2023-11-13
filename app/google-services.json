@@ -1,0 +1,47 @@
+{
+  "project_info": {
+    "project_number": "696564922362",
+    "project_id": "pet-healthcare-45a41",
+    "storage_bucket": "pet-healthcare-45a41.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:696564922362:android:6f11e2759d21f4bb205643",
+        "android_client_info": {
+          "package_name": "com.example.myjavaapplication"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "696564922362-ck7l09qqh2icpsltpfaoc2t0cvtirn2j.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "com.example.myjavaapplication",
+            "certificate_hash": "e04bcf874364b9ef18453e5d89388f073fbb027f"
+          }
+        },
+        {
+          "client_id": "696564922362-bq59t202m78ks2gg8inegivf5e5qr8ic.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyA27_i0r8xB1NCuAo6Km7YztYA_jYbQYQ0"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "696564922362-bq59t202m78ks2gg8inegivf5e5qr8ic.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
