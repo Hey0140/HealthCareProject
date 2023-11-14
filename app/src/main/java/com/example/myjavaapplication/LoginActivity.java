@@ -27,7 +27,6 @@ import com.google.firebase.auth.FirebaseUser;
 import com.google.firebase.auth.GoogleAuthProvider;
 
 public class LoginActivity extends AppCompatActivity implements View.OnClickListener {
-
     private FirebaseAuth auth;
     private FirebaseAuth.AuthStateListener authListener;
     private GoogleSignInOptions gso;
@@ -38,10 +37,16 @@ public class LoginActivity extends AppCompatActivity implements View.OnClickList
     EditText idText, pwText;
     Button loginButton, googleButton;
 
+    String email = "";
+    String password = "";
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.login_page);
+        email = "";
+        password = "";
+
         idText = findViewById(R.id.loginId);
         pwText = findViewById(R.id.loginPassword);
         googleButton = findViewById(R.id.loginSnsButton);
@@ -63,7 +68,9 @@ public class LoginActivity extends AppCompatActivity implements View.OnClickList
     @Override
     public void onClick(View v) {
         if (v == loginButton) {
-            if(!idText.getText().equals("") && !pwText.getText().equals("")){
+            email = idText.getText().toString();
+            password = pwText.getText().toString();
+            if(email.length() > 0 && password.length() >= 6){
                 auth.signInWithEmailAndPassword(idText.getText().toString(), pwText.getText().toString())
                         .addOnCompleteListener(this, new OnCompleteListener<AuthResult>() {
                             @Override
@@ -87,7 +94,9 @@ public class LoginActivity extends AppCompatActivity implements View.OnClickList
         if(v == googleButton) {
             gsa = GoogleSignIn.getLastSignedInAccount(LoginActivity.this);
             if(gsa != null){
-                Toast.makeText(this, "이미 로그인 되어있습니다.", Toast.LENGTH_LONG).show();
+                Toast.makeText(this, "로그인 성공", Toast.LENGTH_LONG).show();
+                Intent intent = new Intent(getApplicationContext(), MainActivity.class);
+                startActivity(intent);
             }
             else{
                 Intent intent = gsc.getSignInIntent();
@@ -145,5 +154,12 @@ public class LoginActivity extends AppCompatActivity implements View.OnClickList
                         Toast.makeText(LoginActivity.this, "로그인 실패", Toast.LENGTH_SHORT).show();
                     }
                 });
+    }
+
+    @Override
+    protected void onRestart() {
+        super.onRestart();
+        idText.setText(email);
+        pwText.setText(password);
     }
 }
