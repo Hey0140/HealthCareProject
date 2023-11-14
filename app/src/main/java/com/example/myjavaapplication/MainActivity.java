@@ -11,14 +11,25 @@ import androidx.fragment.app.FragmentTransaction;
 
 import android.app.Activity;
 import android.content.Intent;
+import android.media.MediaPlayer;
+import android.util.Log;
 import android.view.MenuItem;
 import android.view.View;
 import android.widget.*;
 import android.os.Bundle;
 
+import com.google.android.gms.tasks.OnCompleteListener;
+import com.google.android.gms.tasks.Task;
 import com.google.android.material.bottomnavigation.BottomNavigationView;
+import com.google.firebase.firestore.DocumentSnapshot;
+import com.google.firebase.firestore.FirebaseFirestore;
+import com.google.firebase.firestore.QueryDocumentSnapshot;
+import com.google.firebase.firestore.QuerySnapshot;
 
 import org.jetbrains.annotations.Nullable;
+
+import java.util.Map;
+import java.util.Objects;
 
 public class MainActivity extends AppCompatActivity {
     private FragmentManager fmanager = getSupportFragmentManager();
@@ -26,12 +37,15 @@ public class MainActivity extends AppCompatActivity {
     private PetmanageFragment petmanageFragment = new PetmanageFragment();
     private CommunityFragment communityFragment = new CommunityFragment();
     private MypageFragment mypageFragment = new MypageFragment();
+    String email= "";
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.main_page);
 
+        Intent intent = new Intent(this.getIntent());
+        email = intent.getStringExtra("email");
         FragmentTransaction transaction = fmanager.beginTransaction();
 
         transaction.replace(R.id.mainFragmentLayout, homeFragment).commitAllowingStateLoss();

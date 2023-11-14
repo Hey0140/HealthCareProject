@@ -3,12 +3,16 @@ package com.example.myjavaapplication;
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
 
+import android.app.Activity;
+import android.content.Context;
 import android.content.Intent;
+import android.graphics.Paint;
 import android.net.Uri;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.View;
 import android.widget.Button;
+import android.widget.CheckBox;
 import android.widget.EditText;
 import android.widget.TextView;
 import android.widget.Toast;
@@ -25,6 +29,8 @@ import com.google.firebase.auth.AuthResult;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
 import com.google.firebase.auth.GoogleAuthProvider;
+import com.google.firebase.firestore.DocumentSnapshot;
+import com.google.firebase.firestore.FirebaseFirestore;
 
 public class LoginActivity extends AppCompatActivity implements View.OnClickListener {
     private FirebaseAuth auth;
@@ -32,10 +38,19 @@ public class LoginActivity extends AppCompatActivity implements View.OnClickList
     private GoogleSignInOptions gso;
     private GoogleSignInAccount gsa;
     private GoogleSignInClient gsc;
+    private int professional;
+    private boolean GOOGLE;
     private final int RC_SIGN_IN = 9001;
+    private final int BASIC_MEMBER = 100;
+    private final int PROFESSIONAL = 200;
 
+
+    CheckBox proCheckBox;
+    CheckBox memCheckBox;
     EditText idText, pwText;
     Button loginButton, googleButton;
+    TextView loginJoin;
+    TextView loginFindOrPw;
 
     String email = "";
     String password = "";
@@ -46,11 +61,17 @@ public class LoginActivity extends AppCompatActivity implements View.OnClickList
         setContentView(R.layout.login_page);
         email = "";
         password = "";
+        professional = 0;
+        GOOGLE = false;
 
         idText = findViewById(R.id.loginId);
         pwText = findViewById(R.id.loginPassword);
         googleButton = findViewById(R.id.loginSnsButton);
         loginButton = findViewById(R.id.loginButton);
+        proCheckBox = findViewById(R.id.professCheckBox);
+        memCheckBox = findViewById(R.id.basicCheckBox);
+        loginJoin = findViewById(R.id.loginJoin);
+        loginFindOrPw = findViewById(R.id.loginFindIdOrPw);
 
         auth = FirebaseAuth.getInstance();
 
@@ -62,46 +83,81 @@ public class LoginActivity extends AppCompatActivity implements View.OnClickList
 
         loginButton.setOnClickListener(this);
         googleButton.setOnClickListener(this);
+        proCheckBox.setOnClickListener(this);
+        memCheckBox.setOnClickListener(this);
+        loginJoin.setOnClickListener(this);
+        loginFindOrPw.setOnClickListener(this);
     }
 
 
     @Override
     public void onClick(View v) {
+        if(v == proCheckBox){
+            professional = PROFESSIONAL;
+            onCheckBox(professional);
+        }
+        if(v== memCheckBox){
+            professional = BASIC_MEMBER;
+            onCheckBox(professional);
+        }
         if (v == loginButton) {
             email = idText.getText().toString();
             password = pwText.getText().toString();
-            if(email.length() > 0 && password.length() >= 6){
+            if(email.length() > 0 && password.length() >= 6 && professional > 0){
                 auth.signInWithEmailAndPassword(idText.getText().toString(), pwText.getText().toString())
                         .addOnCompleteListener(this, new OnCompleteListener<AuthResult>() {
                             @Override
                             public void onComplete(@NonNull Task<AuthResult> task) {
                                 if(task.isSuccessful()){
-                                    Toast.makeText(LoginActivity.this, "로그인 성공", Toast.LENGTH_LONG).show();
-                                    Intent intent = new Intent(getApplicationContext(), MainActivity.class);
-                                    startActivity(intent);
+                                    FirebaseUser user = auth.getCurrentUser();
+                                    if(user.isEmailVerified()){
+                                        Toast.makeText(LoginActivity.this, "로그인 성공", Toast.LENGTH_LONG).show();
+                                        Intent intent = new Intent(getApplicationContext(), MainActivity.class);
+                                        intent.putExtra("email", email);
+                                        startActivity(intent);
+                                    }
+                                    else{
+                                        Toast.makeText(LoginActivity.this, "이메일 인증 중입니다. 이메일을 인증해주세요.", Toast.LENGTH_LONG).show();
+                                    }
                                 }
                                 else{
                                     Toast.makeText(LoginActivity.this, "아이디 또는 패스워드가 일치하지 않습니다.", Toast.LENGTH_LONG).show();
                                 }
                             }
                         });
-            }
-            else{
+            } else if (professional == 0) {
+                Toast.makeText(LoginActivity.this, "의사 회원인지 일반 회원인지 선택해주세요.", Toast.LENGTH_LONG).show();
+            } else{
                 Toast.makeText(LoginActivity.this, "아이디 또는 비밀번호를 입력해주세요.", Toast.LENGTH_LONG).show();
             }
 
         }
         if(v == googleButton) {
-            gsa = GoogleSignIn.getLastSignedInAccount(LoginActivity.this);
-            if(gsa != null){
-                Toast.makeText(this, "로그인 성공", Toast.LENGTH_LONG).show();
-                Intent intent = new Intent(getApplicationContext(), MainActivity.class);
-                startActivity(intent);
+            if(professional > 0){
+                gsa = GoogleSignIn.getLastSignedInAccount(LoginActivity.this);
+                if(gsa != null){
+                    Toast.makeText(this, "로그인 성공", Toast.LENGTH_LONG).show();
+                    GOOGLE = true;
+                    Intent intent = new Intent(getApplicationContext(), MainActivity.class);
+                    email = gsa.getEmail();
+                    intent.putExtra("email", email);
+                    startActivity(intent);
+                }
+                else{
+                    Intent intent = gsc.getSignInIntent();
+                    startActivityForResult(intent, RC_SIGN_IN);
+                }
             }
-            else{
-                Intent intent = gsc.getSignInIntent();
-                startActivityForResult(intent, RC_SIGN_IN);
+            else {
+                Toast.makeText(LoginActivity.this, "의사 회원인지 일반 회원인지 선택해주세요.", Toast.LENGTH_LONG).show();
             }
+        }
+        if(v == loginJoin){
+            Context context = LoginActivity.this;
+            goNextActivity(context, JoinActivity.class);
+        }
+        if(v == loginFindOrPw){
+
         }
     }
 
@@ -123,16 +179,10 @@ public class LoginActivity extends AppCompatActivity implements View.OnClickList
                 String personName = gsia.getDisplayName();
                 String personGivenName = gsia.getGivenName();
                 String personFamilyName = gsia.getFamilyName();
-                String personEmail = gsia.getEmail();
+                String email = gsia.getEmail();
                 String personId = gsia.getId();
                 Uri personPhoto = gsia.getPhotoUrl();
 
-                Log.d("google", "handleSignInResult:personName "+personName);
-                Log.d("google", "handleSignInResult:personGivenName "+personGivenName);
-                Log.d("google", "handleSignInResult:personEmail "+personEmail);
-                Log.d("google", "handleSignInResult:personId "+personId);
-                Log.d("google", "handleSignInResult:personFamilyName "+personFamilyName);
-                Log.d("google", "handleSignInResult:personPhoto "+personPhoto);
             }
         } catch (ApiException e) {
             Log.e("google", "signInResult:failed code=" + e.getStatusCode());
@@ -159,7 +209,37 @@ public class LoginActivity extends AppCompatActivity implements View.OnClickList
     @Override
     protected void onRestart() {
         super.onRestart();
-        idText.setText(email);
-        pwText.setText(password);
+        if(GOOGLE == true){
+            onCheckBox(professional);
+            GOOGLE = false;
+        }
+        else{
+            idText.setText(email);
+            pwText.setText(password);
+            onCheckBox(professional);
+            GOOGLE = false;
+        }
     }
+
+    void onCheckBox(int mem){
+        if(mem == PROFESSIONAL){
+            memCheckBox.setChecked(false);
+            proCheckBox.setChecked(true);
+        }
+        else if(mem == BASIC_MEMBER){
+            memCheckBox.setChecked(true);
+            proCheckBox.setChecked(false);
+        }else{
+            memCheckBox.setChecked(false);
+            proCheckBox.setChecked(false);
+        }
+    }
+
+    public static void goNextActivity(Context context, Class<? extends Activity> activityClass) {
+        Intent intent = new Intent(context, activityClass);
+        context.startActivity(intent);
+    }
+
+
 }
+
