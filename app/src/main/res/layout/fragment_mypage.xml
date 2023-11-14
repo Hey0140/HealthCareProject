@@ -1,0 +1,271 @@
+<?xml version="1.0" encoding="utf-8"?>
+<FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    tools:context=".MypageFragment">
+
+    <androidx.constraintlayout.widget.ConstraintLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent">
+
+        <TextView
+                android:id="@+id/mypageTitle"
+                android:layout_width="match_parent"
+                android:layout_height="30dp"
+                app:layout_constraintLeft_toLeftOf="parent"
+                app:layout_constraintTop_toTopOf="parent"
+                android:layout_marginLeft="20dp"
+                android:layout_marginTop="20dp"
+                android:text="마이페이지"
+                android:textSize="20dp"/>
+
+        <TextView
+            android:id="@+id/mypageProfileInfoTitle"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            app:layout_constraintTop_toBottomOf="@id/mypageTitle"
+            app:layout_constraintLeft_toLeftOf="@id/mypageTitle"
+            android:layout_marginTop="20dp"
+            android:text="프로필정보"
+            android:textSize="20dp"
+            />
+
+        <androidx.constraintlayout.widget.ConstraintLayout
+            android:id="@+id/mypageLayout"
+            android:layout_width="match_parent"
+            android:layout_height="130dp"
+            app:layout_constraintTop_toBottomOf="@id/mypageProfileInfoTitle"
+            >
+
+            <View
+                android:id="@+id/profileView"
+                android:layout_width="70dp"
+                android:layout_height="70dp"
+                app:layout_constraintBottom_toBottomOf="parent"
+                app:layout_constraintTop_toTopOf="parent"
+                app:layout_constraintLeft_toLeftOf="parent"
+                android:layout_marginLeft="50dp"
+                android:backgroundTint="@color/whitegray"
+                android:background="@drawable/myprofile_circle"
+                />
+
+            <ImageView
+                android:id="@+id/profileImage"
+                android:layout_width="40dp"
+                android:layout_height="40dp"
+                app:layout_constraintBottom_toBottomOf="parent"
+                app:layout_constraintTop_toTopOf="parent"
+                app:layout_constraintLeft_toLeftOf="@id/profileView"
+                app:layout_constraintRight_toRightOf="@id/profileView"
+                android:background="@drawable/mypage_icon"
+                android:backgroundTint="@color/middlegray"
+                />
+
+            <androidx.appcompat.widget.AppCompatButton
+                android:id="@+id/logoutButton"
+                android:layout_width="100dp"
+                android:layout_height="50dp"
+                app:layout_constraintRight_toRightOf="parent"
+                app:layout_constraintTop_toTopOf="parent"
+                app:layout_constraintBottom_toBottomOf="parent"
+                android:layout_marginRight="50dp"
+                android:text="logout"
+                android:background="@drawable/logout_button_box"
+                />
+
+        </androidx.constraintlayout.widget.ConstraintLayout>
+        <TextView
+            android:id="@+id/petInfoTitle"
+            android:layout_width="match_parent"
+            android:layout_height="50dp"
+            app:layout_constraintTop_toBottomOf="@id/mypageLayout"
+            app:layout_constraintLeft_toLeftOf="parent"
+            android:text="반려견 정보"
+            android:textSize="20dp"
+            android:layout_marginLeft="20dp"
+            />
+        <androidx.recyclerview.widget.RecyclerView
+            android:id="@+id/myPetInfoRecyclerView"
+            android:layout_width="match_parent"
+            android:layout_height="100dp"
+            app:layout_constraintTop_toBottomOf="@id/petInfoTitle"
+            android:layout_marginLeft="10dp"
+            android:layout_marginRight="10dp"
+            android:scrollbarSize="2dp"
+            android:scrollbars="horizontal"
+            android:scrollbarFadeDuration="0"
+            android:orientation="horizontal">
+
+        </androidx.recyclerview.widget.RecyclerView>
+        <TextView
+            android:layout_width="match_parent"
+            android:layout_height="40dp"
+            android:text="나의 활동"
+            android:textSize="20dp"
+            app:layout_constraintBottom_toTopOf="@id/mypageConstraintLayout"
+            android:layout_marginBottom="10dp"
+            android:layout_marginLeft="20dp"
+            />
+
+        <androidx.constraintlayout.widget.ConstraintLayout
+            android:id="@+id/mypageConstraintLayout"
+            android:layout_width="match_parent"
+            android:layout_height="120dp"
+            app:layout_constraintBottom_toTopOf="@id/walkRecordButton"
+            >
+
+            <androidx.constraintlayout.widget.ConstraintLayout
+                android:layout_width="130dp"
+                android:layout_height="match_parent"
+                app:layout_constraintRight_toLeftOf="@id/myPetFriendLayout">
+                <TextView
+                    android:id="@+id/myOwnPostTitle"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    app:layout_constraintLeft_toLeftOf="parent"
+                    app:layout_constraintRight_toRightOf="parent"
+                    app:layout_constraintTop_toTopOf="parent"
+                    android:layout_marginTop="30dp"
+                    android:text="나의 게시글"
+                    android:textSize="15dp"
+                    />
+
+                <TextView
+                    android:id="@+id/myOwnPost"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    app:layout_constraintLeft_toLeftOf="parent"
+                    app:layout_constraintRight_toRightOf="parent"
+                    app:layout_constraintTop_toBottomOf="@id/myOwnPostTitle"
+                    android:layout_marginTop="10dp"
+                    android:text="0"
+                    android:textSize="15dp"
+                    />
+            </androidx.constraintlayout.widget.ConstraintLayout>
+            <View
+                android:layout_width="1dp"
+                android:layout_height="90dp"
+                app:layout_constraintRight_toLeftOf="@id/myPetFriendLayout"
+                app:layout_constraintTop_toTopOf="parent"
+                android:layout_marginTop="20dp"
+                android:background="@drawable/mypage_horizontal_line"/>
+
+            <androidx.constraintlayout.widget.ConstraintLayout
+                android:layout_width="130dp"
+                android:layout_height="match_parent"
+                android:id="@+id/myPetFriendLayout"
+                app:layout_constraintLeft_toLeftOf="parent"
+                app:layout_constraintRight_toRightOf="parent"
+                >
+                <TextView
+                    android:id="@+id/myPetFriendTitle"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    app:layout_constraintLeft_toLeftOf="parent"
+                    app:layout_constraintRight_toRightOf="parent"
+                    app:layout_constraintTop_toTopOf="parent"
+                    android:layout_marginTop="30dp"
+                    android:text="내 펫친구 "
+                    android:textSize="15dp"
+                    />
+
+                <TextView
+                    android:id="@+id/myPetFriend"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    app:layout_constraintLeft_toLeftOf="parent"
+                    app:layout_constraintRight_toRightOf="parent"
+                    app:layout_constraintTop_toBottomOf="@id/myPetFriendTitle"
+                    android:layout_marginTop="10dp"
+                    android:text="0"
+                    android:textSize="15dp"
+                    />
+            </androidx.constraintlayout.widget.ConstraintLayout>
+            <View
+                android:layout_width="1dp"
+                android:layout_height="90dp"
+                app:layout_constraintLeft_toRightOf="@id/myPetFriendLayout"
+                app:layout_constraintTop_toTopOf="parent"
+                android:layout_marginTop="20dp"
+                android:background="@drawable/mypage_horizontal_line"/>
+
+            <androidx.constraintlayout.widget.ConstraintLayout
+                android:layout_width="130dp"
+                android:layout_height="match_parent"
+                app:layout_constraintLeft_toRightOf="@id/myPetFriendLayout">
+
+                <TextView
+                    android:id="@+id/myLetterTitle"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    app:layout_constraintLeft_toLeftOf="parent"
+                    app:layout_constraintRight_toRightOf="parent"
+                    app:layout_constraintTop_toTopOf="parent"
+                    android:layout_marginTop="30dp"
+                    android:text="쪽지함"
+                    android:textSize="15dp"
+                    />
+
+                <TextView
+                    android:id="@+id/myLetter"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    app:layout_constraintLeft_toLeftOf="parent"
+                    app:layout_constraintRight_toRightOf="parent"
+                    app:layout_constraintTop_toBottomOf="@id/myLetterTitle"
+                    android:layout_marginTop="10dp"
+                    android:text="0"
+                    android:textSize="15dp"
+                    />
+            </androidx.constraintlayout.widget.ConstraintLayout>
+
+        </androidx.constraintlayout.widget.ConstraintLayout>
+        <View
+            android:layout_width="match_parent"
+            android:layout_height="1dp"
+            app:layout_constraintBottom_toTopOf="@id/walkRecordButton"
+            android:background="@drawable/mypage_vertical_line"/>
+
+        <androidx.constraintlayout.widget.ConstraintLayout
+            android:layout_width="match_parent"
+            android:layout_height="60dp"
+            app:layout_constraintBottom_toTopOf="@id/petStatusButton"
+            android:id="@+id/walkRecordButton">
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                app:layout_constraintTop_toTopOf="parent"
+                app:layout_constraintBottom_toBottomOf="parent"
+                app:layout_constraintLeft_toLeftOf="parent"
+                android:layout_marginLeft="20dp"
+                android:text="산책 기록 보기"
+                android:textSize="20dp"/>
+        </androidx.constraintlayout.widget.ConstraintLayout>
+
+        <View
+            android:layout_width="match_parent"
+            android:layout_height="1dp"
+            app:layout_constraintBottom_toTopOf="@id/petStatusButton"
+            android:background="@drawable/mypage_vertical_line"/>
+
+        <androidx.constraintlayout.widget.ConstraintLayout
+            android:layout_width="match_parent"
+            android:layout_height="60dp"
+            app:layout_constraintBottom_toBottomOf="parent"
+            android:id="@+id/petStatusButton">
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                app:layout_constraintTop_toTopOf="parent"
+                app:layout_constraintBottom_toBottomOf="parent"
+                app:layout_constraintLeft_toLeftOf="parent"
+                android:layout_marginLeft="20dp"
+                android:text="반려동물 상태 보기"
+                android:textSize="20dp"/>
+        </androidx.constraintlayout.widget.ConstraintLayout>
+
+    </androidx.constraintlayout.widget.ConstraintLayout>
+</FrameLayout>
