@@ -1,0 +1,33 @@
+<?xml version="1.0" encoding="utf-8"?>
+<menu xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto">
+    <item
+        android:id="@+id/homeIcon"
+        android:enabled="true"
+        android:title="home"
+        android:icon="@drawable/home_icon"
+        app:showAsAction="always"
+        />
+    <item
+        android:id="@+id/petIcon"
+        android:enabled="true"
+        android:title="pet"
+        android:iconTint="@color/deepgray"
+        android:icon="@drawable/pet_icon"
+        app:showAsAction="always"
+        />
+    <item
+        android:id="@+id/communityIcon"
+        android:enabled="true"
+        android:title="community"
+        android:icon="@drawable/community_icon"
+        app:showAsAction="always"
+        />
+    <item
+        android:id="@+id/mypageIcon"
+        android:enabled="true"
+        android:title="mypage"
+        android:icon="@drawable/mypage_icon"
+        app:showAsAction="always"
+        />
+</menu>
