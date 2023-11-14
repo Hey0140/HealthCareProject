@@ -3,7 +3,10 @@ package com.example.myjavaapplication;
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
 
+import android.app.Activity;
+import android.content.Context;
 import android.content.Intent;
+import android.graphics.Paint;
 import android.net.Uri;
 import android.os.Bundle;
 import android.util.Log;
@@ -11,6 +14,7 @@ import android.view.View;
 import android.widget.Button;
 import android.widget.CheckBox;
 import android.widget.EditText;
+import android.widget.TextView;
 import android.widget.Toast;
 
 import com.google.android.gms.auth.api.signin.GoogleSignIn;
@@ -45,6 +49,8 @@ public class LoginActivity extends AppCompatActivity implements View.OnClickList
     CheckBox memCheckBox;
     EditText idText, pwText;
     Button loginButton, googleButton;
+    TextView loginJoin;
+    TextView loginFindOrPw;
 
     String email = "";
     String password = "";
@@ -64,6 +70,8 @@ public class LoginActivity extends AppCompatActivity implements View.OnClickList
         loginButton = findViewById(R.id.loginButton);
         proCheckBox = findViewById(R.id.professCheckBox);
         memCheckBox = findViewById(R.id.basicCheckBox);
+        loginJoin = findViewById(R.id.loginJoin);
+        loginFindOrPw = findViewById(R.id.loginFindIdOrPw);
 
         auth = FirebaseAuth.getInstance();
 
@@ -77,6 +85,8 @@ public class LoginActivity extends AppCompatActivity implements View.OnClickList
         googleButton.setOnClickListener(this);
         proCheckBox.setOnClickListener(this);
         memCheckBox.setOnClickListener(this);
+        loginJoin.setOnClickListener(this);
+        loginFindOrPw.setOnClickListener(this);
     }
 
 
@@ -99,10 +109,16 @@ public class LoginActivity extends AppCompatActivity implements View.OnClickList
                             @Override
                             public void onComplete(@NonNull Task<AuthResult> task) {
                                 if(task.isSuccessful()){
-                                    Toast.makeText(LoginActivity.this, "로그인 성공", Toast.LENGTH_LONG).show();
-                                    Intent intent = new Intent(getApplicationContext(), MainActivity.class);
-                                    intent.putExtra("email", email);
-                                    startActivity(intent);
+                                    FirebaseUser user = auth.getCurrentUser();
+                                    if(user.isEmailVerified()){
+                                        Toast.makeText(LoginActivity.this, "로그인 성공", Toast.LENGTH_LONG).show();
+                                        Intent intent = new Intent(getApplicationContext(), MainActivity.class);
+                                        intent.putExtra("email", email);
+                                        startActivity(intent);
+                                    }
+                                    else{
+                                        Toast.makeText(LoginActivity.this, "이메일 인증 중입니다. 이메일을 인증해주세요.", Toast.LENGTH_LONG).show();
+                                    }
                                 }
                                 else{
                                     Toast.makeText(LoginActivity.this, "아이디 또는 패스워드가 일치하지 않습니다.", Toast.LENGTH_LONG).show();
@@ -135,6 +151,13 @@ public class LoginActivity extends AppCompatActivity implements View.OnClickList
             else {
                 Toast.makeText(LoginActivity.this, "의사 회원인지 일반 회원인지 선택해주세요.", Toast.LENGTH_LONG).show();
             }
+        }
+        if(v == loginJoin){
+            Context context = LoginActivity.this;
+            goNextActivity(context, JoinActivity.class);
+        }
+        if(v == loginFindOrPw){
+
         }
     }
 
@@ -211,5 +234,12 @@ public class LoginActivity extends AppCompatActivity implements View.OnClickList
             proCheckBox.setChecked(false);
         }
     }
+
+    public static void goNextActivity(Context context, Class<? extends Activity> activityClass) {
+        Intent intent = new Intent(context, activityClass);
+        context.startActivity(intent);
+    }
+
+
 }
 

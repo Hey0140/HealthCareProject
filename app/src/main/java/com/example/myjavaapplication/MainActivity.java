@@ -46,7 +46,6 @@ public class MainActivity extends AppCompatActivity {
 
         Intent intent = new Intent(this.getIntent());
         email = intent.getStringExtra("email");
-
         FragmentTransaction transaction = fmanager.beginTransaction();
 
         transaction.replace(R.id.mainFragmentLayout, homeFragment).commitAllowingStateLoss();

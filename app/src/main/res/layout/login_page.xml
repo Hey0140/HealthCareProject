@@ -187,13 +187,6 @@
         android:background="@drawable/login_sns_button_box"
         android:text="google"
         />
-
-
-
-
-
-
-
-
+    
 
 </androidx.constraintlayout.widget.ConstraintLayout>
