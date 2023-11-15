@@ -35,7 +35,7 @@
         <androidx.constraintlayout.widget.ConstraintLayout
             android:id="@+id/mypageLayout"
             android:layout_width="match_parent"
-            android:layout_height="130dp"
+            android:layout_height="100dp"
             app:layout_constraintTop_toBottomOf="@id/mypageProfileInfoTitle"
             >
 
@@ -102,7 +102,7 @@
         <TextView
             android:id="@+id/petInfoTitle"
             android:layout_width="match_parent"
-            android:layout_height="50dp"
+            android:layout_height="30dp"
             app:layout_constraintTop_toBottomOf="@id/mypageLayout"
             app:layout_constraintLeft_toLeftOf="parent"
             android:text="반려견 정보"
