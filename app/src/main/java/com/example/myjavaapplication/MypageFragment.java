@@ -80,7 +80,9 @@ public class MypageFragment extends Fragment implements View.OnClickListener {
         userData = (UserMedia) this.getArguments().getSerializable("userData");
 
         if(userData.getImage() != null){
-            profileImage.setImageURI(Uri.parse(userData.getImage()));
+            if(!userData.getImage().equals("")){
+                profileImage.setImageURI(Uri.parse(userData.getImage()));
+            }
         }
         profileName.setText(userData.getName());
         profileEmail.setText(userData.getEmail());
