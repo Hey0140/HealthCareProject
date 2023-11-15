@@ -116,6 +116,7 @@
             app:layout_constraintTop_toBottomOf="@id/petInfoTitle"
             android:layout_marginLeft="10dp"
             android:layout_marginRight="10dp"
+            android:layout_marginTop="10dp"
             android:scrollbarSize="2dp"
             android:scrollbars="horizontal"
             android:scrollbarFadeDuration="0"
@@ -124,7 +125,7 @@
         </androidx.recyclerview.widget.RecyclerView>
         <TextView
             android:layout_width="match_parent"
-            android:layout_height="40dp"
+            android:layout_height="30dp"
             android:text="나의 활동"
             android:textSize="20dp"
             app:layout_constraintBottom_toTopOf="@id/mypageConstraintLayout"
