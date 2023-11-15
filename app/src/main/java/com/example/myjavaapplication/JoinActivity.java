@@ -89,7 +89,7 @@ public class JoinActivity extends AppCompatActivity implements View.OnClickListe
                                 @Override
                                 public void onComplete(@NonNull Task<AuthResult> task) {
                                     if(task.isSuccessful()){
-                                        signIn(email, pw);
+                                        Log.w("click", "signInWithEmail:success");
                                     }
                                     else{
                                         Toast.makeText(JoinActivity.this, "이미 존재하는 계정입니다.", Toast.LENGTH_SHORT).show();
@@ -114,6 +114,7 @@ public class JoinActivity extends AppCompatActivity implements View.OnClickListe
             }
         }
     }
+
     public void signIn(String em, String pa){
         auth.signInWithEmailAndPassword(em, pa)
                 .addOnCompleteListener(this, new OnCompleteListener<AuthResult>() {
