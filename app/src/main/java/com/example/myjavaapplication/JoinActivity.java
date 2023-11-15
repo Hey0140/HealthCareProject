@@ -3,6 +3,7 @@ package com.example.myjavaapplication;
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
 
+import android.app.ProgressDialog;
 import android.graphics.Paint;
 import android.os.Bundle;
 import android.util.Log;
@@ -13,12 +14,19 @@ import android.widget.Toast;
 import android.widget.ToggleButton;
 
 import com.google.android.gms.tasks.OnCompleteListener;
+import com.google.android.gms.tasks.OnFailureListener;
+import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.android.gms.tasks.Task;
 import com.google.firebase.auth.ActionCodeSettings;
 import com.google.firebase.auth.AuthResult;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
+import com.google.firebase.database.DatabaseReference;
+import com.google.firebase.database.FirebaseDatabase;
+import com.google.firebase.firestore.FirebaseFirestore;
 import com.google.firebase.ktx.Firebase;
+
+import java.util.HashMap;
 
 public class JoinActivity extends AppCompatActivity implements View.OnClickListener {
     private FirebaseAuth auth;
@@ -38,6 +46,7 @@ public class JoinActivity extends AppCompatActivity implements View.OnClickListe
     String email;
     String pw;
     String pwCheck;
+    String uid;
     boolean professional;
 
     @Override
@@ -121,6 +130,51 @@ public class JoinActivity extends AppCompatActivity implements View.OnClickListe
         }
     }
 
+    public void createUser(String pa_email, String pa_password){
+        auth.createUserWithEmailAndPassword(pa_email, pa_password)
+                .addOnCompleteListener(this, new OnCompleteListener<AuthResult>() {
+                    @Override
+                    public void onComplete(@NonNull Task<AuthResult> task) {
+                        if(task.isSuccessful()){
+                            verifyButton.setVisibility(View.VISIBLE);
+                            joinButton.setText("완료");
+                            isSetEmail = true;
+
+                            FirebaseUser user = auth.getCurrentUser();
+                            uid = user.getUid();
+                            HashMap<String, Object> hashMap = new HashMap<>();
+                            hashMap.put("uid", uid);
+                            hashMap.put("email", email);
+                            hashMap.put("name", name);
+                            hashMap.put("number", number);
+                            hashMap.put("pro", professional);
+                            hashMap.put("image", "");
+
+                            FirebaseFirestore db = FirebaseFirestore.getInstance();
+                            db.collection("users").document(uid)
+                                    .set(hashMap)
+                                    .addOnSuccessListener(new OnSuccessListener<Void>() {
+                                        @Override
+                                        public void onSuccess(Void aVoid) {
+                                            Log.d("Firebase", "DocumentSnapshot successfully written!");
+                                        }
+                                    })
+                                    .addOnFailureListener(new OnFailureListener() {
+                                        @Override
+                                        public void onFailure(@NonNull Exception e) {
+                                            Log.w("Firebase", "Error writing document", e);
+                                        }
+                                    });
+
+                            Toast.makeText(JoinActivity.this, "계정이 등록되었습니다. 이메일 인증을 추가로 완료해주세요.", Toast.LENGTH_SHORT).show();
+                        }
+                        else{
+                            Toast.makeText(JoinActivity.this, "이미 존재하는 계정입니다. 이메일 인증을 진행하지 않았다면 버튼을 눌러 진행해주세요.", Toast.LENGTH_SHORT).show();
+                        }
+                    }
+                });
+    }
+
     private void verifyEmail() {
         final FirebaseUser user = auth.getCurrentUser();
         user.sendEmailVerification()
@@ -142,23 +196,7 @@ public class JoinActivity extends AppCompatActivity implements View.OnClickListe
                 });
     }
 
-    public void createUser(String pa_email, String pa_password){
-        auth.createUserWithEmailAndPassword(pa_email, pa_password)
-                .addOnCompleteListener(this, new OnCompleteListener<AuthResult>() {
-                    @Override
-                    public void onComplete(@NonNull Task<AuthResult> task) {
-                        if(task.isSuccessful()){
-                            Toast.makeText(JoinActivity.this, "계정이 등록되었습니다. 이메일 인증을 추가로 완료해주세요.", Toast.LENGTH_SHORT).show();
-                            verifyButton.setVisibility(View.VISIBLE);
-                            joinButton.setText("완료");
-                            isSetEmail = true;
-                        }
-                        else{
-                            Toast.makeText(JoinActivity.this, "이미 존재하는 계정입니다. 이메일 인증을 진행하지 않았다면 버튼을 눌러 진행해주세요.", Toast.LENGTH_SHORT).show();
-                        }
-                    }
-                });
-    }
+
     @Override
     protected void onStart() {
         super.onStart();
@@ -176,4 +214,5 @@ public class JoinActivity extends AppCompatActivity implements View.OnClickListe
 
         joinButton.setText("기입 완료");
     }
+
 }

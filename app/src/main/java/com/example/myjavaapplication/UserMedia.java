@@ -1,10 +1,23 @@
 package com.example.myjavaapplication;
 
-public class UserMedia {
+import java.io.Serializable;
+
+public class UserMedia implements Serializable {
     private String email;
+    private String image;
     private String name;
-    private String phoneNumber;
-    private boolean professional;
+    private String number;
+    private boolean pro;
+    private String uid;
+
+    public void UserMedia(){
+        this.email = "";
+        this.image = "";
+        this.name = "";
+        this.number = "";
+        this.pro = false;
+        this.uid = "";
+    }
 
     public String getEmail() {
         return email;
@@ -14,13 +27,15 @@ public class UserMedia {
         return name;
     }
 
-    public String getPhoneNumber() {
-        return phoneNumber;
+    public String getNumber() {
+        return number;
     }
 
-    public boolean isProfessional() {
-        return professional;
+    public boolean isPro() {
+        return pro;
     }
+    public String getUid() {return uid;}
+    public String getImage() {return image;}
 
 
     public void setEmail(String email) {
@@ -31,11 +46,11 @@ public class UserMedia {
         this.name = name;
     }
 
-    public void setPhoneNumber(String phoneNumber) {
-        this.phoneNumber = phoneNumber;
+    public void setNumber(String phoneNumber) {
+        this.number = number;
     }
 
-    public void setProfessional(boolean professional) {
-        this.professional = professional;
-    }
+    public void setPro(boolean pro) { this.pro = pro; }
+    public void setUid(String uid) {this.uid = uid;}
+    public void setImage(String image){this.image = image;}
 }

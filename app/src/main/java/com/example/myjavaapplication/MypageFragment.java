@@ -1,5 +1,6 @@
 package com.example.myjavaapplication;
 
+import android.net.Uri;
 import android.os.Bundle;
 
 import androidx.fragment.app.Fragment;
@@ -13,6 +14,8 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.AdapterView;
 import android.widget.Button;
+import android.widget.ImageView;
+import android.widget.TextView;
 import android.widget.Toast;
 
 import com.google.firebase.auth.FirebaseAuth;
@@ -26,6 +29,11 @@ public class MypageFragment extends Fragment implements View.OnClickListener {
     ArrayList<MyPetInfoData> list= new ArrayList<>();
 
     Button logoutButton;
+
+    UserMedia userData;
+    TextView profileName;
+    TextView profileEmail;
+    ImageView profileImage;
 
 
 //    private static final String ARG_PARAM1 = "param1";
@@ -63,7 +71,20 @@ public class MypageFragment extends Fragment implements View.OnClickListener {
         View view = inflater.inflate(R.layout.fragment_mypage, container, false);
 
         logoutButton = view.findViewById(R.id.logoutButton);
+        profileName = view.findViewById(R.id.profileName);
+        profileEmail = view.findViewById(R.id.profileEmail);
+        profileImage = view.findViewById(R.id.profileImage);
+
         logoutButton.setOnClickListener(this);
+
+        userData = (UserMedia) this.getArguments().getSerializable("userData");
+
+        if(userData.getImage() != null){
+            profileImage.setImageURI(Uri.parse(userData.getImage()));
+        }
+        profileName.setText(userData.getName());
+        profileEmail.setText(userData.getEmail());
+
 
         list.clear();
 

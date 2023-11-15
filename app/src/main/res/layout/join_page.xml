@@ -75,6 +75,7 @@
         android:background="@null"
         android:inputType="text"
         android:textSize="17dp"
+        android:privateImeOptions="defaultInputmode=korean"
         app:layout_constraintBottom_toBottomOf="@id/userNameBox"
         app:layout_constraintLeft_toLeftOf="@id/userNameBox" />
 
