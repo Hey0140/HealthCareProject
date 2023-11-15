@@ -25,6 +25,7 @@ import com.google.firebase.firestore.DocumentSnapshot;
 import com.google.firebase.firestore.FirebaseFirestore;
 import com.google.firebase.firestore.QueryDocumentSnapshot;
 import com.google.firebase.firestore.QuerySnapshot;
+import com.google.firebase.firestore.auth.User;
 
 import org.jetbrains.annotations.Nullable;
 
@@ -37,7 +38,7 @@ public class MainActivity extends AppCompatActivity {
     private PetmanageFragment petmanageFragment = new PetmanageFragment();
     private CommunityFragment communityFragment = new CommunityFragment();
     private MypageFragment mypageFragment = new MypageFragment();
-    String email= "";
+    UserMedia userData;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -45,7 +46,8 @@ public class MainActivity extends AppCompatActivity {
         setContentView(R.layout.main_page);
 
         Intent intent = new Intent(this.getIntent());
-        email = intent.getStringExtra("email");
+        userData = (UserMedia) intent.getSerializableExtra("userData");
+
         FragmentTransaction transaction = fmanager.beginTransaction();
 
         transaction.replace(R.id.mainFragmentLayout, homeFragment).commitAllowingStateLoss();
@@ -69,6 +71,9 @@ public class MainActivity extends AppCompatActivity {
                 ftransaction.replace(R.id.mainFragmentLayout, communityFragment).commitAllowingStateLoss();
             }
             if(item.getItemId() == R.id.mypageIcon) {
+                Bundle bundle = new Bundle();
+                bundle.putSerializable("userData", userData);
+                mypageFragment.setArguments(bundle);
                 ftransaction.replace(R.id.mainFragmentLayout, mypageFragment).commitAllowingStateLoss();
             }
             return true;

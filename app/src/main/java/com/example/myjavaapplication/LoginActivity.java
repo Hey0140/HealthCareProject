@@ -23,14 +23,19 @@ import com.google.android.gms.auth.api.signin.GoogleSignInClient;
 import com.google.android.gms.auth.api.signin.GoogleSignInOptions;
 import com.google.android.gms.common.api.ApiException;
 import com.google.android.gms.tasks.OnCompleteListener;
+import com.google.android.gms.tasks.OnFailureListener;
+import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.android.gms.tasks.Task;
 import com.google.firebase.auth.AuthCredential;
 import com.google.firebase.auth.AuthResult;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
 import com.google.firebase.auth.GoogleAuthProvider;
+import com.google.firebase.firestore.DocumentReference;
 import com.google.firebase.firestore.DocumentSnapshot;
 import com.google.firebase.firestore.FirebaseFirestore;
+
+import java.util.HashMap;
 
 public class LoginActivity extends AppCompatActivity implements View.OnClickListener {
     private FirebaseAuth auth;
@@ -38,11 +43,11 @@ public class LoginActivity extends AppCompatActivity implements View.OnClickList
     private GoogleSignInOptions gso;
     private GoogleSignInAccount gsa;
     private GoogleSignInClient gsc;
-    private int professional;
+    private boolean professional;
     private boolean GOOGLE;
     private final int RC_SIGN_IN = 9001;
-    private final int BASIC_MEMBER = 100;
-    private final int PROFESSIONAL = 200;
+    private final boolean BASIC_MEMBER = false;
+    private final boolean PROFESSIONAL = true;
 
 
     CheckBox proCheckBox;
@@ -54,6 +59,7 @@ public class LoginActivity extends AppCompatActivity implements View.OnClickList
 
     String email = "";
     String password = "";
+    UserMedia userData;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -61,8 +67,9 @@ public class LoginActivity extends AppCompatActivity implements View.OnClickList
         setContentView(R.layout.login_page);
         email = "";
         password = "";
-        professional = 0;
+        professional = BASIC_MEMBER;
         GOOGLE = false;
+        userData = new UserMedia();
 
         idText = findViewById(R.id.loginId);
         pwText = findViewById(R.id.loginPassword);
@@ -96,14 +103,14 @@ public class LoginActivity extends AppCompatActivity implements View.OnClickList
             professional = PROFESSIONAL;
             onCheckBox(professional);
         }
-        if(v== memCheckBox){
+        if(v == memCheckBox){
             professional = BASIC_MEMBER;
             onCheckBox(professional);
         }
         if (v == loginButton) {
             email = idText.getText().toString();
             password = pwText.getText().toString();
-            if(email.length() > 0 && password.length() >= 6 && professional > 0){
+            if(email.length() > 0 && password.length() >= 6){
                 auth.signInWithEmailAndPassword(idText.getText().toString(), pwText.getText().toString())
                         .addOnCompleteListener(this, new OnCompleteListener<AuthResult>() {
                             @Override
@@ -111,10 +118,8 @@ public class LoginActivity extends AppCompatActivity implements View.OnClickList
                                 if(task.isSuccessful()){
                                     FirebaseUser user = auth.getCurrentUser();
                                     if(user.isEmailVerified()){
+                                        getDataToFirestore(user.getUid());
                                         Toast.makeText(LoginActivity.this, "로그인 성공!", Toast.LENGTH_LONG).show();
-                                        Intent intent = new Intent(getApplicationContext(), MainActivity.class);
-                                        intent.putExtra("email", email);
-                                        startActivity(intent);
                                     }
                                     else{
                                         Toast.makeText(LoginActivity.this, "이메일 인증 중입니다. 이메일을 인증을 진행해주세요.", Toast.LENGTH_LONG).show();
@@ -125,36 +130,26 @@ public class LoginActivity extends AppCompatActivity implements View.OnClickList
                                 }
                             }
                         });
-            } else if (professional == 0) {
-                Toast.makeText(LoginActivity.this, "의사 회원인지 일반 회원인지 선택해주세요.", Toast.LENGTH_LONG).show();
             } else{
                 Toast.makeText(LoginActivity.this, "아이디 또는 비밀번호를 입력해주세요.", Toast.LENGTH_LONG).show();
             }
 
         }
         if(v == googleButton) {
-            if(professional > 0){
-                gsa = GoogleSignIn.getLastSignedInAccount(LoginActivity.this);
-                if(gsa != null){
-                    Toast.makeText(this, "로그인 성공", Toast.LENGTH_LONG).show();
-                    GOOGLE = true;
-                    Intent intent = new Intent(getApplicationContext(), MainActivity.class);
-                    email = gsa.getEmail();
-                    intent.putExtra("email", email);
-                    startActivity(intent);
-                }
-                else{
-                    Intent intent = gsc.getSignInIntent();
-                    startActivityForResult(intent, RC_SIGN_IN);
-                }
+            gsa = GoogleSignIn.getLastSignedInAccount(LoginActivity.this);
+            if(gsa != null){
+                Toast.makeText(this, "로그인 성공", Toast.LENGTH_LONG).show();
+                GOOGLE = true;
+                getDataToFirestore(gsa.getId());
             }
-            else {
-                Toast.makeText(LoginActivity.this, "의사 회원인지 일반 회원인지 선택해주세요.", Toast.LENGTH_LONG).show();
+            else{
+                Intent intent = gsc.getSignInIntent();
+                startActivityForResult(intent, RC_SIGN_IN);
             }
         }
         if(v == loginJoin){
-            Context context = LoginActivity.this;
-            goNextActivity(context, JoinActivity.class);
+            Intent intent = new Intent(getApplicationContext(), JoinActivity.class);
+            startActivity(intent);
         }
         if(v == loginFindOrPw){
 
@@ -175,14 +170,12 @@ public class LoginActivity extends AppCompatActivity implements View.OnClickList
 
             if (gsia != null) {
                 firebaseAuthWithGoogle(gsia.getIdToken());
-
+                String id = gsia.getId();
                 String personName = gsia.getDisplayName();
-                String personGivenName = gsia.getGivenName();
-                String personFamilyName = gsia.getFamilyName();
                 String email = gsia.getEmail();
-                String personId = gsia.getId();
                 Uri personPhoto = gsia.getPhotoUrl();
 
+                setDataToFirestore(id, email, personName, "", professional, personPhoto.toString());
             }
         } catch (ApiException e) {
             Log.e("google", "signInResult:failed code=" + e.getStatusCode());
@@ -206,6 +199,20 @@ public class LoginActivity extends AppCompatActivity implements View.OnClickList
                 });
     }
 
+    public void getDataToFirestore(String id){
+        FirebaseFirestore db = FirebaseFirestore.getInstance();
+        DocumentReference docRef = db.collection("users").document(id);
+        docRef.get().addOnSuccessListener(new OnSuccessListener<DocumentSnapshot>() {
+            @Override
+            public void onSuccess(DocumentSnapshot documentSnapshot) {
+                userData = documentSnapshot.toObject(UserMedia.class);
+                Intent intent = new Intent(getApplicationContext(), MainActivity.class);
+                intent.putExtra("userData", userData);
+                startActivity(intent);
+            }
+        });
+    }
+
     @Override
     protected void onRestart() {
         super.onRestart();
@@ -214,6 +221,7 @@ public class LoginActivity extends AppCompatActivity implements View.OnClickList
             GOOGLE = false;
         }
         else{
+            userData = new UserMedia();
             idText.setText(email);
             pwText.setText(password);
             onCheckBox(professional);
@@ -221,7 +229,7 @@ public class LoginActivity extends AppCompatActivity implements View.OnClickList
         }
     }
 
-    void onCheckBox(int mem){
+    void onCheckBox(boolean mem){
         if(mem == PROFESSIONAL){
             memCheckBox.setChecked(false);
             proCheckBox.setChecked(true);
@@ -229,17 +237,35 @@ public class LoginActivity extends AppCompatActivity implements View.OnClickList
         else if(mem == BASIC_MEMBER){
             memCheckBox.setChecked(true);
             proCheckBox.setChecked(false);
-        }else{
-            memCheckBox.setChecked(false);
-            proCheckBox.setChecked(false);
         }
     }
 
-    public static void goNextActivity(Context context, Class<? extends Activity> activityClass) {
-        Intent intent = new Intent(context, activityClass);
-        context.startActivity(intent);
-    }
 
+    public void setDataToFirestore(String id, String email, String name, String number, Boolean professional, String image){
+        HashMap<String, Object> hashMap = new HashMap<>();
+        hashMap.put("uid", id);
+        hashMap.put("email", email);
+        hashMap.put("name", name);
+        hashMap.put("number", number);
+        hashMap.put("pro", professional);
+        hashMap.put("image", image);
+
+        FirebaseFirestore db = FirebaseFirestore.getInstance();
+        db.collection("users").document(id)
+                .set(hashMap)
+                .addOnSuccessListener(new OnSuccessListener<Void>() {
+                    @Override
+                    public void onSuccess(Void aVoid) {
+                        Log.d("Firebase", "DocumentSnapshot successfully written!");
+                    }
+                })
+                .addOnFailureListener(new OnFailureListener() {
+                    @Override
+                    public void onFailure(@NonNull Exception e) {
+                        Log.w("Firebase", "Error writing document", e);
+                    }
+                });
+    }
 
 }
 
