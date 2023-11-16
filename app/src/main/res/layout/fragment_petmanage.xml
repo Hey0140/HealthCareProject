@@ -3,12 +3,153 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
     tools:context=".PetmanageFragment">
 
     <!-- TODO: Update blank fragment layout -->
-    <TextView
+    <androidx.constraintlayout.widget.ConstraintLayout
         android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        android:text="petmanagefragment" />
+        android:layout_height="match_parent">
+
+
+        <TextView
+            android:id="@+id/petpetmanagement"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginLeft="16dp"
+            android:layout_marginTop="24dp"
+            android:text="10000개"
+            android:textSize="15dp"
+            app:layout_constraintLeft_toLeftOf="parent"
+            app:layout_constraintTop_toTopOf="parent" />
+
+        <TextView
+                android:id="@+id/petmanagementname"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                app:layout_constraintTop_toTopOf="parent"
+                app:layout_constraintLeft_toLeftOf="parent"
+           android:layout_marginLeft="220dp"
+            android:layout_marginTop="80dp"
+                android:text="이름"
+            android:textSize="20dp"/>
+        <TextView
+            android:id="@+id/petmanagementtextview"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            app:layout_constraintTop_toBottomOf="@id/petmanagementname"
+            app:layout_constraintLeft_toLeftOf="parent"
+          android:layout_marginLeft="150dp"
+            android:text="몸무게/사료이름, 칼로리"
+            android:textSize="20dp"
+            android:layout_marginTop="3dp"/>
+
+        <View
+            android:id="@+id/petmangement121"
+            android:layout_width="70dp"
+            android:layout_height="70dp"
+            android:layout_marginLeft="60dp"
+            android:layout_marginTop="80dp"
+            android:background="@drawable/myprofile_circle"
+            android:backgroundTint="@color/whitegray"
+            app:layout_constraintLeft_toLeftOf="parent"
+            app:layout_constraintTop_toTopOf="parent" />
+
+        <ImageView
+            android:id="@+id/petmangement1212"
+            android:layout_width="40dp"
+            android:layout_height="40dp"
+            app:layout_constraintBottom_toBottomOf="@id/petmangement121"
+            app:layout_constraintTop_toTopOf="@id/petmangement121"
+            app:layout_constraintLeft_toLeftOf="@id/petmangement121"
+            app:layout_constraintRight_toRightOf="@id/petmangement121"
+            android:background="@drawable/pet_icon"
+            android:backgroundTint="@color/middlegray"
+            />
+        <View
+
+            android:layout_width="match_parent"
+            android:layout_height="3dp"
+            app:layout_constraintTop_toBottomOf="@id/petmanagementtextview"
+            android:layout_marginTop="60dp"
+            android:background="@drawable/mypage_vertical_line"/>
+        <TextView
+            android:id="@+id/petmanagementname11"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            app:layout_constraintTop_toTopOf="parent"
+            app:layout_constraintLeft_toLeftOf="@id/petmanagementtextview"
+            app:layout_constraintRight_toRightOf="@id/petmanagementtextview"
+            app:layout_constraintTop_toBottomOf="@id/petmanagementtextview"
+            android:layout_marginTop="220dp"
+            android:text="11월"
+            android:textSize="20dp"/>
+        <androidx.appcompat.widget.AppCompatButton
+            android:layout_width="100dp"
+            android:layout_height="25dp"
+            app:layout_constraintLeft_toLeftOf="@id/petmangement121"
+            app:layout_constraintTop_toBottomOf="@id/petmangement121"
+            app:layout_constraintRight_toRightOf="@id/petmangement121"
+            android:layout_marginTop="10dp"
+            android:background="@drawable/petbox"
+            android:text="반려동물 변경"/>
+
+        <TextView
+            android:id="@+id/petmanagement11M"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Mon"
+            app:layout_constraintTop_toBottomOf="@id/petmanagementname11"
+            tools:layout_editor_absoluteX="32dp"
+            android:textSize="15dp"/>
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="2,400Kcal"
+            app:layout_constraintTop_toBottomOf="@id/petmanagement11M"/>
+        <TextView
+            android:id="@+id/petmanagement11T"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Tue"
+            app:layout_constraintTop_toBottomOf="@id/petmanagementname11"
+            android:textSize="15dp"
+            tools:layout_editor_absoluteX="100dp"/>
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="3,200Kcal"
+            app:layout_constraintLeft_toLeftOf="@id/petmanagement11T"
+            app:layout_constraintTop_toBottomOf="@id/petmanagement11T" />
+
+        <TextView
+            android:id="@+id/petmanagement11W"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Wed"
+            app:layout_constraintTop_toBottomOf="@id/petmanagementname11"
+            android:textSize="15dp"
+            tools:layout_editor_absoluteX="180dp"/>
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="1,800Kcal"
+            app:layout_constraintLeft_toLeftOf="@id/petmanagement11W"
+            app:layout_constraintTop_toBottomOf="@id/petmanagement11W"/>
+        <TextView
+            android:id="@+id/petmanagement11Th"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Thu"
+
+
+
+
+
+
+
+
+    </androidx.constraintlayout.widget.ConstraintLayout>
 
 </FrameLayout>
