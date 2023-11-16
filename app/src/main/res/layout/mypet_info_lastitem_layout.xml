@@ -4,18 +4,29 @@
     android:layout_height="match_parent"
     xmlns:app="http://schemas.android.com/apk/res-auto">
 
-    <androidx.appcompat.widget.AppCompatButton
+    <View
         android:id="@+id/myPetInfoPlusButton"
         android:layout_width="36dp"
         android:layout_height="60dp"
         app:layout_constraintTop_toTopOf="parent"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintLeft_toLeftOf="parent"
-        android:text="+"
-        android:textSize="25dp"
+
         android:textColor="@color/middlegray"
         android:background="@drawable/mypet_info_lastitem_box"
         />
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        app:layout_constraintLeft_toLeftOf="@id/myPetInfoPlusButton"
+        app:layout_constraintRight_toRightOf="@id/myPetInfoPlusButton"
+        app:layout_constraintTop_toTopOf="@id/myPetInfoPlusButton"
+        app:layout_constraintBottom_toBottomOf="@id/myPetInfoPlusButton"
+        android:text="+"
+        android:textSize="25dp"
+        android:textColor="@color/middlegray"
+        />
+
 
 
 </androidx.constraintlayout.widget.ConstraintLayout>
