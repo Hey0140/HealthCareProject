@@ -1,11 +1,11 @@
 package com.example.myjavaapplication;
 
 import android.content.Context;
-import android.text.Layout;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.AdapterView;
+import android.widget.ImageView;
+import android.widget.TextView;
 
 import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.RecyclerView;
@@ -15,11 +15,56 @@ import java.util.ArrayList;
 public class MypetInfoAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> {
 
     ArrayList<MyPetInfoData> itemList;
-
+    private OnListItemSelected mListener;
+    public interface OnListItemSelected {
+        void onItemSelected(View v, int position, int vg);
+    }
     MypetInfoAdapter(ArrayList<MyPetInfoData> list){
-        itemList = list;
+        this.itemList = list;
+    }
+    public void setOnItemClickListener(OnListItemSelected listener){
+        this.mListener = listener;
     }
 
+    public class MypetInfoViewHolder  extends  RecyclerView.ViewHolder{
+        TextView name;
+        ImageView image;
+        public MypetInfoViewHolder(View itemView) {
+            super(itemView);
+
+            name = itemView.findViewById(R.id.myPetInfoName);
+            image = itemView.findViewById(R.id.myPetInfoProfile);
+            itemView.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View view) {
+                    int position = getAdapterPosition();
+                    if(position != RecyclerView.NO_POSITION){
+                        if(mListener != null){
+                            mListener.onItemSelected(view, position, Code.ViewType.BASIC);
+                        }
+                    }
+                }
+            });
+        }
+    }
+
+    public class MypetInfoAddViewHolder  extends  RecyclerView.ViewHolder{
+        public MypetInfoAddViewHolder(View itemView) {
+            super(itemView);
+
+            itemView.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View view) {
+                    int position = getAdapterPosition();
+                    if(position != RecyclerView.NO_POSITION){
+                        if(mListener != null){
+                            mListener.onItemSelected(view, position, Code.ViewType.ADD);
+                        }
+                    }
+                }
+            });
+        }
+    }
 
 
     @NonNull

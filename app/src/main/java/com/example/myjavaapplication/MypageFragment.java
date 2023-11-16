@@ -1,18 +1,16 @@
 package com.example.myjavaapplication;
 
+import android.content.Intent;
 import android.net.Uri;
 import android.os.Bundle;
 
 import androidx.fragment.app.Fragment;
-import androidx.fragment.app.FragmentManager;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.AdapterView;
 import android.widget.Button;
 import android.widget.ImageView;
 import android.widget.TextView;
@@ -21,7 +19,6 @@ import android.widget.Toast;
 import com.google.firebase.auth.FirebaseAuth;
 
 import java.util.ArrayList;
-import java.util.Objects;
 
 public class MypageFragment extends Fragment implements View.OnClickListener {
     FirebaseAuth auth;
@@ -35,34 +32,10 @@ public class MypageFragment extends Fragment implements View.OnClickListener {
     TextView profileEmail;
     ImageView profileImage;
 
-
-//    private static final String ARG_PARAM1 = "param1";
-//    private static final String ARG_PARAM2 = "param2";
-//
-//    private String mParam1;
-//    private String mParam2;
-//
-//    public HomeFragment() {
-//
-//    }
-//
-//    public static HomeFragment newInstance(String param1, String param2) {
-//        HomeFragment fragment = new HomeFragment();
-//        Bundle args = new Bundle();
-//        args.putString(ARG_PARAM1, param1);
-//        args.putString(ARG_PARAM2, param2);
-//        fragment.setArguments(args);
-//        return fragment;
-//    }
-//
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         auth = FirebaseAuth.getInstance();
-//        if (getArguments() != null) {
-//            mParam1 = getArguments().getString(ARG_PARAM1);
-//            mParam2 = getArguments().getString(ARG_PARAM2);
-//        }
     }
 
     @Override
@@ -90,7 +63,7 @@ public class MypageFragment extends Fragment implements View.OnClickListener {
 
         list.clear();
 
-        for (int i = 0; i < 3; i++) {
+        for (int i = 0; i < 2; i++) {
             MyPetInfoData mpid = new MyPetInfoData();
             mpid.setName("choco");
             mpid.setImageId(R.drawable.mypetprofile_basic_icon);
@@ -103,6 +76,19 @@ public class MypageFragment extends Fragment implements View.OnClickListener {
         RecyclerView recyclerView = view.findViewById(R.id.myPetInfoRecyclerView);
         recyclerView.setLayoutManager(new LinearLayoutManager(getActivity(), LinearLayoutManager.HORIZONTAL,false));
         MypetInfoAdapter adapter = new MypetInfoAdapter(list);
+        adapter.setOnItemClickListener(new MypetInfoAdapter.OnListItemSelected() {
+            @Override
+            public void onItemSelected(View v, int position, int vg) {
+                        if(vg == Code.ViewType.BASIC){
+                            Toast.makeText(getContext(), position+"BASIC", Toast.LENGTH_SHORT).show();
+                        }
+                        if(vg == Code.ViewType.ADD){
+                            Intent intent = new Intent(getActivity(), PetAddActivity.class);
+                            intent.putExtra("userData", userData.getUid());
+                            startActivity(intent);
+                        }
+            }
+        });
         recyclerView.setAdapter(adapter);
 
         return view;
@@ -122,4 +108,5 @@ public class MypageFragment extends Fragment implements View.OnClickListener {
             getActivity().finish();
         }
     }
+
 }
