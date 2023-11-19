@@ -1,0 +1,109 @@
+<?xml version="1.0" encoding="utf-8"?>
+<FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="wrap_content"
+    android:layout_height="wrap_content"
+    xmlns:app="http://schemas.android.com/apk/res-auto">
+
+    <androidx.constraintlayout.widget.ConstraintLayout
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content">
+
+
+        <View
+            android:id="@+id/petKindSelectedBox"
+            android:layout_width="300dp"
+            android:layout_height="190dp"
+            app:layout_constraintTop_toTopOf="parent"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintLeft_toLeftOf="parent"
+            app:layout_constraintRight_toRightOf="parent"
+            android:background="@drawable/petkind_selected_box"
+            android:orientation="vertical"/>
+
+        <TextView
+            android:id="@+id/petKindSelectedTitle"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="종/품종 선택"
+            app:layout_constraintTop_toTopOf="@id/petKindSelectedBox"
+            app:layout_constraintLeft_toLeftOf="@id/petKindSelectedBox"
+            app:layout_constraintRight_toRightOf="@id/petKindSelectedBox"
+            android:layout_marginTop="17dp"
+            android:textSize="16dp"/>
+
+        <View
+            android:layout_width="280dp"
+            android:layout_height="1dp"
+            android:background="@drawable/mypage_horizontal_line"
+            app:layout_constraintBottom_toTopOf="@id/smallSizePet"
+            android:layout_marginBottom="5dp"
+            app:layout_constraintLeft_toLeftOf="@id/petKindSelectedBox"
+            app:layout_constraintRight_toRightOf="@id/petKindSelectedBox"/>
+
+
+        <View
+            android:id="@+id/smallSizePet"
+            android:layout_width="280dp"
+            android:layout_height="40dp"
+            app:layout_constraintLeft_toLeftOf="@id/petKindSelectedBox"
+            app:layout_constraintRight_toRightOf="@id/petKindSelectedBox"
+            app:layout_constraintTop_toBottomOf="@id/petKindSelectedTitle"
+            android:layout_marginTop="10dp"
+            android:background="@color/white"/>
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            app:layout_constraintLeft_toLeftOf="@id/smallSizePet"
+            app:layout_constraintRight_toRightOf="@id/smallSizePet"
+            app:layout_constraintTop_toTopOf="@id/smallSizePet"
+            app:layout_constraintBottom_toBottomOf="@id/smallSizePet"
+            android:text="소형견(7kg 미만)"
+            android:textSize="16dp"/>
+
+
+        <View
+            android:id="@+id/middleSizePet"
+            android:layout_width="280dp"
+            android:layout_height="40dp"
+            app:layout_constraintLeft_toLeftOf="@id/petKindSelectedBox"
+            app:layout_constraintRight_toRightOf="@id/petKindSelectedBox"
+            app:layout_constraintTop_toBottomOf="@id/smallSizePet"
+            android:layout_marginTop="5dp"
+            android:background="@color/white" />
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            app:layout_constraintLeft_toLeftOf="@id/middleSizePet"
+            app:layout_constraintRight_toRightOf="@id/middleSizePet"
+            app:layout_constraintTop_toTopOf="@id/middleSizePet"
+            app:layout_constraintBottom_toBottomOf="@id/middleSizePet"
+            android:text="중형견(7kg~15kg미만)"
+            android:textSize="16dp"/>
+
+        <View
+            android:id="@+id/bigSizePet"
+            android:layout_width="280dp"
+            android:layout_height="40dp"
+            app:layout_constraintLeft_toLeftOf="@id/petKindSelectedBox"
+            app:layout_constraintRight_toRightOf="@id/petKindSelectedBox"
+            app:layout_constraintTop_toBottomOf="@id/middleSizePet"
+            android:layout_marginTop="5dp"
+            android:background="@color/white"/>
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            app:layout_constraintLeft_toLeftOf="@id/bigSizePet"
+            app:layout_constraintRight_toRightOf="@id/bigSizePet"
+            app:layout_constraintTop_toTopOf="@id/bigSizePet"
+            app:layout_constraintBottom_toBottomOf="@id/bigSizePet"
+            android:text="대형견(15kg 이상)"
+            android:textSize="16dp"/>
+
+
+    </androidx.constraintlayout.widget.ConstraintLayout>
+
+</FrameLayout>

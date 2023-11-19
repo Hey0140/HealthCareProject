@@ -13,7 +13,7 @@
         app:layout_constraintTop_toTopOf="parent"
         android:layout_marginTop="40dp">
 
-        <View
+        <de.hdodenhof.circleimageview.CircleImageView
             android:id="@+id/petProfileBox"
             android:layout_width="60dp"
             android:layout_height="60dp"
@@ -24,7 +24,7 @@
             android:background="@drawable/myprofile_circle"
             android:backgroundTint="@color/whitegray"/>
 
-        <ImageView
+        <View
             android:id="@+id/petProfileImage"
             android:layout_width="40dp"
             android:layout_height="40dp"
@@ -103,48 +103,15 @@
         android:layout_marginTop="10dp"
         />
 
-    <TextView
-        android:id="@+id/petKindTitle"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        app:layout_constraintLeft_toLeftOf="parent"
-        app:layout_constraintTop_toBottomOf="@id/petKindButton"
-        android:layout_marginLeft="52dp"
-        android:layout_marginTop="10dp"
-        android:text="품종"
-        />
-
-    <TextView
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_marginTop="2dp"
-        android:layout_marginRight="5dp"
-        android:text="*"
-        android:textColor="@color/red"
-        app:layout_constraintRight_toLeftOf="@id/petKindTitle"
-        app:layout_constraintTop_toTopOf="@id/petKindTitle"
-        />
-
-    <EditText
-        android:id="@+id/petKind"
-        android:layout_width="330dp"
-        android:layout_height="wrap_content"
-        app:layout_constraintTop_toBottomOf="@id/petKindTitle"
-        app:layout_constraintLeft_toLeftOf="parent"
-        app:layout_constraintRight_toRightOf="parent"
-        android:maxLines="1"
-        android:hint="ex) 말티즈, 치와와"
-        android:textSize="16dp"
-        />
 
     <TextView
         android:id="@+id/petSexTitle"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         app:layout_constraintLeft_toLeftOf="parent"
-        app:layout_constraintTop_toBottomOf="@id/petKind"
+        app:layout_constraintTop_toBottomOf="@id/petKindButton"
         android:layout_marginLeft="52dp"
-        android:layout_marginTop="10dp"
+        android:layout_marginTop="20dp"
         android:text="성별"
         />
 
@@ -251,7 +218,7 @@
         app:layout_constraintLeft_toLeftOf="parent"
         app:layout_constraintTop_toBottomOf="@id/femaleText"
         android:layout_marginLeft="52dp"
-        android:layout_marginTop="10dp"
+        android:layout_marginTop="20dp"
         android:text="생년월일"
         />
 
@@ -274,8 +241,9 @@
         app:layout_constraintLeft_toLeftOf="parent"
         app:layout_constraintRight_toRightOf="parent"
         android:maxLines="1"
+        android:maxLength="10"
         android:hint="ex) YYYY-MM-DD"
-        android:inputType="date"
+        android:inputType="number"
         android:textSize="16dp"
         />
 
@@ -286,7 +254,7 @@
         app:layout_constraintLeft_toLeftOf="parent"
         app:layout_constraintTop_toBottomOf="@id/petBirth"
         android:layout_marginLeft="52dp"
-        android:layout_marginTop="10dp"
+        android:layout_marginTop="20dp"
         android:text="몸무게"
         />
 
