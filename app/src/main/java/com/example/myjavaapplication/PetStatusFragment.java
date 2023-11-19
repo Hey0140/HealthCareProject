@@ -1,28 +1,26 @@
 package com.example.myjavaapplication;
 
-import android.content.Context;
-import android.os.Bundle;
-
 import androidx.annotation.NonNull;
 import androidx.fragment.app.Fragment;
 
+import android.content.Context;
+import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
-import android.widget.Toast;
 
-
-public class PetmanageFragment extends Fragment implements View.OnClickListener {
+public class PetStatusFragment extends Fragment implements View.OnClickListener {
     MainActivity mainActivity;
 
-    Button petStatusButton;
+    View arrow;
+    View backButton;
+    public PetStatusFragment() {
 
-    public PetmanageFragment() {
-        // Required empty public constructor
     }
 
-   @Override
+
+    @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
 
@@ -31,21 +29,15 @@ public class PetmanageFragment extends Fragment implements View.OnClickListener 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
-        View view =  inflater.inflate(R.layout.fragment_petmanage, container, false);
-        petStatusButton = view.findViewById(R.id.petManagementStatusButton);
+        View view = inflater.inflate(R.layout.petstatus_page, container, false);
 
-        petStatusButton.setOnClickListener(this);
+        arrow = view.findViewById(R.id.petStatusArrowBlue);
+        backButton = view.findViewById(R.id.petStatusBackButton);
+
+        backButton.setOnClickListener(this);
+
         return view;
     }
-
-    @Override
-    public void onClick(View v) {
-        if(v == petStatusButton){
-            mainActivity.onChangeToPetStatusFragment();
-        }
-    }
-
-    @Override
     public void onAttach(@NonNull Context context) {
         super.onAttach(context);
         mainActivity = (MainActivity) getActivity();
@@ -56,4 +48,13 @@ public class PetmanageFragment extends Fragment implements View.OnClickListener 
         super.onDetach();
         mainActivity = null;
     }
+
+
+    @Override
+    public void onClick(View v) {
+        if(v == backButton){
+            mainActivity.onChangeToPetManageFragment();
+        }
+    }
+
 }

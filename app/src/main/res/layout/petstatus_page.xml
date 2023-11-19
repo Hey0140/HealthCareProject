@@ -1,23 +1,249 @@
 <?xml version="1.0" encoding="utf-8"?>
-<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context=".PetStatusActivity">
+    tools:context=".PetStatusFragment">
+    <androidx.constraintlayout.widget.ConstraintLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent">
+
+        <View
+            android:id="@+id/petStatusBackButton"
+            android:layout_width="22dp"
+            android:layout_height="22dp"
+            app:layout_constraintLeft_toLeftOf="parent"
+            app:layout_constraintTop_toTopOf="parent"
+            android:layout_marginTop="24dp"
+            android:layout_marginLeft="20dp"
+            android:background="@drawable/back_icon"/>
+
+        <TextView
+            android:id="@+id/petNameTitle"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginLeft="10dp"
+            android:layout_marginTop="20dp"
+            android:text="초코"
+            android:textSize="18dp"
+            app:layout_constraintLeft_toRightOf="@id/petStatusBackButton"
+            app:layout_constraintTop_toTopOf="parent" />
+
+        <TextView
+            android:id="@+id/petStatusTitle"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            app:layout_constraintLeft_toLeftOf="parent"
+            app:layout_constraintTop_toBottomOf="@id/petNameTitle"
+            android:layout_marginTop="10dp"
+            android:layout_marginLeft="20dp"
+            android:text="반려동물 상태"
+            android:textSize="20dp"
+            />
+
+        <View
+            android:id="@+id/petHospitalInfoButton"
+            android:layout_width="280dp"
+            android:layout_height="70dp"
+            app:layout_constraintTop_toBottomOf="@id/petStatusTitle"
+            app:layout_constraintLeft_toLeftOf="parent"
+            app:layout_constraintRight_toRightOf="parent"
+            android:layout_marginTop="20dp"
+            android:background="@drawable/pethospital_info_button_box"
+            />
+
+        <TextView
+            android:id="@+id/petHospitalName"
+            android:layout_width="250dp"
+            android:layout_height="wrap_content"
+            app:layout_constraintTop_toTopOf="@id/petHospitalInfoButton"
+            app:layout_constraintLeft_toLeftOf="@id/petHospitalInfoButton"
+            android:layout_marginTop="10dp"
+            android:layout_marginLeft="15dp"
+            android:maxLines="1"
+            android:text="행복병원"
+            android:textSize="20dp"
+            />
+
+        <TextView
+            android:id="@+id/petHospitalAddress"
+            android:layout_width="250dp"
+            android:layout_height="wrap_content"
+            app:layout_constraintTop_toBottomOf="@id/petHospitalName"
+            app:layout_constraintLeft_toLeftOf="@id/petHospitalName"
+            android:text="서울시 동작구 상도로 123길 "
+            android:maxLines="1"
+            android:ellipsize="end"
+            />
+
+        <TextView
+            android:id="@+id/petNowStatus"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            app:layout_constraintLeft_toLeftOf="@id/petStatusTitle"
+            app:layout_constraintTop_toBottomOf="@id/petHospitalInfoButton"
+            android:layout_marginTop="20dp"
+            android:text="현재 상태"
+            android:textSize="20dp"
+            />
+
+        <View
+            android:id="@+id/petStatusArrowBlue"
+            android:layout_width="35dp"
+            android:layout_height="40dp"
+            app:layout_constraintBottom_toTopOf="@id/petStatusSpectrum"
+            app:layout_constraintLeft_toLeftOf="@id/petStatusSpectrum"
+            android:background="@drawable/petstatus_arrow"
+            />
+
+
+        <View
+            android:id="@+id/petStatusSpectrum"
+            android:layout_width="320dp"
+            android:layout_height="60dp"
+            android:background="@drawable/spectrum"
+            app:layout_constraintTop_toBottomOf="@id/petNowStatus"
+            app:layout_constraintLeft_toLeftOf="parent"
+            app:layout_constraintRight_toRightOf="parent"
+            android:layout_marginTop="50dp"
+            />
+
+        <TextView
+            android:id="@+id/petStatusWeightText"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            app:layout_constraintTop_toBottomOf="@id/petStatusSpectrum"
+            app:layout_constraintLeft_toLeftOf="@id/petStatusSpectrum"
+            android:layout_marginTop="10dp"
+            android:text="체중"
+            android:textSize="20dp"/>
+
+        <TextView
+            android:id="@+id/petStatusWeight"
+            android:layout_width="50dp"
+            android:layout_height="wrap_content"
+            app:layout_constraintBottom_toBottomOf="@id/petStatusWeightText"
+            app:layout_constraintLeft_toRightOf="@id/petStatusWeightText"
+            android:layout_marginLeft="15dp"
+            android:text="8"
+            android:textSize="21dp"
+            android:textAlignment="textEnd"
+            />
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            app:layout_constraintBottom_toBottomOf="@id/petStatusWeight"
+            app:layout_constraintLeft_toRightOf="@id/petStatusWeight"
+            android:text="Kg"
+            android:textSize="21dp"/>
+
+        <TextView
+            android:id="@+id/petStatusActivityText"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            app:layout_constraintTop_toBottomOf="@id/petStatusWeightText"
+            app:layout_constraintLeft_toLeftOf="@id/petStatusWeightText"
+            android:layout_marginTop="10dp"
+            android:text="활동량"
+            android:textSize="20dp"/>
+
+        <TextView
+            android:id="@+id/petStatusActivity"
+            android:layout_width="80dp"
+            android:layout_height="wrap_content"
+            app:layout_constraintBottom_toBottomOf="@id/petStatusActivityText"
+            app:layout_constraintLeft_toRightOf="@id/petStatusActivityText"
+            android:layout_marginLeft="15dp"
+            android:text="2000"
+            android:textSize="21dp"
+            android:textAlignment="textEnd"
+            />
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            app:layout_constraintBottom_toBottomOf="@id/petStatusActivity"
+            app:layout_constraintLeft_toRightOf="@id/petStatusActivity"
+            android:text="cal"
+            android:textSize="21dp"/>
+
+        <TextView
+            android:id="@+id/petStatusHeartText"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            app:layout_constraintTop_toBottomOf="@id/petStatusActivityText"
+            app:layout_constraintLeft_toLeftOf="@id/petStatusActivityText"
+            android:layout_marginTop="10dp"
+            android:text="심박수"
+            android:textSize="20dp"/>
+
+        <TextView
+            android:id="@+id/petStatusHeart"
+            android:layout_width="80dp"
+            android:layout_height="wrap_content"
+            app:layout_constraintBottom_toBottomOf="@id/petStatusHeartText"
+            app:layout_constraintLeft_toRightOf="@id/petStatusHeartText"
+            android:layout_marginLeft="15dp"
+            android:text="2000"
+            android:textSize="21dp"
+            android:textAlignment="textEnd"
+            />
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            app:layout_constraintBottom_toBottomOf="@id/petStatusHeart"
+            app:layout_constraintLeft_toRightOf="@id/petStatusHeart"
+            android:text="bpm"
+            android:textSize="21dp"/>
+
+
+        <TextView
+            android:id="@+id/petFeatureTitle"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            app:layout_constraintLeft_toLeftOf="@id/petStatusTitle"
+            app:layout_constraintTop_toBottomOf="@id/petStatusHeart"
+            android:layout_marginTop="20dp"
+            android:text="반려동물 유의사항"
+            android:textSize="20dp"
+            />
+
+        <LinearLayout
+            android:layout_width="350dp"
+            android:layout_height="wrap_content"
+            app:layout_constraintLeft_toLeftOf="parent"
+            app:layout_constraintRight_toRightOf="parent"
+            android:orientation="horizontal"
+            app:layout_constraintTop_toBottomOf="@id/petFeatureTitle">
+
+            <EditText
+                android:id="@+id/petFeature"
+                android:layout_width="290dp"
+                android:layout_height="wrap_content"
+                app:layout_constraintLeft_toLeftOf="parent"
+                app:layout_constraintRight_toRightOf="parent"
+                app:layout_constraintTop_toBottomOf="@id/petFeatureTitle"
+                android:maxLines="4"
+                android:maxLength="30"
+                android:hint="입력하세요 (30글자 이내)"
+                />
+
+            <androidx.appcompat.widget.AppCompatButton
+                android:id="@+id/petFeatureEndButton"
+                android:layout_width="50dp"
+                android:layout_height="35dp"
+                app:layout_constraintLeft_toLeftOf="parent"
+                android:text="완료"
+                android:textColor="@color/white"
+                android:background="@color/skyblue"
+                />
+        </LinearLayout>
 
 
 
-    <TextView
-        android:id="@+id/petStatusTitle"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_marginLeft="20dp"
-        android:layout_marginTop="20dp"
-        android:text="펫 관리"
-        android:textSize="20dp"
-        app:layout_constraintLeft_toLeftOf="parent"
-        app:layout_constraintTop_toTopOf="parent" />
 
 
-</androidx.constraintlayout.widget.ConstraintLayout>
+
+    </androidx.constraintlayout.widget.ConstraintLayout>
+</FrameLayout>
