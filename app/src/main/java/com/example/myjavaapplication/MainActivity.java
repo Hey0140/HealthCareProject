@@ -38,6 +38,8 @@ public class MainActivity extends AppCompatActivity {
     private PetmanageFragment petmanageFragment = new PetmanageFragment();
     private CommunityFragment communityFragment = new CommunityFragment();
     private MypageFragment mypageFragment = new MypageFragment();
+
+    private PetStatusFragment petStatusFragment = new PetStatusFragment();
     UserMedia userData;
 
     @Override
@@ -78,6 +80,15 @@ public class MainActivity extends AppCompatActivity {
             }
             return true;
         }
+    }
+
+    public void onChangeToPetStatusFragment(){
+        FragmentTransaction ftransaction = fmanager.beginTransaction();
+        ftransaction.replace(R.id.mainFragmentLayout, petStatusFragment).commitAllowingStateLoss();
+    }
+    public void onChangeToPetManageFragment(){
+        FragmentTransaction ftransaction = fmanager.beginTransaction();
+        ftransaction.replace(R.id.mainFragmentLayout, petmanageFragment).commitAllowingStateLoss();
     }
 
 }
