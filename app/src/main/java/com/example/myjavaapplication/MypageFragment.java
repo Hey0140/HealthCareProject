@@ -84,7 +84,7 @@ public class MypageFragment extends Fragment implements View.OnClickListener {
                         }
                         if(vg == Code.ViewType.ADD){
                             Intent intent = new Intent(getActivity(), PetAddActivity.class);
-                            intent.putExtra("userData", userData.getUid());
+                            intent.putExtra("userData", userData);
                             startActivity(intent);
                         }
             }

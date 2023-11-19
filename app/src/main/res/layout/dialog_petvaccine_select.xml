@@ -1,0 +1,69 @@
+<?xml version="1.0" encoding="utf-8"?>
+<FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="wrap_content"
+    android:layout_height="wrap_content"
+    xmlns:app="http://schemas.android.com/apk/res-auto">
+
+    <androidx.constraintlayout.widget.ConstraintLayout
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content">
+
+
+        <View
+            android:id="@+id/petVaccineSelectedBox"
+            android:layout_width="300dp"
+            android:layout_height="450dp"
+            app:layout_constraintTop_toTopOf="parent"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintLeft_toLeftOf="parent"
+            app:layout_constraintRight_toRightOf="parent"
+            android:background="@drawable/petvaccine_selected_box"
+            android:orientation="vertical"/>
+
+        <TextView
+            android:id="@+id/petVaccineSelectedTitle"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="예방주사 선택"
+            app:layout_constraintTop_toTopOf="@id/petVaccineSelectedBox"
+            app:layout_constraintLeft_toLeftOf="@id/petVaccineSelectedBox"
+            app:layout_constraintRight_toRightOf="@id/petVaccineSelectedBox"
+            android:layout_marginTop="17dp"
+            android:textSize="16dp"/>
+
+        <View
+            android:id="@+id/vaccineDialogHorizonatalLine"
+            android:layout_width="280dp"
+            android:layout_height="1dp"
+            android:background="@drawable/mypage_horizontal_line"
+            app:layout_constraintTop_toBottomOf="@id/petVaccineSelectedTitle"
+            android:layout_marginTop="5dp"
+            app:layout_constraintLeft_toLeftOf="@id/petVaccineSelectedBox"
+            app:layout_constraintRight_toRightOf="@id/petVaccineSelectedBox"/>
+
+        <androidx.recyclerview.widget.RecyclerView
+            android:id="@+id/petVaccineRecyclerView"
+            android:layout_width="280dp"
+            android:layout_height="325dp"
+            app:layout_constraintTop_toBottomOf="@id/vaccineDialogHorizonatalLine"
+            app:layout_constraintLeft_toLeftOf="parent"
+            app:layout_constraintRight_toRightOf="parent"
+            android:layout_marginTop="15dp"/>
+
+        <androidx.appcompat.widget.AppCompatButton
+            android:id="@+id/vaccineEndButton"
+            android:layout_width="280dp"
+            android:layout_height="40dp"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintLeft_toLeftOf="parent"
+            app:layout_constraintRight_toRightOf="parent"
+            android:layout_marginBottom="13dp"
+            android:background="@color/skyblue"
+            android:text="완료"
+            android:textColor="@color/white"
+            />
+    </androidx.constraintlayout.widget.ConstraintLayout>
+
+
+</FrameLayout>

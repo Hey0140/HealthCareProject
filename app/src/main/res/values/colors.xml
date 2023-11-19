@@ -11,4 +11,7 @@
     <color name="pointblue">#8EB6F8</color>
     <color name="whitegray">#E7E6E6</color>
     <color name="red">#e8301c</color>
+    <color name ="whitered">#EDA399</color>
+    <color name="whitegreen">#ACE997</color>
+    <color name="whiteyellow">#F1EEA1</color>
 </resources>
