@@ -8,6 +8,7 @@ import android.view.View;
 import android.widget.Button;
 import android.widget.CheckBox;
 import android.widget.EditText;
+import android.widget.Toast;
 
 import java.util.HashMap;
 import java.util.LinkedList;
@@ -24,6 +25,7 @@ public class PetAdd2Activity extends AppCompatActivity implements View.OnClickLi
     EditText petFeed;
     EditText petFeedCalorie;
     EditText petVaccine;
+    EditText petFeat;
 
 
     HashMap<String, Boolean> petLikeList = new HashMap<>();
@@ -44,12 +46,14 @@ public class PetAdd2Activity extends AppCompatActivity implements View.OnClickLi
         petFeed = findViewById(R.id.petFeed);
         petFeedCalorie = findViewById(R.id.petFeedCalorie);
         petVaccine = findViewById(R.id.petVaccine);
+        petFeat = findViewById(R.id.petFeat);
         
         endButton.setOnClickListener(this);
         petVaccineButton.setOnClickListener(this);
         diet.setOnClickListener(this);
         health.setOnClickListener(this);
         walk.setOnClickListener(this);
+        setItemList();
 
         Intent intent = new Intent(this.getIntent());
         userData = (UserMedia) intent.getSerializableExtra("userData");
@@ -62,11 +66,19 @@ public class PetAdd2Activity extends AppCompatActivity implements View.OnClickLi
     @Override
     public void onClick(View v) {
         if(v == endButton){
-            Intent intent = new Intent(PetAdd2Activity.this, MainActivity.class);
-            intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
-            intent.putExtra("userData", userData);
-            startActivity(intent);
-            finish();
+            if(petFeed.getText().toString().length() < 1){
+                Toast.makeText(this, "사료를 입력하세요.",Toast.LENGTH_SHORT).show();
+            } else if (petFeedCalorie.getText().toString().length() < 1){
+                Toast.makeText(this, "사료 한 끼 칼로리를 입력하세요.",Toast.LENGTH_SHORT).show();
+            } else if (petFeat.getText().toString().length() < 1){
+                Toast.makeText(this, "성격을 입력하세요.",Toast.LENGTH_SHORT).show();
+            } else {
+                Intent intent = new Intent(PetAdd2Activity.this, MainActivity.class);
+                intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
+                intent.putExtra("userData", userData);
+                startActivity(intent);
+                finish();
+            }
         }
         if(v == diet){
             if(diet.isChecked()){
@@ -90,15 +102,48 @@ public class PetAdd2Activity extends AppCompatActivity implements View.OnClickLi
             }
         }
         if(v == petVaccineButton){
-            PetVaccineSelectedDialog dialog = new PetVaccineSelectedDialog(this);
+
+            PetVaccineSelectedDialog dialog = new PetVaccineSelectedDialog(this, vaccineList);
             dialog.setVaccineDialogListener(new PetVaccineSelectedDialog.OnVaccineDialogListener() {
                 @Override
                 public void onVaccineSelected(HashMap<String, Boolean> data) {
                     vaccineList = data;
+                    String petVaccineData = "";
+                    for(Map.Entry<String, Boolean> hashMap : vaccineList.entrySet()){
+                        if(hashMap.getValue() == true){
+                            petVaccineData = petVaccineData + hashMap.getKey() + ", ";
+                        }
+                    }
+                    if( petVaccineData.length() > 3){
+                        petVaccine.setText(petVaccineData.substring(0,petVaccineData.length()-2));
+                    }
                 }
             });
             dialog.show();
         }
-
     }
+
+    private void setItemList(){
+        for(int i = 1; i <=5; i++){
+            String name = "종합백신 "+i+"차 (생후"+(i*2+4)+"주차)";
+            vaccineList.put(name, false);
+        }
+        for(int i = 1; i <=2; i++){
+            String name = "코로나 장염 "+i+"차 (생후 "+(i*2+4)+"주차)";
+            vaccineList.put(name, false);
+        }
+        for(int i = 1; i <=2; i++){
+            String name = "켄넬코프 "+i+"차 (생후 "+(i*2+8)+"주차)";
+            vaccineList.put(name, false);
+        }
+
+        vaccineList.put("광견병 1차 (생후 12주차)", false);
+        vaccineList.put("광견병 2차 (생후 1년차)", false);
+
+        for(int i = 1; i <=2; i++){
+            String name = "인플루엔자 "+i+"차 (생후 "+(i*2+12)+"주차)";
+            vaccineList.put(name, false);
+        }
+    }
+
 }

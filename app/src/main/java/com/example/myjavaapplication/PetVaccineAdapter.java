@@ -7,6 +7,7 @@ import android.view.ViewGroup;
 import android.widget.CheckBox;
 import android.widget.ImageView;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.RecyclerView;
@@ -39,13 +40,13 @@ public class PetVaccineAdapter extends RecyclerView.Adapter<RecyclerView.ViewHol
             vaccineCheck = itemView.findViewById(R.id.vaccineCheck);
             vaccineName = itemView.findViewById(R.id.vaccineName);
 
-            itemView.setOnClickListener(new View.OnClickListener() {
+            vaccineCheck.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View view) {
                     int position = getAdapterPosition();
                     if(position != RecyclerView.NO_POSITION){
                         if(mListener != null){
-                            mListener.onItemSelected(view, position, Code.ViewType.BASIC);
+                           mListener.onItemSelected(view, position, Code.ViewType.BASIC);
                         }
                     }
                 }
