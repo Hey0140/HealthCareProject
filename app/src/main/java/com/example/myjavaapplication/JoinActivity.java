@@ -29,6 +29,8 @@ import com.google.firebase.ktx.Firebase;
 import java.util.HashMap;
 
 public class JoinActivity extends AppCompatActivity implements View.OnClickListener {
+    private final boolean PROFESSIONAL = true;
+    private final boolean BASIC_MEMBER = false;
     private FirebaseAuth auth;
     private EditText userName, phoneNumber, emailId, password, passwordCheck;
     private Button joinButton, verifyButton;
@@ -60,7 +62,7 @@ public class JoinActivity extends AppCompatActivity implements View.OnClickListe
         verifyButton.setVisibility(View.GONE);
         toggleButton.setChecked(false);
         joinButton.setText("기입 완료");
-        professional = false;
+        professional = BASIC_MEMBER;
         isEmailVerified = false;
         isSetEmail = false;
 
@@ -108,13 +110,16 @@ public class JoinActivity extends AppCompatActivity implements View.OnClickListe
             }
         }
         if(v== toggleButton){
-            if(professional == false){
-                professional = true;
-                toggleButton.setChecked(true);
+            if(professional == BASIC_MEMBER){
+                professional = PROFESSIONAL;
+                toggleButton.setChecked(PROFESSIONAL);
+                Toast.makeText(this, "의사 계정으로 회원가입 진행합니다.", Toast.LENGTH_SHORT).show();
+
             }
             else{
-                professional = false;
-                toggleButton.setChecked(false);
+                professional = BASIC_MEMBER;
+                toggleButton.setChecked(BASIC_MEMBER);
+                Toast.makeText(this, "일반 계정으로 회원가입 진행합니다.", Toast.LENGTH_SHORT).show();
             }
         }
     }
