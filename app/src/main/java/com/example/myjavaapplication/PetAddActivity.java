@@ -33,6 +33,8 @@ public class PetAddActivity extends AppCompatActivity implements View.OnClickLis
     private final int MIDDLE = 22;
     private final int BIG = 23;
     private UserMedia userData;
+    private PetMedia petData;
+    private int petCount;
     private int petSex = 0;
     private int petKind = 0;
     private CircleImageView petProfileBox;
@@ -42,6 +44,7 @@ public class PetAddActivity extends AppCompatActivity implements View.OnClickLis
 
     private CheckBox male, female, maleNeutering, femaleNeutering;
     private Button petAddNextButton, petKindButton;
+    private Bitmap image;
 
 
     @Override
@@ -69,6 +72,9 @@ public class PetAddActivity extends AppCompatActivity implements View.OnClickLis
         female.setOnClickListener(this);
         maleNeutering.setOnClickListener(this);
         femaleNeutering.setOnClickListener(this);
+
+        image = null;
+        petData = new PetMedia();
 
         petBirth.addTextChangedListener(new TextWatcher() {
             @Override
@@ -118,6 +124,8 @@ public class PetAddActivity extends AppCompatActivity implements View.OnClickLis
 
         Intent intent = new Intent(this.getIntent());
         userData = (UserMedia) intent.getSerializableExtra("userData");
+
+        petCount = userData.getCount();
     }
 
 
@@ -135,8 +143,10 @@ public class PetAddActivity extends AppCompatActivity implements View.OnClickLis
             } else if(petWeight.getText().toString().length() < 1) {
                 Toast.makeText(this, "몸무게를 입력해주세요", Toast.LENGTH_SHORT).show();
             } else {
+                onSetPetData();
                 Intent intent = new Intent(getApplicationContext(), PetAdd2Activity.class);
                 intent.putExtra("userData", userData);
+                intent.putExtra("petData", petData);
                 startActivity(intent);
             }
         }
@@ -218,15 +228,30 @@ public class PetAddActivity extends AppCompatActivity implements View.OnClickLis
             if(resultCode == RESULT_OK){
                 try{
                     InputStream in = getContentResolver().openInputStream(data.getData());
-                    Bitmap img = BitmapFactory.decodeStream(in);
+                    image = BitmapFactory.decodeStream(in);
                     in.close();
-
-                    petProfileBox.setImageBitmap(img);
+                    petProfileBox.setImageBitmap(image);
                     petProfileImage.setVisibility(View.INVISIBLE);
                 }catch (Exception e){
 
                 }
             }
         }
+    }
+
+    private void onSetPetData(){
+        petData.setuId(userData.getUid());
+        if(image != null){
+            petData.setImage(image.toString());
+        }
+        else{
+            petData.setImage("");
+        }
+        petData.setPetId(petCount);
+        petData.setPetName(petName.getText().toString());
+        petData.setPetKind(petKind);
+        petData.setPetSex(petSex);
+        petData.setPetBirth(petBirth.getText().toString());
+        petData.setPetWeight(Integer.parseInt(petWeight.getText().toString()));
     }
 }

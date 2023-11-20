@@ -143,6 +143,7 @@ public class JoinActivity extends AppCompatActivity implements View.OnClickListe
                             hashMap.put("number", number);
                             hashMap.put("pro", professional);
                             hashMap.put("image", "");
+                            hashMap.put("count", 0);
 
                             FirebaseFirestore db = FirebaseFirestore.getInstance();
                             db.collection("users").document(uid)

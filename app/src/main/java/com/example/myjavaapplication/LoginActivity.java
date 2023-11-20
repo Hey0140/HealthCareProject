@@ -268,6 +268,7 @@ public class LoginActivity extends AppCompatActivity implements View.OnClickList
         hashMap.put("number", number);
         hashMap.put("pro", professional);
         hashMap.put("image", image);
+        hashMap.put("count", 0);
 
         FirebaseFirestore db = FirebaseFirestore.getInstance();
         db.collection("users").document(id)

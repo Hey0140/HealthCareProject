@@ -9,14 +9,16 @@ public class UserMedia implements Serializable {
     private String number;
     private boolean pro;
     private String uid;
+    private int count;
 
-    public void UserMedia(){
+    public UserMedia(){
         this.email = "";
         this.image = "";
         this.name = "";
         this.number = "";
         this.pro = false;
         this.uid = "";
+        this.count = 0;
     }
 
     public String getEmail() {
@@ -30,6 +32,7 @@ public class UserMedia implements Serializable {
     public String getNumber() {
         return number;
     }
+    public int getCount(){ return count;}
 
     public boolean isPro() {
         return pro;
@@ -53,4 +56,6 @@ public class UserMedia implements Serializable {
     public void setPro(boolean pro) { this.pro = pro; }
     public void setUid(String uid) {this.uid = uid;}
     public void setImage(String image){this.image = image;}
+
+    public void setCount(int count){this.count = count; }
 }
