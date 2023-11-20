@@ -116,30 +116,36 @@ public class LoginActivity extends AppCompatActivity implements View.OnClickList
                                     FirebaseUser user = auth.getCurrentUser();
                                     if(user.isEmailVerified()){
                                         getDataToFirestore(user.getUid());
-                                        Toast.makeText(LoginActivity.this, "로그인 성공!", Toast.LENGTH_LONG).show();
                                     }
                                     else{
-                                        Toast.makeText(LoginActivity.this, "이메일 인증 중입니다. 이메일을 인증을 진행해주세요.", Toast.LENGTH_LONG).show();
+                                        Toast.makeText(LoginActivity.this, "이메일 인증 중입니다. 이메일을 인증을 진행해주세요.", Toast.LENGTH_SHORT).show();
                                     }
                                 }
                                 else{
-                                    Toast.makeText(LoginActivity.this, "아이디 또는 패스워드가 일치하지 않습니다.", Toast.LENGTH_LONG).show();
+                                    Toast.makeText(LoginActivity.this, "아이디 또는 패스워드가 일치하지 않습니다.", Toast.LENGTH_SHORT).show();
                                 }
                             }
                         });
             } else{
-                Toast.makeText(LoginActivity.this, "아이디 또는 비밀번호를 입력해주세요.", Toast.LENGTH_LONG).show();
+                Toast.makeText(LoginActivity.this, "아이디 또는 비밀번호를 입력해주세요.", Toast.LENGTH_SHORT).show();
             }
 
         }
         if(v == googleButton) {
             gsa = GoogleSignIn.getLastSignedInAccount(LoginActivity.this);
             if(gsa != null){
-                Toast.makeText(this, "로그인 성공", Toast.LENGTH_LONG).show();
+                Toast.makeText(this, "구글 로그인은 일반 회원으로만 로그인할 수 있습니다.", Toast.LENGTH_SHORT).show();
                 GOOGLE = true;
+                memCheckBox.setChecked(true);
+                proCheckBox.setChecked(false);
+                professional = BASIC_MEMBER;
                 getDataToFirestore(gsa.getId());
             }
             else{
+                memCheckBox.setChecked(true);
+                proCheckBox.setChecked(false);
+                professional = BASIC_MEMBER;
+                Toast.makeText(this, "구글 로그인은 일반 회원으로만 로그인할 수 있습니다.", Toast.LENGTH_SHORT).show();
                 Intent intent = gsc.getSignInIntent();
                 startActivityForResult(intent, RC_SIGN_IN);
             }
@@ -172,7 +178,7 @@ public class LoginActivity extends AppCompatActivity implements View.OnClickList
                 String email = gsia.getEmail();
                 Uri personPhoto = gsia.getPhotoUrl();
 
-                setDataToFirestore(id, email, personName, "", professional, personPhoto.toString());
+                setDataToFirestore(id, email, personName, "", BASIC_MEMBER, personPhoto.toString());
             }
         } catch (ApiException e) {
             Log.e("google", "signInResult:failed code=" + e.getStatusCode());
@@ -203,9 +209,25 @@ public class LoginActivity extends AppCompatActivity implements View.OnClickList
             @Override
             public void onSuccess(DocumentSnapshot documentSnapshot) {
                 userData = documentSnapshot.toObject(UserMedia.class);
-                Intent intent = new Intent(getApplicationContext(), MainActivity.class);
-                intent.putExtra("userData", userData);
-                startActivity(intent);
+                if(userData.isPro() == professional){
+                    Intent intent = new Intent(getApplicationContext(), MainActivity.class);
+                    intent.putExtra("userData", userData);
+                    startActivity(intent);
+                }
+                else{
+                    if(professional == BASIC_MEMBER && userData.isPro() == PROFESSIONAL){
+                        Toast.makeText(LoginActivity.this, "의사 계정 "+userData.getName()+"님 일반 회원 서비스로 접속합니다.", Toast.LENGTH_LONG).show();
+                        Intent intent = new Intent(getApplicationContext(), MainActivity.class);
+                        intent.putExtra("userData", userData);
+                        startActivity(intent);
+                    }
+                    if(professional == PROFESSIONAL && userData.isPro() == BASIC_MEMBER){
+                        Toast.makeText(LoginActivity.this, "의사 계정이 아닙니다. 일반 회원으로 접속해주세요.", Toast.LENGTH_LONG).show();
+                        auth.signOut();
+                    }
+
+                }
+
             }
         });
     }
