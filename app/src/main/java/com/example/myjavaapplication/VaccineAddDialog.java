@@ -14,8 +14,8 @@ import android.widget.EditText;
 public class VaccineAddDialog extends Dialog implements View.OnClickListener {
 
     private Context context;
-    EditText vaccineAdd;
-    Button vaccineAddButton;
+    private EditText vaccineAdd;
+    private Button vaccineAddButton;
 
     private VaccineAddDialog.OnVaccineAddDialogListener vaccineAddDialogListener;
 

@@ -30,23 +30,12 @@ import java.util.HashMap;
 
 public class JoinActivity extends AppCompatActivity implements View.OnClickListener {
     private FirebaseAuth auth;
-    EditText userName;
-    EditText phoneNumber;
-    EditText emailId;
-    EditText password;
-    EditText passwordCheck;
-    Button joinButton;
-    Button verifyButton;
-    ToggleButton toggleButton;
+    private EditText userName, phoneNumber, emailId, password, passwordCheck;
+    private Button joinButton, verifyButton;
+    private ToggleButton toggleButton;
+    private String name, number, email, pw, pwCheck, uid;
     boolean isEmailVerified;
     boolean isSetEmail;
-
-    String name;
-    String number;
-    String email;
-    String pw;
-    String pwCheck;
-    String uid;
     boolean professional;
 
     @Override

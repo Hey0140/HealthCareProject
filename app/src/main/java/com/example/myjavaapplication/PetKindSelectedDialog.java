@@ -10,9 +10,7 @@ import androidx.annotation.Nullable;
 
 public class PetKindSelectedDialog extends Dialog implements View.OnClickListener {
     private Context context;
-    View smallPet;
-    View middlePet;
-    View bigPet;
+    private View smallPet, middlePet, bigPet;
     private OnPetKindDialogListener kindDialogListener;
 
     public void setKindDialogListener(OnPetKindDialogListener onPetKindDialogListener){

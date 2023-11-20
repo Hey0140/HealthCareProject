@@ -35,20 +35,13 @@ public class PetAddActivity extends AppCompatActivity implements View.OnClickLis
     private UserMedia userData;
     private int petSex = 0;
     private int petKind = 0;
-    CircleImageView petProfileBox;
-    View cameraBox;
-    View petProfileImage;
+    private CircleImageView petProfileBox;
+    private View petProfileImage;
 
-    EditText petName;
-    EditText petBirth;
-    EditText petWeight;
+    private EditText petName, petBirth, petWeight;
 
-    CheckBox male, female, maleNeutering, femaleNeutering;
-    Button petAddNextButton;
-    Button petKindButton;
-
-
-
+    private CheckBox male, female, maleNeutering, femaleNeutering;
+    private Button petAddNextButton, petKindButton;
 
 
     @Override
@@ -58,7 +51,6 @@ public class PetAddActivity extends AppCompatActivity implements View.OnClickLis
 
         petProfileBox = findViewById(R.id.petProfileBox);
         petProfileImage = findViewById(R.id.petProfileImage);
-        cameraBox = findViewById(R.id.cameraBox);
         petName = findViewById(R.id.petName);
         petKindButton = findViewById(R.id.petKindButton);
         petBirth = findViewById(R.id.petBirth);
@@ -73,7 +65,6 @@ public class PetAddActivity extends AppCompatActivity implements View.OnClickLis
         petAddNextButton.setOnClickListener(this);
         petKindButton.setOnClickListener(this);
         petProfileBox.setOnClickListener(this);
-        cameraBox.setOnClickListener(this);
         male.setOnClickListener(this);
         female.setOnClickListener(this);
         maleNeutering.setOnClickListener(this);
@@ -154,9 +145,6 @@ public class PetAddActivity extends AppCompatActivity implements View.OnClickLis
             intent.setType("image/*");
             intent.setAction(intent.ACTION_GET_CONTENT);
             startActivityForResult(intent, REQUEST_CODE);
-        }
-        if( v== cameraBox){
-
         }
         if( v== petKindButton){
             PetKindSelectedDialog dialog = new PetKindSelectedDialog(this);

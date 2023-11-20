@@ -11,10 +11,9 @@ import android.view.ViewGroup;
 import android.widget.Button;
 
 public class PetStatusFragment extends Fragment implements View.OnClickListener {
-    MainActivity mainActivity;
+    private MainActivity mainActivity;
 
-    View arrow;
-    View backButton;
+    private View arrow, backButton;
     public PetStatusFragment() {
 
     }
