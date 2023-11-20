@@ -97,7 +97,6 @@
             android:background="@drawable/petstatus_arrow"
             />
 
-
         <View
             android:id="@+id/petStatusSpectrum"
             android:layout_width="320dp"
