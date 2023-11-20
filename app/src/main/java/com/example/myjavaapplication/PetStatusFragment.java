@@ -30,7 +30,6 @@ public class PetStatusFragment extends Fragment implements View.OnClickListener 
                              Bundle savedInstanceState) {
         View view = inflater.inflate(R.layout.petstatus_page, container, false);
 
-        arrow = view.findViewById(R.id.petStatusArrowBlue);
         backButton = view.findViewById(R.id.petStatusBackButton);
 
         backButton.setOnClickListener(this);

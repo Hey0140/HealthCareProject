@@ -21,16 +21,16 @@ import com.google.firebase.auth.FirebaseAuth;
 import java.util.ArrayList;
 
 public class MypageFragment extends Fragment implements View.OnClickListener {
-    FirebaseAuth auth;
+    private FirebaseAuth auth;
 
-    ArrayList<MyPetInfoData> list= new ArrayList<>();
+    private ArrayList<MyPetInfoData> list= new ArrayList<>();
 
-    Button logoutButton;
+    private Button logoutButton;
 
-    UserMedia userData;
-    TextView profileName;
-    TextView profileEmail;
-    ImageView profileImage;
+    private UserMedia userData;
+    private TextView profileName, profileEmail;
+    private ImageView profileImage;
+    private int petCount = 0;
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
@@ -60,10 +60,10 @@ public class MypageFragment extends Fragment implements View.OnClickListener {
         profileName.setText(userData.getName());
         profileEmail.setText(userData.getEmail());
 
-
         list.clear();
 
-        for (int i = 0; i < 2; i++) {
+        petCount = userData.getCount();
+        for (int i = 0; i < petCount; i++) {
             MyPetInfoData mpid = new MyPetInfoData();
             mpid.setName("choco");
             mpid.setImageId(R.drawable.mypetprofile_basic_icon);
