@@ -14,6 +14,7 @@ import android.widget.Toast;
 
 import com.google.android.gms.tasks.OnFailureListener;
 import com.google.android.gms.tasks.OnSuccessListener;
+import com.google.firebase.firestore.DocumentReference;
 import com.google.firebase.firestore.FirebaseFirestore;
 
 import org.checkerframework.checker.units.qual.A;
@@ -161,11 +162,14 @@ public class PetAdd2Activity extends AppCompatActivity implements View.OnClickLi
         petData.setPetFeat(petFeat.getText().toString());
         petData.setPetLike(petLikeList);
         petData.setPetVaccine(vaccineList);
+        int preCount = userData.getCount();
+        userData.setCount(preCount+1);
     }
 
     private void onSetDataToFirebase(PetMedia pet){
         HashMap<String, Object> hashMap = new HashMap<>();
         String uid = pet.getuId();
+        int id = pet.getPetId();
         hashMap.put("uid", uid);
         hashMap.put("id", pet.getPetId());
         hashMap.put("birth", pet.getPetBirth());
@@ -179,7 +183,8 @@ public class PetAdd2Activity extends AppCompatActivity implements View.OnClickLi
         hashMap.put("weight", pet.getPetWeight());
 
         FirebaseFirestore db = FirebaseFirestore.getInstance();
-        db.collection("pet").document(uid)
+        db.collection("users").document(uid)
+                .collection("pet").document(String.valueOf(id))
                 .set(hashMap)
                 .addOnSuccessListener(new OnSuccessListener<Void>() {
                     @Override
@@ -194,8 +199,10 @@ public class PetAdd2Activity extends AppCompatActivity implements View.OnClickLi
                     }
                 });
 
-        db.collection("pet").document(uid).collection("list")
-                .document("petLike")
+
+        db.collection("users").document(uid)
+                .collection("pet").document(String.valueOf(id))
+                .collection("list").document("petLike")
                 .set(petLikeList)
                 .addOnSuccessListener(new OnSuccessListener<Void>() {
                     @Override
@@ -210,8 +217,9 @@ public class PetAdd2Activity extends AppCompatActivity implements View.OnClickLi
                     }
                 });
 
-        db.collection("pet").document(uid).collection("list")
-                .document("petVaccine")
+        db.collection("users").document(uid)
+                .collection("pet").document(String.valueOf(id))
+                .collection("list").document("petVaccine")
                 .set(vaccineList)
                 .addOnSuccessListener(new OnSuccessListener<Void>() {
                     @Override
@@ -223,6 +231,21 @@ public class PetAdd2Activity extends AppCompatActivity implements View.OnClickLi
                     @Override
                     public void onFailure(@NonNull Exception e) {
                         Log.w("Firebase", "Error writing document", e);
+                    }
+                });
+
+        DocumentReference documentReference = db.collection("users").document(uid);
+        documentReference.update("count", userData.getCount())
+                .addOnSuccessListener(new OnSuccessListener<Void>() {
+                    @Override
+                    public void onSuccess(Void aVoid) {
+                        Log.d("Firebase", "DocumentSnapshot successfully updated!");
+                    }
+                })
+                .addOnFailureListener(new OnFailureListener() {
+                    @Override
+                    public void onFailure(@NonNull Exception e) {
+                        Log.w("Firebase", "Error updating document", e);
                     }
                 });
 
