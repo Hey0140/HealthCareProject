@@ -35,26 +35,6 @@
             android:background="@drawable/pet_icon"
             android:backgroundTint="#B6B6B6"/>
 
-        <View
-            android:id="@+id/cameraBox"
-            android:layout_width="25dp"
-            android:layout_height="25dp"
-            app:layout_constraintBottom_toBottomOf="@id/petProfileBox"
-            app:layout_constraintLeft_toRightOf="@id/petProfileBox"
-            android:layout_marginBottom="-7dp"
-            android:layout_marginLeft="-17dp"
-            android:background="@drawable/myprofile_circle"
-            android:backgroundTint="#B6B6B6"/>
-
-        <ImageView
-            android:layout_width="15dp"
-            android:layout_height="15dp"
-            app:layout_constraintTop_toTopOf="@id/cameraBox"
-            app:layout_constraintBottom_toBottomOf="@id/cameraBox"
-            app:layout_constraintLeft_toLeftOf="@id/cameraBox"
-            app:layout_constraintRight_toRightOf="@id/cameraBox"
-            android:background="@drawable/camera_icon"/>
-
     </androidx.constraintlayout.widget.ConstraintLayout>
 
     <TextView

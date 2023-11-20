@@ -165,10 +165,10 @@
         app:layout_constraintTop_toBottomOf="@id/petVaccinTitle"
         app:layout_constraintLeft_toLeftOf="parent"
         app:layout_constraintRight_toRightOf="parent"
-        android:maxLines="1"
+        android:maxLines="14"
         android:ellipsize="end"
         android:hint="예방접종 이름"
-        android:textSize="16dp"
+        android:textSize="12dp"
         />
 
     <androidx.appcompat.widget.AppCompatButton

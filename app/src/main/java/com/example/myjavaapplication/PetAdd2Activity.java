@@ -16,17 +16,11 @@ import java.util.Map;
 
 public class PetAdd2Activity extends AppCompatActivity implements View.OnClickListener {
     
-    Button endButton;
-    Button petVaccineButton;
-    private UserMedia userData;
-    CheckBox diet;
-    CheckBox health;
-    CheckBox walk;
-    EditText petFeed;
-    EditText petFeedCalorie;
-    EditText petVaccine;
-    EditText petFeat;
 
+    private UserMedia userData;
+    private CheckBox diet, health, walk;
+    private EditText petFeed, petFeedCalorie, petVaccine, petFeat;
+    private Button endButton, petVaccineButton;
 
     HashMap<String, Boolean> petLikeList = new HashMap<>();
     HashMap<String, Boolean> vaccineList = new HashMap<>();
@@ -47,6 +41,8 @@ public class PetAdd2Activity extends AppCompatActivity implements View.OnClickLi
         petFeedCalorie = findViewById(R.id.petFeedCalorie);
         petVaccine = findViewById(R.id.petVaccine);
         petFeat = findViewById(R.id.petFeat);
+
+        petVaccine.setEnabled(false);
         
         endButton.setOnClickListener(this);
         petVaccineButton.setOnClickListener(this);

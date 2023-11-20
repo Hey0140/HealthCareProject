@@ -50,16 +50,13 @@ public class LoginActivity extends AppCompatActivity implements View.OnClickList
     private final boolean PROFESSIONAL = true;
 
 
-    CheckBox proCheckBox;
-    CheckBox memCheckBox;
-    EditText idText, pwText;
-    Button loginButton, googleButton;
-    TextView loginJoin;
-    TextView loginFindOrPw;
+    private CheckBox proCheckBox, memCheckBox;
+    private EditText idText, pwText;
+    private Button loginButton, googleButton;
+    private TextView loginJoin, loginFindOrPw;
 
-    String email = "";
-    String password = "";
-    UserMedia userData;
+    private String email = "", password = "";
+    private UserMedia userData;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {

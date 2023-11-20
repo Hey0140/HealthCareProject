@@ -36,11 +36,11 @@ public class MainActivity extends AppCompatActivity {
     private FragmentManager fmanager = getSupportFragmentManager();
     private HomeFragment homeFragment = new HomeFragment();
     private PetmanageFragment petmanageFragment = new PetmanageFragment();
-    private CommunityFragment communityFragment = new CommunityFragment();
     private MypageFragment mypageFragment = new MypageFragment();
 
     private PetStatusFragment petStatusFragment = new PetStatusFragment();
-    UserMedia userData;
+//    private CommunityFragment communityFragment = new CommunityFragment();
+    private UserMedia userData;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -69,9 +69,9 @@ public class MainActivity extends AppCompatActivity {
             if(item.getItemId() ==  R.id.petIcon) {
                 ftransaction.replace(R.id.mainFragmentLayout, petmanageFragment).commitAllowingStateLoss();
             }
-            if(item.getItemId() == R.id.communityIcon) {
-                ftransaction.replace(R.id.mainFragmentLayout, communityFragment).commitAllowingStateLoss();
-            }
+//            if(item.getItemId() == R.id.communityIcon) {
+//                ftransaction.replace(R.id.mainFragmentLayout, communityFragment).commitAllowingStateLoss();
+//            }
             if(item.getItemId() == R.id.mypageIcon) {
                 Bundle bundle = new Bundle();
                 bundle.putSerializable("userData", userData);
