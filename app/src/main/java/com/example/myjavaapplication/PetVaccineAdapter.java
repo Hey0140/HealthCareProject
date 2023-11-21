@@ -94,6 +94,7 @@ public class PetVaccineAdapter extends RecyclerView.Adapter<RecyclerView.ViewHol
         if (holder instanceof PetVaccineAdapter.PetVaccineViewHolder){
             PetVaccineData item = itemList.get(position);
 
+
             ((PetVaccineAdapter.PetVaccineViewHolder) holder).vaccineCheck.setChecked(item.isCheck());
             ((PetVaccineAdapter.PetVaccineViewHolder) holder).vaccineName.setText(item.getVaccineName());
         }

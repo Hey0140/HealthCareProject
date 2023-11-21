@@ -23,20 +23,21 @@ public class HomeFragment extends Fragment implements View.OnClickListener {
     private TextView homePageNeedCalorie;
     private Button homePageChangeButton;
     private Button walkStartButton;
-    private ArrayList<String> list;
+    ArrayList<PetChangeData> list = new ArrayList<>();
     public HomeFragment() {
     }
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-
+        PetChangeData petChangeData = new PetChangeData();
+        petChangeData.setName("choco");
+        list.add(petChangeData);
     }
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
         View view = inflater.inflate(R.layout.fragment_home, container, false);
         puppyName=view.findViewById(R.id.puppyName);
-        puppyName.setText("초코");
         homePageWalkNumber=view.findViewById(R.id.homePageWalkNumber);
         homePageWalkTime=view.findViewById(R.id.homePageWalkTime);
         homePageCalorie=view.findViewById(R.id.homePageCalorie);
@@ -45,23 +46,23 @@ public class HomeFragment extends Fragment implements View.OnClickListener {
         homePageChangeButton.setOnClickListener(this);
         walkStartButton = view.findViewById(R.id.walkStartButton);
         walkStartButton.setOnClickListener(this);
-        list.add("초코");
+
         return view;
     }
 
     @Override
     public void onClick(View view) {
         if (view == homePageChangeButton) {
-            PetChangeDialog dialog = new PetChangeDialog(getContext(),list);
+            PetChangeDialog dialog = new PetChangeDialog(getContext(), list);
             dialog.setChangeDialogListener(
                     new PetChangeDialog.OnChangeDialogListener() {
                         @Override
                         public void onChangeSelected(String data) {
                             puppyName.setText(data);
-
                         }
                     }
             );
+            dialog.show();
             Toast.makeText(getContext(), "확인.", Toast.LENGTH_LONG).show();
         }
         if (view== walkStartButton){
