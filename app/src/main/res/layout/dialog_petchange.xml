@@ -1,0 +1,51 @@
+<?xml version="1.0" encoding="utf-8"?>
+<FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="wrap_content"
+    android:layout_height="wrap_content"
+    xmlns:app="http://schemas.android.com/apk/res-auto">
+    <androidx.constraintlayout.widget.ConstraintLayout
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content">
+        <View
+            android:id="@+id/Petchange_SelectedBox"
+            android:layout_width="300dp"
+            android:layout_height="300dp"
+            app:layout_constraintTop_toTopOf="parent"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintLeft_toLeftOf="parent"
+            app:layout_constraintRight_toRightOf="parent"
+            android:background="@drawable/petvaccine_selected_box"
+            android:orientation="vertical"/>
+
+        <TextView
+            android:id="@+id/Petchange_SelectedTitle"
+            app:layout_constraintLeft_toLeftOf="@id/Petchange_SelectedBox"
+            app:layout_constraintRight_toRightOf="@id/Petchange_SelectedBox"
+            app:layout_constraintTop_toTopOf="@id/Petchange_SelectedBox"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="애완동물 선택"
+            android:textSize="16dp"
+            android:layout_marginTop="15dp"/>
+
+        <View
+            android:id="@+id/Petchange_DialogHorizonatalLine"
+            android:layout_width="280dp"
+            android:layout_height="1dp"
+            android:background="@drawable/mypage_horizontal_line"
+            app:layout_constraintTop_toBottomOf="@id/Petchange_SelectedTitle"
+            android:layout_marginTop="5dp"
+            app:layout_constraintLeft_toLeftOf="@id/Petchange_SelectedBox"
+            app:layout_constraintRight_toRightOf="@id/Petchange_SelectedBox"/>
+
+        <androidx.recyclerview.widget.RecyclerView
+            android:id="@+id/Petchange_RecyclerView"
+            android:layout_width="280dp"
+            android:layout_height="225dp"
+            app:layout_constraintTop_toBottomOf="@id/Petchange_DialogHorizonatalLine"
+            app:layout_constraintLeft_toLeftOf="parent"
+            app:layout_constraintRight_toRightOf="parent"
+            android:layout_marginTop="15dp"/>
+    </androidx.constraintlayout.widget.ConstraintLayout>
+</FrameLayout>
