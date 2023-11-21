@@ -34,6 +34,8 @@ import com.google.firebase.auth.GoogleAuthProvider;
 import com.google.firebase.firestore.DocumentReference;
 import com.google.firebase.firestore.DocumentSnapshot;
 import com.google.firebase.firestore.FirebaseFirestore;
+import com.google.firebase.firestore.QueryDocumentSnapshot;
+import com.google.firebase.firestore.QuerySnapshot;
 
 import java.util.HashMap;
 
@@ -57,6 +59,7 @@ public class LoginActivity extends AppCompatActivity implements View.OnClickList
 
     private String email = "", password = "";
     private UserMedia userData;
+    private PetMedia petData;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -67,6 +70,7 @@ public class LoginActivity extends AppCompatActivity implements View.OnClickList
         professional = BASIC_MEMBER;
         GOOGLE = false;
         userData = new UserMedia();
+        petData = new PetMedia();
 
         idText = findViewById(R.id.loginId);
         pwText = findViewById(R.id.loginPassword);
@@ -230,6 +234,25 @@ public class LoginActivity extends AppCompatActivity implements View.OnClickList
 
             }
         });
+//        if(userData.getCount() > 0){
+//
+//        }
+//        db.collection("users")
+//                .document(id)
+//                .collection("pet")
+//                .get()
+//                .addOnCompleteListener(new OnCompleteListener<QuerySnapshot>() {
+//                    @Override
+//                    public void onComplete(@NonNull Task<QuerySnapshot> task) {
+//                        if (task.isSuccessful()) {
+//                            for (QueryDocumentSnapshot document : task.getResult()) {
+//                                Log.d("Firebase", document.getId() + " => " + document.getData());
+//                            }
+//                        } else {
+//                            Log.d("Firebase", "Error getting documents: ", task.getException());
+//                        }
+//                    }
+//                });
     }
 
     @Override
