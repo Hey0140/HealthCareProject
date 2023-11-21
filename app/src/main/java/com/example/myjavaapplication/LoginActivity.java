@@ -34,10 +34,13 @@ import com.google.firebase.auth.GoogleAuthProvider;
 import com.google.firebase.firestore.DocumentReference;
 import com.google.firebase.firestore.DocumentSnapshot;
 import com.google.firebase.firestore.FirebaseFirestore;
+import com.google.firebase.firestore.Query;
 import com.google.firebase.firestore.QueryDocumentSnapshot;
 import com.google.firebase.firestore.QuerySnapshot;
 
+import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.Map;
 
 public class LoginActivity extends AppCompatActivity implements View.OnClickListener {
     private FirebaseAuth auth;
@@ -59,7 +62,7 @@ public class LoginActivity extends AppCompatActivity implements View.OnClickList
 
     private String email = "", password = "";
     private UserMedia userData;
-    private PetMedia petData;
+    private ArrayList<PetMedia> petData;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -70,7 +73,7 @@ public class LoginActivity extends AppCompatActivity implements View.OnClickList
         professional = BASIC_MEMBER;
         GOOGLE = false;
         userData = new UserMedia();
-        petData = new PetMedia();
+        petData = new ArrayList<>();
 
         idText = findViewById(R.id.loginId);
         pwText = findViewById(R.id.loginPassword);
@@ -234,9 +237,6 @@ public class LoginActivity extends AppCompatActivity implements View.OnClickList
 
             }
         });
-//        if(userData.getCount() > 0){
-//
-//        }
 //        db.collection("users")
 //                .document(id)
 //                .collection("pet")
@@ -246,7 +246,56 @@ public class LoginActivity extends AppCompatActivity implements View.OnClickList
 //                    public void onComplete(@NonNull Task<QuerySnapshot> task) {
 //                        if (task.isSuccessful()) {
 //                            for (QueryDocumentSnapshot document : task.getResult()) {
-//                                Log.d("Firebase", document.getId() + " => " + document.getData());
+//                                PetMedia petMedia = new PetMedia();
+//                                Map<String, Object> temp = document.getData();
+//                                petMedia.setPetId(Integer.parseInt(document.getId()));
+//                                petMedia.setuId((String) temp.get("uid"));
+//                                petMedia.setPetName((String) temp.get("name"));
+////                                petMedia.setPetKind((Long) temp.get("kind"));
+////                                petMedia.setPetSex((Integer)temp.get("sex"));
+//                                petMedia.setPetBirth((String) temp.get("birth"));
+////                                petMedia.setPetWeight((Integer) temp.get("birth"));
+//                                petMedia.setImage((String) temp.get("image"));
+//                                petMedia.setPetFeed((String) temp.get("feed"));
+////                                petMedia.setPetFeedCalorie((Integer) temp.get("feedcal"));
+//                                petMedia.setPetFeat((String) temp.get("feat"));
+//
+//                                petData.add(petMedia);
+//                            }
+//                        } else {
+//                            Log.d("Firebase", "Error getting documents: ", task.getException());
+//                        }
+//                    }
+//                });
+
+//        db.collection("users")
+//                .document(id)
+//                .collection("pet")
+//                .document(id)
+//                .collection("list")
+//                .get()
+//                .addOnCompleteListener(new OnCompleteListener<QuerySnapshot>() {
+//                    @Override
+//                    public void onComplete(@NonNull Task<QuerySnapshot> task) {
+//                        if (task.isSuccessful()) {
+//                            int i = 0;
+//                            for (QueryDocumentSnapshot document : task.getResult()) {
+//                                PetMedia media = petData.get(i);
+//                                if(document.getId().equals("petLike")){
+//                                    Map<String, Object> temp = document.getData();
+//                                    HashMap<String, Boolean> a = new HashMap<>();
+//                                    for( Map.Entry<String, Object> entry: temp.entrySet() ){
+//                                        a.put(entry.getKey(), (Boolean) entry.getValue());
+//                                    }
+//
+//                                }
+//                                if (document.getId().equals("petVaccine")){
+//                                    Map<String, Object> temp = document.getData();
+//                                    HashMap<String, Boolean> a = new HashMap<>();
+//                                    for( Map.Entry<String, Object> entry: temp.entrySet() ){
+//                                        a.put(entry.getKey(), (Boolean) entry.getValue());
+//                                    }
+//                                }
 //                            }
 //                        } else {
 //                            Log.d("Firebase", "Error getting documents: ", task.getException());

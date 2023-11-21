@@ -104,7 +104,7 @@ public class PetmanageFragment extends Fragment implements View.OnClickListener{
         Sucalorie.setText("2000Kcal");
         hospital.setText("SJP 동물병원");
         hname.setText("박소정");
-        monStatusBox.setBackgroundColor(Color.parseColor(String.valueOf(R.color.whitegreen));
+        monStatusBox.setBackgroundColor(Color.parseColor(String.valueOf(R.color.whitegreen)));
         tueStatusBox.setBackgroundColor(Color.parseColor(String.valueOf(R.color.whitegreen)));
         wedStatusBox.setBackgroundColor(Color.parseColor(String.valueOf(R.color.whitegreen)));
         thuStatusBox.setBackgroundColor(Color.parseColor(String.valueOf(R.color.whitegreen)));

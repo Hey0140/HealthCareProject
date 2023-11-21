@@ -13,10 +13,8 @@ import java.util.ArrayList;
 
 public class PetChangeDialog extends Dialog {
     private Context context;
-    private ArrayList<String> list;
     private ArrayList<PetChangeData> itemList = new ArrayList<>();
     private OnChangeDialogListener changeDialogListener;
-    private  String data;
     public interface OnChangeDialogListener{
         void onChangeSelected(String data);
     }
@@ -25,10 +23,10 @@ public class PetChangeDialog extends Dialog {
         this.changeDialogListener = changeDialogListener;
     }
 
-    public PetChangeDialog(@NonNull Context context, ArrayList<String>list) {
+    public PetChangeDialog(@NonNull Context context, ArrayList<PetChangeData> list) {
         super(context);
-        this.context=context;
-        this.list=list;
+        this.context = context;
+        this.itemList = list;
     }
 
     @Override
@@ -42,7 +40,7 @@ public class PetChangeDialog extends Dialog {
             @Override
             public void onItemSelected(View v, int position) {
                 String name = itemList.get(position).getName();
-                changeDialogListener.onChangeSelected(data);
+                changeDialogListener.onChangeSelected(name);
                 dismiss();
             }
         });
