@@ -13,6 +13,8 @@ import android.widget.Toast;
 
 import org.w3c.dom.Text;
 
+import java.util.ArrayList;
+
 public class HomeFragment extends Fragment implements View.OnClickListener {
     private TextView puppyName;
     private TextView homePageWalkNumber;
@@ -21,6 +23,7 @@ public class HomeFragment extends Fragment implements View.OnClickListener {
     private TextView homePageNeedCalorie;
     private Button homePageChangeButton;
     private Button walkStartButton;
+    private ArrayList<String> list;
     public HomeFragment() {
     }
     @Override
@@ -42,12 +45,23 @@ public class HomeFragment extends Fragment implements View.OnClickListener {
         homePageChangeButton.setOnClickListener(this);
         walkStartButton = view.findViewById(R.id.walkStartButton);
         walkStartButton.setOnClickListener(this);
+        list.add("초코");
         return view;
     }
 
     @Override
     public void onClick(View view) {
         if (view == homePageChangeButton) {
+            PetChangeDialog dialog = new PetChangeDialog(getContext(),list);
+            dialog.setChangeDialogListener(
+                    new PetChangeDialog.OnChangeDialogListener() {
+                        @Override
+                        public void onChangeSelected(String data) {
+                            puppyName.setText(data);
+
+                        }
+                    }
+            );
             Toast.makeText(getContext(), "확인.", Toast.LENGTH_LONG).show();
         }
         if (view== walkStartButton){
