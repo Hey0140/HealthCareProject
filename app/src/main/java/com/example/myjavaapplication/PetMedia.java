@@ -86,7 +86,6 @@ public class PetMedia implements Serializable {
     }
 
 
-
     public void setImage(String image) {
         this.image = image;
     }
