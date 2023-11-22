@@ -7,15 +7,17 @@ import java.util.ArrayList;
 import java.util.HashMap;
 
 public class PetMedia implements Serializable {
-    private final int MALE = 11;
-    private final int FEMALE = 12;
-    private final int MALENEUTER = 13;
-    private final int FEMALENEUTER = 14;
-    private final int SMALL = 21;
-    private final int MIDDLE = 22;
-    private final int BIG = 23;
+    private final long MALE = 11;
+    private final long FEMALE = 12;
+    private final long MALENEUTER = 13;
+    private final long FEMALENEUTER = 14;
+    private final long SMALL = 21;
+    private final long MIDDLE = 22;
+    private final long BIG = 23;
 
     public PetMedia() {
+        this.id = 0;
+        this.uid = "";
         this.image = "";
         this.birth = "";
         this.feat = "";
@@ -25,17 +27,15 @@ public class PetMedia implements Serializable {
         this.kind = 0;
         this.weight = 0;
         this.sex = 0;
-        this.id = 0;
-        this.uid = "";
         this.petVaccine = new HashMap<>();
         this.petLike = new HashMap<>();
     }
     private String uid;
     private int id;
-    private int kind;
-    private int sex;
-    private int weight;
-    private int feedcal;
+    private long kind;
+    private long sex;
+    private long weight;
+    private long feedcal;
     private String name;
     private String birth;
     private String image;
@@ -47,16 +47,16 @@ public class PetMedia implements Serializable {
     public String getuId() {
         return uid;
     }
-    public int getPetKind() {
+    public long getPetKind() {
         return kind;
     }
-    public int getPetSex() {
+    public long getPetSex() {
         return sex;
     }
-    public int getPetWeight() {
+    public long getPetWeight() {
         return weight;
     }
-    public int getPetFeedCalorie() {
+    public long getPetFeedCalorie() {
         return feedcal;
     }
     public String getPetName() {
@@ -85,6 +85,8 @@ public class PetMedia implements Serializable {
         return id;
     }
 
+
+
     public void setImage(String image) {
         this.image = image;
     }
@@ -101,11 +103,11 @@ public class PetMedia implements Serializable {
         this.feed = petFeed;
     }
 
-    public void setPetFeedCalorie(int petFeedCalorie) {
+    public void setPetFeedCalorie(long petFeedCalorie) {
         this.feedcal = petFeedCalorie;
     }
 
-    public void setPetKind(int petKind) {
+    public void setPetKind(long petKind) {
         this.kind = petKind;
     }
 
@@ -117,7 +119,7 @@ public class PetMedia implements Serializable {
         this.name = petName;
     }
 
-    public void setPetSex(int petSex) {
+    public void setPetSex(long petSex) {
         this.sex = petSex;
     }
 
@@ -128,7 +130,7 @@ public class PetMedia implements Serializable {
     public void setPetVaccine(HashMap<String, Boolean> petVaccine) {
         this.petVaccine = petVaccine;
     }
-    public void setPetWeight(int petWeight) {
+    public void setPetWeight(long petWeight) {
         this.weight = petWeight;
     }
 

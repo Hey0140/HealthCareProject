@@ -3,10 +3,12 @@ package com.example.myjavaapplication;
 import static com.example.myjavaapplication.R.color.whitegreen;
 
 import android.content.Context;
+import android.content.Intent;
 import android.graphics.Color;
 import android.os.Bundle;
 
 import androidx.annotation.NonNull;
+import androidx.constraintlayout.widget.ConstraintLayout;
 import androidx.fragment.app.Fragment;
 
 import android.view.LayoutInflater;
@@ -18,33 +20,23 @@ import android.widget.Toast;
 
 import org.checkerframework.checker.units.qual.C;
 
+import java.util.ArrayList;
+
 
 public class PetmanageFragment extends Fragment implements View.OnClickListener{
     MainActivity mainActivity;
 
-    private Button petStatusButton;
-    private Button petChangeButton;
-    private TextView name;
-    private TextView weight;
-    private TextView qkq;
-    private TextView calorie;
-    private TextView months;
-    private TextView Mcalorie;
-    private TextView Tcalorie;
-    private TextView Wcalorie;
-    private TextView Thcalorie;
-    private TextView Fcalorie;
-    private TextView Sacalorie;
-    private TextView Sucalorie;
-    private TextView hospital;
-    private TextView hname;
-    private View monStatusBox;
-    private View tueStatusBox;
-    private View wedStatusBox;
-    private View thuStatusBox;
-    private View friStatusBox;
-    private View satStatusBox;
-    private View sunStatusBox;
+    private Button petStatusButton,  petChangeButton;
+    private TextView name, weight, feed, calorie, months;
+    private TextView Mcalorie, Tcalorie, Wcalorie, Thcalorie,  Fcalorie, Sacalorie, Sucalorie;
+    private TextView hospital, hname;
+    private View monStatusBox, tueStatusBox, wedStatusBox, thuStatusBox, friStatusBox, satStatusBox, sunStatusBox;
+    private ConstraintLayout petManageMentLayout;
+
+    private final String WHITERED = "#EDA399";
+    private final String WHITEGREEN = "#ACE997";
+    private final String WHITEYELLOW = "#F1EEA1";
+    private ArrayList<PetChangeData> list;
 
     public PetmanageFragment() {
         // Required empty public constructor
@@ -53,7 +45,10 @@ public class PetmanageFragment extends Fragment implements View.OnClickListener{
    @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-
+        list = new ArrayList<>();
+        PetChangeData petChangeData = new PetChangeData();
+        petChangeData.setName("choco");
+        list.add(petChangeData);
     }
 
     @Override
@@ -63,12 +58,13 @@ public class PetmanageFragment extends Fragment implements View.OnClickListener{
         View view =  inflater.inflate(R.layout.fragment_petmanage, container, false);
 
         petStatusButton = view.findViewById(R.id.petManagementStatusButton);
+        petChangeButton = view.findViewById(R.id.petManagementChangeButton);
+
         name = view.findViewById(R.id.petManagementName);
         weight = view.findViewById(R.id.petManagementWeightText);
-        qkq = view.findViewById(R.id.petManagementFeedText);
+        feed = view.findViewById(R.id.petManagementFeedText);
         calorie = view.findViewById(R.id.petManagementCalorieText);
         months = view.findViewById(R.id.petManagementMonth);
-        monStatusBox = view.findViewById(R.id.petManagementMonth);
         Mcalorie = view.findViewById(R.id.petManagementDayMonCalorie);
         Tcalorie = view.findViewById(R.id.petManagementDayTueCalorie);
         Wcalorie = view.findViewById(R.id.petManagementDayWedCalorie);
@@ -86,13 +82,13 @@ public class PetmanageFragment extends Fragment implements View.OnClickListener{
         friStatusBox = view.findViewById(R.id.petManagementDayFriBox);
         satStatusBox = view.findViewById(R.id.petManagementDaySatBox);
         sunStatusBox = view.findViewById(R.id.petManagementDaySunBox);
+        petManageMentLayout = view.findViewById(R.id.petManagementDayLayout);
 
 
-        petChangeButton = view.findViewById(R.id.petManagementChangeButton);
 
         name.setText("초코");
         weight.setText("5Kg");
-        qkq.setText("고급 사료");
+        feed.setText("고급 사료");
         calorie.setText("3,500Kcal/Kg");
         months.setText("11월");
         Mcalorie.setText("2400Kcal");
@@ -104,26 +100,40 @@ public class PetmanageFragment extends Fragment implements View.OnClickListener{
         Sucalorie.setText("2000Kcal");
         hospital.setText("SJP 동물병원");
         hname.setText("박소정");
-        monStatusBox.setBackgroundColor(Color.parseColor(String.valueOf(R.color.whitegreen)));
-        tueStatusBox.setBackgroundColor(Color.parseColor(String.valueOf(R.color.whitegreen)));
-        wedStatusBox.setBackgroundColor(Color.parseColor(String.valueOf(R.color.whitegreen)));
-        thuStatusBox.setBackgroundColor(Color.parseColor(String.valueOf(R.color.whitegreen)));
-        friStatusBox.setBackgroundColor(Color.parseColor(String.valueOf(R.color.whitegreen)));
-        satStatusBox.setBackgroundColor(Color.parseColor(String.valueOf(R.color.whitegreen)));
-        sunStatusBox.setBackgroundColor(Color.parseColor(String.valueOf(R.color.whitegreen)));
+        monStatusBox.setBackgroundColor(Color.parseColor(WHITEGREEN));
+        tueStatusBox.setBackgroundColor(Color.parseColor(WHITEGREEN));
+        wedStatusBox.setBackgroundColor(Color.parseColor(WHITEGREEN));
+        thuStatusBox.setBackgroundColor(Color.parseColor(WHITEGREEN));
+        friStatusBox.setBackgroundColor(Color.parseColor(WHITEGREEN));
+        satStatusBox.setBackgroundColor(Color.parseColor(WHITEGREEN));
+        sunStatusBox.setBackgroundColor(Color.parseColor(WHITEGREEN));
 
         petChangeButton.setOnClickListener(this);
         petStatusButton.setOnClickListener(this);
+        petManageMentLayout.setOnClickListener(this);
         return view;
     }
 
     @Override
     public void onClick(View v) {
         if(v == petChangeButton){
-
+            PetChangeDialog dialog = new PetChangeDialog(getContext(), list);
+            dialog.setChangeDialogListener(
+                    new PetChangeDialog.OnChangeDialogListener() {
+                        @Override
+                        public void onChangeSelected(String data) {
+                            name.setText(data);
+                        }
+                    }
+            );
+            dialog.show();
         }
         if(v == petStatusButton){
             mainActivity.onChangeToPetStatusFragment();
+        }
+        if(v == petManageMentLayout){
+            Intent intent = new Intent(getActivity(), DaywalkActivity.class);
+            startActivity(intent);
         }
     }
 

@@ -29,6 +29,7 @@ import com.google.firebase.firestore.auth.User;
 
 import org.jetbrains.annotations.Nullable;
 
+import java.util.ArrayList;
 import java.util.Map;
 import java.util.Objects;
 
@@ -41,6 +42,7 @@ public class MainActivity extends AppCompatActivity {
     private PetStatusFragment petStatusFragment = new PetStatusFragment();
 //    private CommunityFragment communityFragment = new CommunityFragment();
     private UserMedia userData;
+    private ArrayList<PetMedia> petDataList;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -49,6 +51,7 @@ public class MainActivity extends AppCompatActivity {
 
         Intent intent = new Intent(this.getIntent());
         userData = (UserMedia) intent.getSerializableExtra("userData");
+        petDataList = (ArrayList<PetMedia>) intent.getSerializableExtra("petDataList");
 
         FragmentTransaction transaction = fmanager.beginTransaction();
 

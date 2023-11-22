@@ -24,19 +24,19 @@ import de.hdodenhof.circleimageview.CircleImageView;
 
 public class PetAddActivity extends AppCompatActivity implements View.OnClickListener {
     private static final int REQUEST_CODE = 2001;
-    private final int NONE = 0;
-    private final int MALE = 11;
-    private final int FEMALE = 12;
-    private final int MALENEUTER = 13;
-    private final int FEMALENEUTER = 14;
-    private final int SMALL = 21;
-    private final int MIDDLE = 22;
-    private final int BIG = 23;
+    private final long NONE = 0;
+    private final long MALE = 11;
+    private final long FEMALE = 12;
+    private final long MALENEUTER = 13;
+    private final long FEMALENEUTER = 14;
+    private final long SMALL = 21;
+    private final long MIDDLE = 22;
+    private final long BIG = 23;
     private UserMedia userData;
     private PetMedia petData;
     private int petCount;
-    private int petSex = 0;
-    private int petKind = 0;
+    private long petSex = 0;
+    private long petKind = 0;
     private CircleImageView petProfileBox;
     private View petProfileImage;
 
@@ -144,6 +144,7 @@ public class PetAddActivity extends AppCompatActivity implements View.OnClickLis
                 Toast.makeText(this, "몸무게를 입력해주세요", Toast.LENGTH_SHORT).show();
             } else {
                 onSetPetData();
+
                 Intent intent = new Intent(getApplicationContext(), PetAdd2Activity.class);
                 intent.putExtra("userData", userData);
                 intent.putExtra("petData", petData);
@@ -252,6 +253,6 @@ public class PetAddActivity extends AppCompatActivity implements View.OnClickLis
         petData.setPetKind(petKind);
         petData.setPetSex(petSex);
         petData.setPetBirth(petBirth.getText().toString());
-        petData.setPetWeight(Integer.parseInt(petWeight.getText().toString()));
+        petData.setPetWeight(Long.parseLong(petWeight.getText().toString()));
     }
 }

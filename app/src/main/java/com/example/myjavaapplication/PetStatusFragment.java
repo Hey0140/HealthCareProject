@@ -16,22 +16,17 @@ import android.widget.TextView;
 public class PetStatusFragment extends Fragment implements View.OnClickListener {
     private MainActivity mainActivity;
 
-    private View arrow, backButton;
+    private View backButton, hospitalInfo;
     private EditText note;
-    private View back;
-    private TextView name;
-    private TextView hospitalname;
-    private TextView address;
-    private View petStatusLeftView;
-    private TextView petStatusLeftText;
-    private View petStatusCenterView;
-    private TextView petStatusCenterText;
-    private View petStatusRightView;
-    private TextView petStatusRightText;
-    private TextView petStatusWeight;
-    private TextView petStatusActivity;
-    private TextView petStatusHeart;
+    private View petStatusLeftView, petStatusCenterView, petStatusRightView;
+    private TextView name, hospitalname, address;
+    private TextView petStatusRightText, petStatusWeight, petStatusCenterText;
+    private TextView petStatusActivity, petStatusHeart, petStatusLeftText;
     private Button end;
+
+    private final String WHITERED = "#EDA399";
+    private final String WHITEGREEN = "#ACE997";
+    private final String WHITEYELLOW = "#F1EEA1";
 
     public PetStatusFragment() {
 
@@ -47,11 +42,10 @@ public class PetStatusFragment extends Fragment implements View.OnClickListener 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
-        View view = inflater.inflate(R.layout.petstatus_page, container, false);
+        View view = inflater.inflate(R.layout.fragment_petstatus, container, false);
 
         backButton = view.findViewById(R.id.petStatusBackButton);
 
-        backButton.setOnClickListener(this);
         note = view.findViewById(R.id.petFeature);
         name = view.findViewById(R.id.petNameTitle);
         hospitalname = view.findViewById(R.id.petHospitalName);
@@ -66,33 +60,31 @@ public class PetStatusFragment extends Fragment implements View.OnClickListener 
         petStatusActivity =view.findViewById(R.id.petStatusActivity);
         petStatusHeart=view.findViewById(R.id.petStatusHeart);
         end=view.findViewById(R.id.petFeatureEndButton);
+        hospitalInfo = view.findViewById(R.id.petHospitalInfoButton);
+
         end.setOnClickListener(this);
+        hospitalInfo.setOnClickListener(this);
+        backButton.setOnClickListener(this);
 
         note.setText("입력하세요");
         name.setText("초코");
         hospitalname.setText("SJP병원");
         address.setText("서울시 동작구 상도로 123길");
-        petStatusLeftView.setBackgroundColor(Color.parseColor(String.valueOf(R.color.whitegreen)));
+        petStatusLeftView.setBackgroundColor(Color.parseColor(WHITEGREEN));
         petStatusLeftText.setVisibility(View.INVISIBLE);
-        petStatusCenterView.setBackgroundColor(Color.parseColor(String.valueOf(R.color.whitegreen)));
+        petStatusCenterView.setBackgroundColor(Color.parseColor(WHITEGREEN));
         petStatusCenterText.setVisibility(View.VISIBLE);
-        petStatusRightView.setBackgroundColor(Color.parseColor(String.valueOf(R.color.whitegreen)));
+        petStatusRightView.setBackgroundColor(Color.parseColor(WHITEGREEN));
         petStatusRightText.setVisibility(View.INVISIBLE);
-        petStatusWeight.setText("8Kg");
-        petStatusActivity.setText("2000cal");
-        petStatusHeart.setText("200bpm");
+        petStatusWeight.setText("8");
+        petStatusActivity.setText("2000");
+        petStatusHeart.setText("200");
         end.setText("완료");
 
 
-
-
-
         return view;
-
-
-
-
     }
+
     public void onAttach(@NonNull Context context) {
         super.onAttach(context);
         mainActivity = (MainActivity) getActivity();
@@ -109,6 +101,12 @@ public class PetStatusFragment extends Fragment implements View.OnClickListener 
     public void onClick(View v) {
         if(v == backButton){
             mainActivity.onChangeToPetManageFragment();
+        }
+        if(v == hospitalInfo){
+
+        }
+        if( v == end){
+            String feature = note.getText().toString();
         }
     }
 

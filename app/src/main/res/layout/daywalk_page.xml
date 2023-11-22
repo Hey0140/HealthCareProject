@@ -7,42 +7,56 @@
     tools:context=".DaywalkActivity">
 
     <TextView
-        android:id="@+id/daywalk_petmanagement"
+        android:id="@+id/dayWalkPetManagementTitle"
         android:layout_width="match_parent"
         android:layout_height="30dp"
         android:layout_marginLeft="20dp"
         android:layout_marginTop="20dp"
-
         android:text="펫 관리"
         android:textSize="20dp"
         app:layout_constraintLeft_toLeftOf="parent"
         app:layout_constraintTop_toTopOf="parent" />
 
-    <TextView
-        android:id="@+id/petdaywalk_Month"
+    <LinearLayout
+        android:id="@+id/petDayWalkMonthLayout"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginTop="20dp"
-        android:text="11월"
-        android:textSize="30dp"
-        app:layout_constraintLeft_toLeftOf="@+id/daywalk_petmanagement"
-        app:layout_constraintTop_toBottomOf="@+id/daywalk_petmanagement" />
+        app:layout_constraintLeft_toLeftOf="@id/dayWalkPetManagementTitle"
+        app:layout_constraintTop_toBottomOf="@id/dayWalkPetManagementTitle"
+        android:orientation="horizontal">
+
+        <TextView
+            android:id="@+id/petDayWalkMonth"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="11"
+            android:textSize="30dp" />
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="월"
+            android:textSize="30dp" />
+
+    </LinearLayout>
+
 
     <androidx.constraintlayout.widget.ConstraintLayout
-        android:id="@+id/petdaywalkpageLayout"
+        android:id="@+id/petDayWalkPageLayout"
         android:layout_width="match_parent"
         android:layout_height="103dp"
         android:layout_marginTop="24dp"
-        app:layout_constraintTop_toBottomOf="@+id/petdaywalk_Month">
+        app:layout_constraintTop_toBottomOf="@id/petDayWalkMonthLayout">
 
         <androidx.constraintlayout.widget.ConstraintLayout
-            android:id="@+id/petdaywalk_Mon_Layout"
+            android:id="@+id/petDayWalkMonLayout"
             android:layout_width="54dp"
             android:layout_height="match_parent"
-            app:layout_constraintRight_toLeftOf="@id/petdaywalk_Tue_Layout">
+            app:layout_constraintRight_toLeftOf="@id/petDayWalkTueLayout">
 
             <TextView
-                android:id="@+id/petdaywalk_Mon"
+                android:id="@+id/petDayWalkMon"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_marginTop="20dp"
@@ -53,28 +67,28 @@
                 app:layout_constraintTop_toTopOf="parent" />
 
             <TextView
-                android:id="@+id/petdaywalk_MonCalorie"
+                android:id="@+id/petDayWalkMonCalorie"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_marginTop="10dp"
                 android:text="01"
                 android:textAlignment="center"
-                android:textSize="35dp"
+                android:textSize="25dp"
                 app:layout_constraintLeft_toLeftOf="parent"
                 app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toBottomOf="@+id/petdaywalk_Mon" />
+                app:layout_constraintTop_toBottomOf="@id/petDayWalkMon" />
 
 
         </androidx.constraintlayout.widget.ConstraintLayout>
 
         <androidx.constraintlayout.widget.ConstraintLayout
-            android:id="@+id/petdaywalk_Tue_Layout"
+            android:id="@+id/petDayWalkTueLayout"
             android:layout_width="54dp"
             android:layout_height="match_parent"
-            app:layout_constraintRight_toLeftOf="@id/petdaywalk_Wed_Layout">
+            app:layout_constraintRight_toLeftOf="@id/petDayWalkWedLayout">
 
             <TextView
-                android:id="@+id/petdaywalk_Tue"
+                android:id="@+id/petDayWalkTue"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_marginTop="20dp"
@@ -91,21 +105,21 @@
                 android:layout_marginTop="10dp"
                 android:text="02"
                 android:textAlignment="center"
-                android:textSize="35dp"
-                app:layout_constraintTop_toBottomOf="@id/petdaywalk_Tue" />
+                android:textSize="25dp"
+                app:layout_constraintTop_toBottomOf="@id/petDayWalkTue" />
 
 
         </androidx.constraintlayout.widget.ConstraintLayout>
 
 
         <androidx.constraintlayout.widget.ConstraintLayout
-            android:id="@+id/petdaywalk_Wed_Layout"
+            android:id="@+id/petDayWalkWedLayout"
             android:layout_width="54dp"
             android:layout_height="match_parent"
-            app:layout_constraintRight_toLeftOf="@id/petdaywalk_Thu_Layout">
+            app:layout_constraintRight_toLeftOf="@id/petDayWalkThuLayout">
 
             <TextView
-                android:id="@+id/petdaywalk_Wed"
+                android:id="@+id/petDayWalkWed"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_marginTop="20dp"
@@ -116,28 +130,28 @@
                 app:layout_constraintTop_toTopOf="parent" />
 
             <TextView
-                android:id="@+id/petdaywalk_WedCalorie"
+                android:id="@+id/petDayWalkWedCalorie"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_marginTop="10dp"
                 android:text="03"
                 android:textAlignment="center"
-                android:textSize="35dp"
-                app:layout_constraintTop_toBottomOf="@id/petdaywalk_Wed" />
+                android:textSize="25dp"
+                app:layout_constraintTop_toBottomOf="@id/petDayWalkWed" />
 
 
         </androidx.constraintlayout.widget.ConstraintLayout>
 
 
         <androidx.constraintlayout.widget.ConstraintLayout
-            android:id="@+id/petdaywalk_Thu_Layout"
+            android:id="@+id/petDayWalkThuLayout"
             android:layout_width="54dp"
             android:layout_height="match_parent"
             app:layout_constraintLeft_toLeftOf="parent"
             app:layout_constraintRight_toRightOf="parent">
 
             <TextView
-                android:id="@+id/petdaywalk_Thu"
+                android:id="@+id/petDayWalkThu"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_marginTop="20dp"
@@ -148,27 +162,27 @@
                 app:layout_constraintTop_toTopOf="parent" />
 
             <TextView
-                android:id="@+id/petdaywalk_ThuCalorie"
+                android:id="@+id/petDayWalkThuCalorie"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_marginTop="10dp"
                 android:text="04"
                 android:textAlignment="center"
-                android:textSize="35dp"
-                app:layout_constraintTop_toBottomOf="@id/petdaywalk_Thu" />
+                android:textSize="25dp"
+                app:layout_constraintTop_toBottomOf="@id/petDayWalkThu" />
 
 
         </androidx.constraintlayout.widget.ConstraintLayout>
 
 
         <androidx.constraintlayout.widget.ConstraintLayout
-            android:id="@+id/petdaywalk_Fri_Layout"
+            android:id="@+id/petDayWalkFriLayout"
             android:layout_width="54dp"
             android:layout_height="match_parent"
-            app:layout_constraintLeft_toRightOf="@id/petdaywalk_Thu_Layout">
+            app:layout_constraintLeft_toRightOf="@id/petDayWalkThuLayout">
 
             <TextView
-                android:id="@+id/petdaywalk_Fri"
+                android:id="@+id/petDayWalkFri"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_marginTop="20dp"
@@ -179,27 +193,27 @@
                 app:layout_constraintTop_toTopOf="parent" />
 
             <TextView
-                android:id="@+id/petdaywalk_FriCalorie"
+                android:id="@+id/petDayWalkFriCalorie"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_marginTop="10dp"
                 android:text="05"
                 android:textAlignment="center"
-                android:textSize="35dp"
-                app:layout_constraintTop_toBottomOf="@id/petdaywalk_Fri" />
+                android:textSize="25dp"
+                app:layout_constraintTop_toBottomOf="@id/petDayWalkFri" />
 
 
         </androidx.constraintlayout.widget.ConstraintLayout>
 
 
         <androidx.constraintlayout.widget.ConstraintLayout
-            android:id="@+id/petdaywalk_Sat_Layout"
+            android:id="@+id/petDayWalkSatLayout"
             android:layout_width="54dp"
             android:layout_height="match_parent"
-            app:layout_constraintLeft_toRightOf="@id/petdaywalk_Fri_Layout">
+            app:layout_constraintLeft_toRightOf="@id/petDayWalkFriLayout">
 
             <TextView
-                android:id="@+id/petdaywalk_Sat"
+                android:id="@+id/petDayWalkSat"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_marginTop="20dp"
@@ -210,27 +224,27 @@
                 app:layout_constraintTop_toTopOf="parent" />
 
             <TextView
-                android:id="@+id/petdaywalk_SatCalorie"
+                android:id="@+id/petDayWalkSatCalorie"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_marginTop="10dp"
                 android:text="06"
                 android:textAlignment="center"
-                android:textSize="35dp"
-                app:layout_constraintTop_toBottomOf="@id/petdaywalk_Sat" />
+                android:textSize="25dp"
+                app:layout_constraintTop_toBottomOf="@id/petDayWalkSat" />
 
 
         </androidx.constraintlayout.widget.ConstraintLayout>
 
 
         <androidx.constraintlayout.widget.ConstraintLayout
-            android:id="@+id/petdaywalk_Sun_Layout"
+            android:id="@+id/petDayWalkSunLayout"
             android:layout_width="54dp"
             android:layout_height="match_parent"
-            app:layout_constraintLeft_toRightOf="@id/petdaywalk_Sat_Layout">
+            app:layout_constraintLeft_toRightOf="@id/petDayWalkSatLayout">
 
             <TextView
-                android:id="@+id/petdaywalk_Sun"
+                android:id="@+id/petDayWalkSun"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_marginTop="20dp"
@@ -241,160 +255,168 @@
                 app:layout_constraintTop_toTopOf="parent" />
 
             <TextView
-                android:id="@+id/petdaywalk_SunCalorie"
+                android:id="@+id/petDayWalkSunCalorie"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_marginTop="10dp"
                 android:text="07"
                 android:textAlignment="center"
-                android:textSize="35dp"
-                app:layout_constraintTop_toBottomOf="@id/petdaywalk_Sun" />
+                android:textSize="25dp"
+                app:layout_constraintTop_toBottomOf="@id/petDayWalkSun" />
 
 
         </androidx.constraintlayout.widget.ConstraintLayout>
     </androidx.constraintlayout.widget.ConstraintLayout>
 
     <View
-        android:id="@+id/petdaywalk_line"
+        android:id="@+id/petDayWalkLine"
         android:layout_width="match_parent"
         android:layout_height="1dp"
-        android:layout_marginTop="30dp"
+        android:layout_marginTop="25dp"
         android:background="@drawable/mypage_vertical_line"
-        app:layout_constraintTop_toBottomOf="@id/petdaywalkpageLayout"/>
+        app:layout_constraintTop_toBottomOf="@id/petDayWalkPageLayout"/>
 
     <androidx.constraintlayout.widget.ConstraintLayout
-        android:id="@+id/daywalkpage_Text_laout"
+        android:id="@+id/dayWalkPageTextLayout"
         android:layout_width="match_parent"
         android:layout_height="300dp"
-        android:layout_marginTop="25dp"
-        app:layout_constraintTop_toBottomOf="@id/petdaywalk_line">
+        android:layout_marginTop="20dp"
+        app:layout_constraintTop_toBottomOf="@id/petDayWalkLine">
 
         <TextView
-            android:id="@+id/daywalkpage_Text_laout_1"
-            android:layout_width="250dp"
-            android:layout_height="55dp"
+            android:id="@+id/dayWalkPageWalkText"
+            android:layout_width="170dp"
+            android:layout_height="50dp"
             android:layout_marginTop="20dp"
-            android:text="- 산책 횟수"
-            android:textSize="35dp"
+            android:layout_marginLeft="20dp"
+            android:text="산책 횟수"
+            android:textSize="28dp"
             app:layout_constraintLeft_toLeftOf="parent"
-            app:layout_constraintTop_toTopOf="parent"
-            android:layout_marginLeft="10dp"/>
+            app:layout_constraintTop_toTopOf="parent" />
 
         <TextView
-            android:id="@+id/daywalkpage_Text_laout_2"
-            android:layout_width="250dp"
-            android:layout_height="55dp"
+            android:id="@+id/dayWalkPageWalkHourText"
+            android:layout_width="170dp"
+            android:layout_height="50dp"
             android:layout_marginTop="20dp"
-            android:text="- 산책 총 시간"
-            android:textSize="35dp"
-            android:layout_marginLeft="10dp"
+            android:text="산책 총 시간"
+            android:textSize="28dp"
+            android:layout_marginLeft="20dp"
             app:layout_constraintLeft_toLeftOf="parent"
-            app:layout_constraintTop_toBottomOf="@id/daywalkpage_Text_laout_1" />
+            app:layout_constraintTop_toBottomOf="@id/dayWalkPageWalkText" />
 
         <TextView
-            android:id="@+id/daywalkpage_Text_laout_3"
-            android:layout_width="250dp"
-            android:layout_height="55dp"
-            android:layout_marginLeft="8dp"
+            android:id="@+id/dayWalkPageCalorieText"
+            android:layout_width="170dp"
+            android:layout_height="50dp"
+            android:layout_marginLeft="20dp"
             android:layout_marginTop="20dp"
-            android:text="- 칼로리 소모량"
-            android:textSize="35dp"
+            android:text="칼로리 소모량"
+            android:textSize="28dp"
             app:layout_constraintLeft_toLeftOf="parent"
-            app:layout_constraintTop_toBottomOf="@id/daywalkpage_Text_laout_2" />
+            app:layout_constraintTop_toBottomOf="@id/dayWalkPageWalkHourText" />
 
         <TextView
-            android:id="@+id/daywalkpage_Text_laout_4"
-            android:layout_width="250dp"
-            android:layout_height="55dp"
+            android:id="@+id/dayWalkPageLeftCalorieText"
+            android:layout_width="170dp"
+            android:layout_height="50dp"
             android:layout_marginTop="20dp"
             android:orientation="horizontal"
-            android:text="- 남은 칼로리 양"
-            android:textSize="35dp"
-            android:layout_marginLeft="10dp"
+            android:text="남은 칼로리 양"
+            android:textSize="28dp"
+            android:layout_marginLeft="20dp"
             app:layout_constraintLeft_toLeftOf="parent"
-            app:layout_constraintTop_toBottomOf="@id/daywalkpage_Text_laout_3"/>
+            app:layout_constraintTop_toBottomOf="@id/dayWalkPageCalorieText"/>
 
         <LinearLayout
             android:id="@+id/dayWalkPageWalkLayout"
-            android:layout_width="140dp"
-            android:layout_height="55dp"
+            android:layout_width="170dp"
+            android:layout_height="50dp"
             android:orientation="horizontal"
             app:layout_constraintRight_toRightOf="parent"
             app:layout_constraintTop_toTopOf="parent"
             android:layout_marginTop="20dp"
+            android:layout_marginRight="20dp"
+            android:gravity="right"
             >
 
             <TextView
                 android:id="@+id/dayWalkPageWalk"
                 android:layout_width="wrap_content"
-                android:layout_height="55dp"
+                android:layout_height="50dp"
                 android:text="00"
-                android:textSize="35dp" />
+                android:textSize="28dp" />
 
             <TextView
                 android:layout_width="wrap_content"
-                android:layout_height="55dp"
+                android:layout_height="50dp"
                 android:text="회"
-                android:textSize="35dp" />
+                android:textSize="28dp" />
 
         </LinearLayout>
 
         <LinearLayout
             android:id="@+id/dayWalkPageWalkHourLayout"
-            android:layout_width="140dp"
-            android:layout_height="55dp"
+            android:layout_width="170dp"
+            android:layout_height="50dp"
             android:orientation="horizontal"
             app:layout_constraintRight_toRightOf="parent"
             app:layout_constraintTop_toBottomOf="@id/dayWalkPageWalkLayout"
-            android:layout_marginTop="20dp">
+            android:layout_marginTop="20dp"
+            android:layout_marginRight="20dp"
+            android:gravity="right">
 
             <TextView
                 android:id="@+id/dayWalkPAgeWalkHour"
                 android:layout_width="wrap_content"
-                android:layout_height="55dp"
+                android:layout_height="50dp"
                 android:text="00"
-                android:textSize="35dp"/>
+                android:textSize="28dp"/>
 
             <TextView
                 android:layout_width="wrap_content"
-                android:layout_height="55dp"
+                android:layout_height="50dp"
                 android:text="분"
-                android:textSize="35dp" />
+                android:textSize="28dp" />
 
         </LinearLayout>
 
         <LinearLayout
             android:id="@+id/dayWalkPageCalorieLayout"
-            android:layout_width="140dp"
-            android:layout_height="55dp"
+            android:layout_width="170dp"
+            android:layout_height="50dp"
             android:orientation="horizontal"
             android:layout_marginTop="20dp"
             app:layout_constraintRight_toRightOf="parent"
+            android:layout_marginRight="20dp"
             app:layout_constraintTop_toBottomOf="@id/dayWalkPageWalkHourLayout"
+            android:gravity="right"
             >
 
             <TextView
-                android:id="@+id/daywalkpage_Text_number_3"
+                android:id="@+id/dayWalkPageCalorie"
                 android:layout_width="wrap_content"
-                android:layout_height="55dp"
+                android:layout_height="50dp"
                 android:text="00"
-                android:textSize="35dp"/>
+                android:textSize="28dp"/>
 
             <TextView
                 android:layout_width="wrap_content"
-                android:layout_height="55dp"
+                android:layout_height="50dp"
                 android:text="kcal"
-                android:textSize="35dp"/>
+                android:textSize="28dp"/>
 
         </LinearLayout>
 
         <LinearLayout
-            android:id="@+id/dayWalkPageLeftColorieLayout"
-            android:layout_width="140dp"
-            android:layout_height="55dp"
+            android:id="@+id/dayWalkPageLeftCalorieLayout"
+            android:layout_width="170dp"
+            android:layout_height="50dp"
             app:layout_constraintTop_toBottomOf="@id/dayWalkPageCalorieLayout"
             app:layout_constraintRight_toRightOf="parent"
             android:layout_marginTop="20dp"
+            android:layout_marginRight="20dp"
+            android:gravity="right"
             android:orientation="horizontal"
             >
 
@@ -403,12 +425,12 @@
                 android:layout_width="wrap_content"
                 android:layout_height="55dp"
                 android:text="00"
-                android:textSize="35dp"/>
+                android:textSize="28dp"/>
             <TextView
                 android:layout_width="wrap_content"
                 android:layout_height="55dp"
                 android:text="kcal"
-                android:textSize="35dp"/>
+                android:textSize="28dp"/>
 
         </LinearLayout>
 
