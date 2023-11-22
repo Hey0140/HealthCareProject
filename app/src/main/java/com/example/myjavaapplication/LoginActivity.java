@@ -216,54 +216,56 @@ public class LoginActivity extends AppCompatActivity implements View.OnClickList
             @Override
             public void onSuccess(DocumentSnapshot documentSnapshot) {
                 userData = documentSnapshot.toObject(UserMedia.class);
+
+                db.collection("users")
+                        .document(id)
+                        .collection("pet")
+                        .get()
+                        .addOnCompleteListener(new OnCompleteListener<QuerySnapshot>() {
+                            @Override
+                            public void onComplete(@NonNull Task<QuerySnapshot> task) {
+                                if (task.isSuccessful()) {
+                                    int i = 0;
+                                    for (QueryDocumentSnapshot document : task.getResult()) {
+                                        PetMedia petMedia = new PetMedia();
+                                        Map<String, Object> map = new HashMap<>();
+
+                                        map = document.getData();
+                                        petMedia = setPetMeida(map, i);
+
+                                        petDataList.add(petMedia);
+                                        Log.i("check", petMedia.getPetId()+": "+i+", "+petMedia.getPetName()+", "+petMedia.getPetKind());
+                                        i++;
+                                    }
+                                    Log.i("check", String.valueOf(petDataList.size()));
+                                    if(userData.isPro() == professional){
+                                        Intent intent = new Intent(getApplicationContext(), MainActivity.class);
+                                        intent.putExtra("userData", userData);
+                                        intent.putExtra("petDataList", petDataList);
+                                        startActivity(intent);
+                                    }
+                                    else{
+                                        if(professional == BASIC_MEMBER && userData.isPro() == PROFESSIONAL){
+                                            Toast.makeText(LoginActivity.this, "의사 계정 "+userData.getName()+"님 일반 회원 서비스로 접속합니다.", Toast.LENGTH_LONG).show();
+                                            Intent intent = new Intent(getApplicationContext(), MainActivity.class);
+                                            intent.putExtra("userData", userData);
+                                            intent.putExtra("petDataList", petDataList);
+                                            startActivity(intent);
+                                        }
+                                        if(professional == PROFESSIONAL && userData.isPro() == BASIC_MEMBER){
+                                            Toast.makeText(LoginActivity.this, "의사 계정이 아닙니다. 일반 회원으로 접속해주세요.", Toast.LENGTH_LONG).show();
+                                            auth.signOut();
+                                        }
+                                    }
+                                } else {
+                                    Log.d("Firebase", "Error getting documents: ", task.getException());
+                                }
+                            }
+                        });
             }
         });
 
-        db.collection("users")
-                .document(id)
-                .collection("pet")
-                .get()
-                .addOnCompleteListener(new OnCompleteListener<QuerySnapshot>() {
-                    @Override
-                    public void onComplete(@NonNull Task<QuerySnapshot> task) {
-                        if (task.isSuccessful()) {
-                            int i = 0;
-                            for (QueryDocumentSnapshot document : task.getResult()) {
-                                PetMedia petMedia = new PetMedia();
-                                Map<String, Object> map = new HashMap<>();
 
-                                map = document.getData();
-                                petMedia = setPetMeida(map, i);
-
-                                petDataList.add(petMedia);
-                                Log.i("check", petMedia.getPetId()+": "+i+", "+petMedia.getPetName()+", "+petMedia.getPetKind());
-                                i++;
-                            }
-                            Log.i("check", String.valueOf(petDataList.size()));
-                            if(userData.isPro() == professional){
-                                Intent intent = new Intent(getApplicationContext(), MainActivity.class);
-                                intent.putExtra("userData", userData);
-                                intent.putExtra("petDataList", petDataList);
-                                startActivity(intent);
-                            }
-                            else{
-                                if(professional == BASIC_MEMBER && userData.isPro() == PROFESSIONAL){
-                                    Toast.makeText(LoginActivity.this, "의사 계정 "+userData.getName()+"님 일반 회원 서비스로 접속합니다.", Toast.LENGTH_LONG).show();
-                                    Intent intent = new Intent(getApplicationContext(), MainActivity.class);
-                                    intent.putExtra("userData", userData);
-                                    intent.putExtra("petDataList", petDataList);
-                                    startActivity(intent);
-                                }
-                                if(professional == PROFESSIONAL && userData.isPro() == BASIC_MEMBER){
-                                    Toast.makeText(LoginActivity.this, "의사 계정이 아닙니다. 일반 회원으로 접속해주세요.", Toast.LENGTH_LONG).show();
-                                    auth.signOut();
-                                }
-                            }
-                        } else {
-                            Log.d("Firebase", "Error getting documents: ", task.getException());
-                        }
-                    }
-                });
     }
 
     public PetMedia setPetMeida(Map<String, Object> map, int position){

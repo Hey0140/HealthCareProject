@@ -28,6 +28,7 @@ public class MypageFragment extends Fragment implements View.OnClickListener {
     private Button logoutButton;
 
     private UserMedia userData;
+    private ArrayList<PetMedia> petDataList;
     private TextView profileName, profileEmail;
     private ImageView profileImage;
     private int petCount = 0;
@@ -50,7 +51,10 @@ public class MypageFragment extends Fragment implements View.OnClickListener {
 
         logoutButton.setOnClickListener(this);
 
+        petDataList = new ArrayList<>();
+
         userData = (UserMedia) this.getArguments().getSerializable("userData");
+        petDataList = (ArrayList<PetMedia>) this.getArguments().getSerializable("petDataList");
 
         if(userData.getImage() != null){
             if(!userData.getImage().equals("")){
@@ -65,7 +69,8 @@ public class MypageFragment extends Fragment implements View.OnClickListener {
         petCount = userData.getCount();
         for (int i = 0; i < petCount; i++) {
             MyPetInfoData mpid = new MyPetInfoData();
-            mpid.setName("choco");
+            PetMedia petMedia = petDataList.get(i);
+            mpid.setName(petMedia.getPetName());
             mpid.setImageId(R.drawable.mypetprofile_basic_icon);
             mpid.setViewType(Code.ViewType.BASIC);
             list.add(mpid);
