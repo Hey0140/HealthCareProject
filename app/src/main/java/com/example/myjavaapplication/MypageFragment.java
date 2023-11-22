@@ -53,8 +53,8 @@ public class MypageFragment extends Fragment implements View.OnClickListener {
 
         petDataList = new ArrayList<>();
 
-        userData = (UserMedia) this.getArguments().getSerializable("userData");
-        petDataList = (ArrayList<PetMedia>) this.getArguments().getSerializable("petDataList");
+        userData = (UserMedia) getActivity().getIntent().getSerializableExtra("userData");
+        petDataList = (ArrayList<PetMedia>) getActivity().getIntent().getSerializableExtra("petDataList");
 
         if(userData.getImage() != null){
             if(!userData.getImage().equals("")){

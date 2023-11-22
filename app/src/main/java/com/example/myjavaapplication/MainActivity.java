@@ -60,6 +60,7 @@ public class MainActivity extends AppCompatActivity {
         bottomNavigationView.setOnNavigationItemSelectedListener(new ItemSelectedListener());
 
     }
+
     class ItemSelectedListener implements BottomNavigationView.OnNavigationItemSelectedListener{
 
         @Override
@@ -67,6 +68,10 @@ public class MainActivity extends AppCompatActivity {
             FragmentTransaction ftransaction = fmanager.beginTransaction();
 
             if (item.getItemId() == R.id.homeIcon){
+                Bundle bundle = new Bundle();
+                bundle.putSerializable("userData", userData);
+                bundle.putSerializable("petDataList", petDataList);
+                homeFragment.setArguments(bundle);
                 ftransaction.replace(R.id.mainFragmentLayout, homeFragment).commitAllowingStateLoss();
             }
             if(item.getItemId() ==  R.id.petIcon) {
