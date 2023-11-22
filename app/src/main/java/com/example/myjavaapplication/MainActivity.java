@@ -78,6 +78,7 @@ public class MainActivity extends AppCompatActivity {
             if(item.getItemId() == R.id.mypageIcon) {
                 Bundle bundle = new Bundle();
                 bundle.putSerializable("userData", userData);
+                bundle.putSerializable("petDataList", petDataList);
                 mypageFragment.setArguments(bundle);
                 ftransaction.replace(R.id.mainFragmentLayout, mypageFragment).commitAllowingStateLoss();
             }
