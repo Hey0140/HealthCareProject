@@ -24,19 +24,23 @@ public class HomeFragment extends Fragment implements View.OnClickListener {
     private Button homePageChangeButton;
     private Button walkStartButton;
     ArrayList<PetChangeData> list = new ArrayList<>();
+    private UserMedia userData;
+    private ArrayList<PetMedia> petDataList;
     public HomeFragment() {
     }
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        PetChangeData petChangeData = new PetChangeData();
-        petChangeData.setName("choco");
-        list.add(petChangeData);
+//        PetChangeData petChangeData = new PetChangeData();
+//        petChangeData.setName("choco");
+//        list.add(petChangeData);
     }
+
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
         View view = inflater.inflate(R.layout.fragment_home, container, false);
+
         puppyName=view.findViewById(R.id.puppyName);
         homePageWalkNumber=view.findViewById(R.id.homePageWalkNumber);
         homePageWalkTime=view.findViewById(R.id.homePageWalkTime);
@@ -46,6 +50,15 @@ public class HomeFragment extends Fragment implements View.OnClickListener {
         homePageChangeButton.setOnClickListener(this);
         walkStartButton = view.findViewById(R.id.walkStartButton);
         walkStartButton.setOnClickListener(this);
+
+        userData = new UserMedia();
+        petDataList = new ArrayList<>();
+
+        userData = (UserMedia) getActivity().getIntent().getSerializableExtra("userData");
+        petDataList = (ArrayList<PetMedia>) getActivity().getIntent().getSerializableExtra("petDataList");
+
+        list.clear();
+        setPetChangedList();
 
         return view;
     }
@@ -67,6 +80,14 @@ public class HomeFragment extends Fragment implements View.OnClickListener {
         }
         if (view== walkStartButton){
             Toast.makeText(getContext(), "확인.", Toast.LENGTH_LONG).show();
+        }
+    }
+
+    public void setPetChangedList(){
+        for(int i = 0; i < petDataList.size(); i++){
+            PetChangeData petChangeData = new PetChangeData();
+            petChangeData.setName(petDataList.get(i).getPetName());
+            list.add(petChangeData);
         }
     }
 }
