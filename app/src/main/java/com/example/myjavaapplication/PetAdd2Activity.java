@@ -135,7 +135,7 @@ public class PetAdd2Activity extends AppCompatActivity implements View.OnClickLi
 
     private void setItemList(){
         for(int i = 1; i <=5; i++){
-            String name = "종합백신 "+i+"차 (생후"+(i*2+4)+"주차)";
+            String name = "종합백신 "+i+"차 (생후 "+(i*2+4)+"주차)";
             vaccineList.put(name, false);
         }
         for(int i = 1; i <=2; i++){
@@ -181,6 +181,8 @@ public class PetAdd2Activity extends AppCompatActivity implements View.OnClickLi
         hashMap.put("name", pet.getPetName());
         hashMap.put("sex", pet.getPetSex());
         hashMap.put("weight", pet.getPetWeight());
+        hashMap.put("petLike", pet.getPetLike());
+        hashMap.put("petVaccine", pet.getPetVaccine());
 
         FirebaseFirestore db = FirebaseFirestore.getInstance();
         db.collection("users").document(uid)
@@ -190,41 +192,7 @@ public class PetAdd2Activity extends AppCompatActivity implements View.OnClickLi
                     @Override
                     public void onSuccess(Void aVoid) {
                         Log.d("Firebase", "DocumentSnapshot successfully written!");
-                    }
-                })
-                .addOnFailureListener(new OnFailureListener() {
-                    @Override
-                    public void onFailure(@NonNull Exception e) {
-                        Log.w("Firebase", "Error writing document", e);
-                    }
-                });
 
-
-        db.collection("users").document(uid)
-                .collection("pet").document(String.valueOf(id))
-                .collection("list").document("petLike")
-                .set(petLikeList)
-                .addOnSuccessListener(new OnSuccessListener<Void>() {
-                    @Override
-                    public void onSuccess(Void aVoid) {
-                        Log.d("Firebase", "DocumentSnapshot successfully written!");
-                    }
-                })
-                .addOnFailureListener(new OnFailureListener() {
-                    @Override
-                    public void onFailure(@NonNull Exception e) {
-                        Log.w("Firebase", "Error writing document", e);
-                    }
-                });
-
-        db.collection("users").document(uid)
-                .collection("pet").document(String.valueOf(id))
-                .collection("list").document("petVaccine")
-                .set(vaccineList)
-                .addOnSuccessListener(new OnSuccessListener<Void>() {
-                    @Override
-                    public void onSuccess(Void aVoid) {
-                        Log.d("Firebase", "DocumentSnapshot successfully written!");
                     }
                 })
                 .addOnFailureListener(new OnFailureListener() {

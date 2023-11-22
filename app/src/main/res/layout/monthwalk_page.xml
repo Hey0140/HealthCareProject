@@ -7,7 +7,7 @@
     tools:context=".MonthWalkActivity">
 
     <TextView
-        android:id="@+id/monthwalk_petmanagement"
+        android:id="@+id/monthWalkPetmanagementTitle"
         android:layout_width="match_parent"
         android:layout_height="30dp"
         android:layout_marginLeft="20dp"
@@ -19,7 +19,7 @@
         app:layout_constraintTop_toTopOf="parent" />
 
     <TextView
-        android:id="@+id/monthwalk_page_loge"
+        android:id="@+id/monthWalkPageLoge"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
 
@@ -31,41 +31,44 @@
         app:layout_constraintTop_toTopOf="parent" />
 
     <TextView
-        android:id="@+id/monthwalk_page_loge_number"
+        android:id="@+id/monthWalkPageLogeNumber"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:text="이번 달 산책일 수 00번"
         android:textSize="25dp"
         app:layout_constraintLeft_toLeftOf="parent"
         app:layout_constraintRight_toRightOf="parent"
-        app:layout_constraintTop_toBottomOf="@id/monthwalk_page_loge" />
+        app:layout_constraintTop_toBottomOf="@id/monthWalkPageLoge" />
 
     <androidx.recyclerview.widget.RecyclerView
-        android:id="@+id/monthwalk_RecyclerView"
+        android:id="@+id/monthWalkRecyclerView"
         android:layout_width="match_parent"
-        android:layout_height="400dp"
-        android:layout_marginTop="50dp"
+        android:layout_height="380dp"
+        android:layout_marginTop="30dp"
         app:layout_constraintLeft_toLeftOf="parent"
         app:layout_constraintRight_toRightOf="parent"
-        app:layout_constraintTop_toBottomOf="@id/monthwalk_page_loge" />
+        app:layout_constraintTop_toBottomOf="@id/monthWalkPageLogeNumber" />
+
     <TextView
-        android:id="@+id/monthwalk_Text_share"
+        android:id="@+id/monthWalkTextShare"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginTop="10dp"
+        android:layout_marginTop="20dp"
         android:text="공유하기"
         android:textStyle="bold"
         android:textSize="25dp"
         android:layout_marginRight="20dp"
         app:layout_constraintRight_toRightOf="parent"
-        app:layout_constraintTop_toBottomOf="@id/monthwalk_RecyclerView" />
+        app:layout_constraintTop_toBottomOf="@id/monthWalkRecyclerView" />
 
     <View
         android:id="@+id/monthwalk_Button"
-        android:layout_width="15dp"
-        android:layout_height="17dp"
-        android:layout_marginTop="24dp"
+        android:layout_width="20dp"
+        android:layout_height="20dp"
         android:background="@drawable/back_icon"
-        app:layout_constraintRight_toLeftOf="@id/monthwalk_Text_share"
-        app:layout_constraintTop_toBottomOf="@id/monthwalk_RecyclerView" />
+        android:layout_marginTop="5dp"
+        app:layout_constraintRight_toLeftOf="@id/monthWalkTextShare"
+        app:layout_constraintBottom_toBottomOf="@id/monthWalkTextShare"
+        app:layout_constraintTop_toTopOf="@id/monthWalkTextShare"/>
+
 </androidx.constraintlayout.widget.ConstraintLayout>
