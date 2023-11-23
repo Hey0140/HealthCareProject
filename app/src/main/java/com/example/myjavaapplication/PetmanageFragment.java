@@ -90,7 +90,7 @@ public class PetmanageFragment extends Fragment implements View.OnClickListener{
         weight.setText("5Kg");
         feed.setText("고급 사료");
         calorie.setText("3,500Kcal/Kg");
-        months.setText("11월");
+        months.setText("11");
         Mcalorie.setText("2400Kcal");
         Tcalorie.setText("3200Kcal");
         Wcalorie.setText("1800Kcal");
