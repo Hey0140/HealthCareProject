@@ -75,6 +75,10 @@ public class MainActivity extends AppCompatActivity {
                 ftransaction.replace(R.id.mainFragmentLayout, homeFragment).commitAllowingStateLoss();
             }
             if(item.getItemId() ==  R.id.petIcon) {
+                Bundle bundle = new Bundle();
+                bundle.putSerializable("userData", userData);
+                bundle.putSerializable("petDataList", petDataList);
+                petmanageFragment.setArguments(bundle);
                 ftransaction.replace(R.id.mainFragmentLayout, petmanageFragment).commitAllowingStateLoss();
             }
 //            if(item.getItemId() == R.id.communityIcon) {

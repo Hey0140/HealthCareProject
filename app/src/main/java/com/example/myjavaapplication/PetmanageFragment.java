@@ -36,7 +36,9 @@ public class PetmanageFragment extends Fragment implements View.OnClickListener{
     private final String WHITERED = "#EDA399";
     private final String WHITEGREEN = "#ACE997";
     private final String WHITEYELLOW = "#F1EEA1";
-    private ArrayList<PetChangeData> list;
+    private ArrayList<PetChangeData> list = new ArrayList<>();
+    private ArrayList<PetMedia> petDataList;
+    private UserMedia userData;
 
     public PetmanageFragment() {
         // Required empty public constructor
@@ -45,10 +47,10 @@ public class PetmanageFragment extends Fragment implements View.OnClickListener{
    @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        list = new ArrayList<>();
-        PetChangeData petChangeData = new PetChangeData();
-        petChangeData.setName("choco");
-        list.add(petChangeData);
+//        list = new ArrayList<>();
+//        PetChangeData petChangeData = new PetChangeData();
+//        petChangeData.setName("choco");
+//        list.add(petChangeData);
     }
 
     @Override
@@ -111,6 +113,17 @@ public class PetmanageFragment extends Fragment implements View.OnClickListener{
         petChangeButton.setOnClickListener(this);
         petStatusButton.setOnClickListener(this);
         petManageMentLayout.setOnClickListener(this);
+
+
+        userData = new UserMedia();
+        petDataList = new ArrayList<>();
+
+        userData = (UserMedia) getActivity().getIntent().getSerializableExtra("userData");
+        petDataList = (ArrayList<PetMedia>) getActivity().getIntent().getSerializableExtra("petDataList");
+
+        list.clear();
+        setPetChangedList();
+
         return view;
     }
 
@@ -147,6 +160,14 @@ public class PetmanageFragment extends Fragment implements View.OnClickListener{
     public void onDetach() {
         super.onDetach();
         mainActivity = null;
+    }
+
+    public void setPetChangedList(){
+        for(int i = 0; i < petDataList.size(); i++){
+            PetChangeData petChangeData = new PetChangeData();
+            petChangeData.setName(petDataList.get(i).getPetName());
+            list.add(petChangeData);
+        }
     }
 
 }

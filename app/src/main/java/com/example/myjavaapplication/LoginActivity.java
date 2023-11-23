@@ -234,7 +234,7 @@ public class LoginActivity extends AppCompatActivity implements View.OnClickList
                                         petMedia = setPetMeida(map, i);
 
                                         petDataList.add(petMedia);
-                                        Log.i("check", petMedia.getPetId()+": "+i+", "+petMedia.getPetName()+", "+petMedia.getPetKind());
+                                        Log.i("check", petMedia.getPetId()+": "+petMedia.getPetName()+", "+petMedia.getPetKind());
                                         i++;
                                     }
                                     Log.i("check", String.valueOf(petDataList.size()));
