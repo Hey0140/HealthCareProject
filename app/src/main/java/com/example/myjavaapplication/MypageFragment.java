@@ -1,13 +1,16 @@
 package com.example.myjavaapplication;
 
+import android.content.Context;
 import android.content.Intent;
 import android.net.Uri;
 import android.os.Bundle;
 
+import androidx.annotation.NonNull;
 import androidx.fragment.app.Fragment;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -67,12 +70,14 @@ public class MypageFragment extends Fragment implements View.OnClickListener {
         list.clear();
 
         petCount = userData.getCount();
-        for (int i = 0; i < petCount; i++) {
+        Log.i("check", String.valueOf(userData.getCount()));
+        for (int i = 0; i < petDataList.size(); i++) {
             MyPetInfoData mpid = new MyPetInfoData();
             PetMedia petMedia = petDataList.get(i);
             mpid.setName(petMedia.getPetName());
             mpid.setImageId(R.drawable.mypetprofile_basic_icon);
             mpid.setViewType(Code.ViewType.BASIC);
+            Log.i("check", petMedia.getPetName());
             list.add(mpid);
         }
 
