@@ -134,8 +134,9 @@ public class PetmanageFragment extends Fragment implements View.OnClickListener{
             dialog.setChangeDialogListener(
                     new PetChangeDialog.OnChangeDialogListener() {
                         @Override
-                        public void onChangeSelected(String data) {
+                        public void onChangeSelected(String data, int position) {
                             name.setText(data);
+
                         }
                     }
             );

@@ -19,6 +19,7 @@ import android.widget.ImageView;
 import android.widget.Toast;
 
 import java.io.InputStream;
+import java.util.ArrayList;
 
 import de.hdodenhof.circleimageview.CircleImageView;
 
@@ -33,6 +34,7 @@ public class PetAddActivity extends AppCompatActivity implements View.OnClickLis
     private final long MIDDLE = 22;
     private final long BIG = 23;
     private UserMedia userData;
+    private ArrayList<PetMedia> petDataList;
     private PetMedia petData;
     private int petCount;
     private long petSex = 0;
@@ -124,6 +126,7 @@ public class PetAddActivity extends AppCompatActivity implements View.OnClickLis
 
         Intent intent = new Intent(this.getIntent());
         userData = (UserMedia) intent.getSerializableExtra("userData");
+        petDataList = (ArrayList<PetMedia>) intent.getSerializableExtra("petDataList");
 
         petCount = userData.getCount();
     }
@@ -147,6 +150,7 @@ public class PetAddActivity extends AppCompatActivity implements View.OnClickLis
 
                 Intent intent = new Intent(getApplicationContext(), PetAdd2Activity.class);
                 intent.putExtra("userData", userData);
+                intent.putExtra("petDataList", petDataList);
                 intent.putExtra("petData", petData);
                 startActivity(intent);
             }

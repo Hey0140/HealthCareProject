@@ -5,13 +5,20 @@ import androidx.activity.result.ActivityResultCallback;
 import androidx.activity.result.ActivityResultLauncher;
 import androidx.activity.result.contract.ActivityResultContracts;
 import androidx.annotation.NonNull;
+import androidx.annotation.Nullable;
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.core.app.ActivityCompat;
 import androidx.fragment.app.FragmentManager;
 import androidx.fragment.app.FragmentTransaction;
 
 import android.app.Activity;
+import android.bluetooth.BluetoothAdapter;
+import android.bluetooth.BluetoothDevice;
+import android.bluetooth.BluetoothSocket;
 import android.content.Intent;
+import android.content.pm.PackageManager;
 import android.media.MediaPlayer;
+import android.os.Handler;
 import android.util.Log;
 import android.view.MenuItem;
 import android.view.View;
@@ -27,20 +34,21 @@ import com.google.firebase.firestore.QueryDocumentSnapshot;
 import com.google.firebase.firestore.QuerySnapshot;
 import com.google.firebase.firestore.auth.User;
 
-import org.jetbrains.annotations.Nullable;
-
 import java.util.ArrayList;
+import java.util.List;
 import java.util.Map;
 import java.util.Objects;
+import java.util.Set;
 
 public class MainActivity extends AppCompatActivity {
+
     private FragmentManager fmanager = getSupportFragmentManager();
     private HomeFragment homeFragment = new HomeFragment();
     private PetmanageFragment petmanageFragment = new PetmanageFragment();
     private MypageFragment mypageFragment = new MypageFragment();
 
     private PetStatusFragment petStatusFragment = new PetStatusFragment();
-//    private CommunityFragment communityFragment = new CommunityFragment();
+    //    private CommunityFragment communityFragment = new CommunityFragment();
     private UserMedia userData;
     private ArrayList<PetMedia> petDataList;
 
@@ -102,6 +110,14 @@ public class MainActivity extends AppCompatActivity {
     public void onChangeToPetManageFragment(){
         FragmentTransaction ftransaction = fmanager.beginTransaction();
         ftransaction.replace(R.id.mainFragmentLayout, petmanageFragment).commitAllowingStateLoss();
+    }
+
+    @Override
+    protected void onRestart() {
+        super.onRestart();
+        Intent intent = new Intent(this.getIntent());
+        userData = (UserMedia) intent.getSerializableExtra("userData");
+        petDataList = (ArrayList<PetMedia>) intent.getSerializableExtra("petDataList");
     }
 
 }

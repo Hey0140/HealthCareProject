@@ -29,6 +29,7 @@ public class PetAdd2Activity extends AppCompatActivity implements View.OnClickLi
 
     private UserMedia userData;
     private PetMedia petData;
+    private ArrayList<PetMedia> petDataList;
     private CheckBox diet, health, walk;
     private EditText petFeed, petFeedCalorie, petVaccine, petFeat;
     private Button endButton, petVaccineButton;
@@ -64,6 +65,7 @@ public class PetAdd2Activity extends AppCompatActivity implements View.OnClickLi
 
         Intent intent = new Intent(this.getIntent());
         userData = (UserMedia) intent.getSerializableExtra("userData");
+        petDataList = (ArrayList<PetMedia>) intent.getSerializableExtra("petDataList");
         petData = (PetMedia) intent.getSerializableExtra("petData");
 
         petLikeList.put("diet", false);
@@ -83,11 +85,6 @@ public class PetAdd2Activity extends AppCompatActivity implements View.OnClickLi
             } else {
                 onSetPetData();
                 onSetDataToFirebase(petData);
-                Intent intent = new Intent(PetAdd2Activity.this, MainActivity.class);
-                intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
-                intent.putExtra("userData", userData);
-                startActivity(intent);
-                finish();
             }
         }
         if(v == diet){
@@ -162,8 +159,6 @@ public class PetAdd2Activity extends AppCompatActivity implements View.OnClickLi
         petData.setPetFeat(petFeat.getText().toString());
         petData.setPetLike(petLikeList);
         petData.setPetVaccine(vaccineList);
-        int preCount = userData.getCount();
-        userData.setCount(preCount+1);
     }
 
     private void onSetDataToFirebase(PetMedia pet){
@@ -191,8 +186,33 @@ public class PetAdd2Activity extends AppCompatActivity implements View.OnClickLi
                 .addOnSuccessListener(new OnSuccessListener<Void>() {
                     @Override
                     public void onSuccess(Void aVoid) {
+                        petDataList.add(petData);
                         Log.d("Firebase", "DocumentSnapshot successfully written!");
 
+                        DocumentReference documentReference = db.collection("users").document(uid);
+                        documentReference.update("count", userData.getCount()+1)
+                                .addOnSuccessListener(new OnSuccessListener<Void>() {
+                                    @Override
+                                    public void onSuccess(Void aVoid) {
+
+                                        int preCount = userData.getCount();
+                                        userData.setCount(preCount+1);
+
+                                        Log.d("Firebase", "DocumentSnapshot successfully updated!");
+                                        Intent intent = new Intent(PetAdd2Activity.this, MainActivity.class);
+                                        intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
+                                        intent.putExtra("userData", userData);
+                                        intent.putExtra("petDataList", petDataList);
+                                        startActivity(intent);
+                                        finish();
+                                    }
+                                })
+                                .addOnFailureListener(new OnFailureListener() {
+                                    @Override
+                                    public void onFailure(@NonNull Exception e) {
+                                        Log.w("Firebase", "Error updating document", e);
+                                    }
+                                });
                     }
                 })
                 .addOnFailureListener(new OnFailureListener() {
@@ -202,20 +222,7 @@ public class PetAdd2Activity extends AppCompatActivity implements View.OnClickLi
                     }
                 });
 
-        DocumentReference documentReference = db.collection("users").document(uid);
-        documentReference.update("count", userData.getCount())
-                .addOnSuccessListener(new OnSuccessListener<Void>() {
-                    @Override
-                    public void onSuccess(Void aVoid) {
-                        Log.d("Firebase", "DocumentSnapshot successfully updated!");
-                    }
-                })
-                .addOnFailureListener(new OnFailureListener() {
-                    @Override
-                    public void onFailure(@NonNull Exception e) {
-                        Log.w("Firebase", "Error updating document", e);
-                    }
-                });
+
 
     }
 
