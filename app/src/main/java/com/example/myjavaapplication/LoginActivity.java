@@ -2,13 +2,24 @@ package com.example.myjavaapplication;
 
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.core.app.ActivityCompat;
+import androidx.core.content.ContextCompat;
 
+import android.Manifest;
+import android.annotation.SuppressLint;
 import android.app.Activity;
+import android.bluetooth.BluetoothAdapter;
+import android.bluetooth.BluetoothDevice;
+import android.bluetooth.BluetoothSocket;
 import android.content.Context;
 import android.content.Intent;
+import android.content.pm.PackageManager;
 import android.graphics.Paint;
+import android.Manifest;
 import android.net.Uri;
+import android.os.Build;
 import android.os.Bundle;
+import android.os.Handler;
 import android.util.Log;
 import android.view.View;
 import android.widget.Button;
@@ -40,7 +51,9 @@ import com.google.firebase.firestore.QuerySnapshot;
 
 import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
+import java.util.Set;
 
 public class LoginActivity extends AppCompatActivity implements View.OnClickListener {
     private FirebaseAuth auth;
@@ -48,6 +61,16 @@ public class LoginActivity extends AppCompatActivity implements View.OnClickList
     private GoogleSignInOptions gso;
     private GoogleSignInAccount gsa;
     private GoogleSignInClient gsc;
+
+    private BluetoothAdapter mBluetoothAdapter;
+    private Set<BluetoothDevice> mPairedDevices;
+    private List<String> mListPairedDevices;
+    private Handler mBluetoothHandler;
+    //    ConnectedBluetoothThread mThreadConnectedBluetooth;
+    private BluetoothDevice mBluetoothDevice;
+    private BluetoothSocket mBluetoothSocket;
+    private final static int  REQUEST_PERMISSION_CODE = 801;
+    private final static int  REQUEST_PERMISSION_UNDER_CODE = 802;
     private boolean professional;
     private boolean GOOGLE;
     private final int RC_SIGN_IN = 9001;
@@ -64,10 +87,21 @@ public class LoginActivity extends AppCompatActivity implements View.OnClickList
     private UserMedia userData;
     private ArrayList<PetMedia> petDataList;
 
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.login_page);
+
+        String [] permission_list = {
+                Manifest.permission.ACCESS_FINE_LOCATION,
+                Manifest.permission.ACCESS_COARSE_LOCATION,
+                Manifest.permission.BLUETOOTH_CONNECT,
+                Manifest.permission.BLUETOOTH_ADVERTISE,
+                Manifest.permission.BLUETOOTH_SCAN
+        };
+        ActivityCompat.requestPermissions(LoginActivity.this, permission_list, 1);
+
         email = "";
         password = "";
         professional = BASIC_MEMBER;
@@ -88,8 +122,8 @@ public class LoginActivity extends AppCompatActivity implements View.OnClickList
 
         gso = new GoogleSignInOptions.Builder(GoogleSignInOptions.DEFAULT_SIGN_IN)
                 .requestIdToken(getString(R.string.default_web_client_id))
-                        .requestEmail()
-                                .build();
+                .requestEmail()
+                .build();
         gsc = GoogleSignIn.getClient(this, gso);
 
         loginButton.setOnClickListener(this);
@@ -103,52 +137,49 @@ public class LoginActivity extends AppCompatActivity implements View.OnClickList
 
     @Override
     public void onClick(View v) {
-        if(v == proCheckBox){
+        if (v == proCheckBox) {
             professional = PROFESSIONAL;
             onCheckBox(professional);
         }
-        if(v == memCheckBox){
+        if (v == memCheckBox) {
             professional = BASIC_MEMBER;
             onCheckBox(professional);
         }
         if (v == loginButton) {
             email = idText.getText().toString();
             password = pwText.getText().toString();
-            if(email.length() > 0 && password.length() >= 6){
+            if (email.length() > 0 && password.length() >= 6) {
                 auth.signInWithEmailAndPassword(idText.getText().toString(), pwText.getText().toString())
                         .addOnCompleteListener(this, new OnCompleteListener<AuthResult>() {
                             @Override
                             public void onComplete(@NonNull Task<AuthResult> task) {
-                                if(task.isSuccessful()){
+                                if (task.isSuccessful()) {
                                     FirebaseUser user = auth.getCurrentUser();
-                                    if(user.isEmailVerified()){
+                                    if (user.isEmailVerified()) {
                                         getDataToFirestore(user.getUid());
-                                    }
-                                    else{
+                                    } else {
                                         Toast.makeText(LoginActivity.this, "이메일 인증 중입니다. 이메일을 인증을 진행해주세요.", Toast.LENGTH_SHORT).show();
                                     }
-                                }
-                                else{
+                                } else {
                                     Toast.makeText(LoginActivity.this, "아이디 또는 패스워드가 일치하지 않습니다.", Toast.LENGTH_SHORT).show();
                                 }
                             }
                         });
-            } else{
+            } else {
                 Toast.makeText(LoginActivity.this, "아이디 또는 비밀번호를 입력해주세요.", Toast.LENGTH_SHORT).show();
             }
 
         }
-        if(v == googleButton) {
+        if (v == googleButton) {
             gsa = GoogleSignIn.getLastSignedInAccount(LoginActivity.this);
-            if(gsa != null){
+            if (gsa != null) {
                 Toast.makeText(this, "구글 로그인은 일반 회원으로만 로그인할 수 있습니다.", Toast.LENGTH_SHORT).show();
                 GOOGLE = true;
                 memCheckBox.setChecked(true);
                 proCheckBox.setChecked(false);
                 professional = BASIC_MEMBER;
                 getDataToFirestore(gsa.getId());
-            }
-            else{
+            } else {
                 memCheckBox.setChecked(true);
                 proCheckBox.setChecked(false);
                 professional = BASIC_MEMBER;
@@ -157,11 +188,11 @@ public class LoginActivity extends AppCompatActivity implements View.OnClickList
                 startActivityForResult(intent, RC_SIGN_IN);
             }
         }
-        if(v == loginJoin){
+        if (v == loginJoin) {
             Intent intent = new Intent(getApplicationContext(), JoinActivity.class);
             startActivity(intent);
         }
-        if(v == loginFindOrPw){
+        if (v == loginFindOrPw) {
 
         }
     }
@@ -173,7 +204,17 @@ public class LoginActivity extends AppCompatActivity implements View.OnClickList
             Task<GoogleSignInAccount> task = GoogleSignIn.getSignedInAccountFromIntent(data);
             handleSignInResult(task);
         }
+//        if (requestCode == REQUEST_ENABLE_BT) {
+//            if (resultCode == RESULT_OK) { // 블루투스 활성화를 확인을 클릭하였다면
+//                Toast.makeText(getApplicationContext(), "블루투스 활성화", Toast.LENGTH_LONG).show();
+//
+//            } else if (resultCode == RESULT_CANCELED) { // 블루투스 활성화를 취소를 클릭하였다면
+//                Toast.makeText(getApplicationContext(), "취소", Toast.LENGTH_LONG).show();
+//
+//            }
+//        }
     }
+
     private void handleSignInResult(Task<GoogleSignInAccount> completedTask) {
         try {
             GoogleSignInAccount gsia = completedTask.getResult(ApiException.class);
@@ -209,7 +250,96 @@ public class LoginActivity extends AppCompatActivity implements View.OnClickList
                 });
     }
 
+
+    private boolean hasPermissions(Context context, String[] permissions){
+        for (int i = 0; i < permissions.length; i++) {
+            if (ActivityCompat.checkSelfPermission(context, permissions[i])
+                    != PackageManager.PERMISSION_GRANTED
+            ) {
+                return false;
+            }
+        }
+        return true;
+    }
+
+    public void isBluetoothSet() {
+        String [] permissionList = {
+                Manifest.permission.ACCESS_FINE_LOCATION,
+                Manifest.permission.BLUETOOTH_CONNECT,
+                Manifest.permission.BLUETOOTH_ADVERTISE,
+                Manifest.permission.BLUETOOTH_SCAN
+        };
+        String [] permissionUnderList = {
+                Manifest.permission.ACCESS_FINE_LOCATION
+        };
+        if(Build.VERSION.SDK_INT >= 31){
+            if(!hasPermissions(this, permissionList)){
+                requestPermissions(permissionList, REQUEST_PERMISSION_CODE);
+            }
+        }
+        else {
+            if(!hasPermissions(this, permissionUnderList)){
+                requestPermissions(permissionUnderList, REQUEST_PERMISSION_CODE);
+            }
+        }
+
+        mBluetoothAdapter = BluetoothAdapter.getDefaultAdapter();
+        if (mBluetoothAdapter != null) {
+            if (!mBluetoothAdapter.isEnabled()) {
+                Toast.makeText(this, "블루투스가 활성화 되지않았습니다. 일부 기능이 제한될 수 있습니다.", Toast.LENGTH_LONG).show();
+            }
+        }
+    }
+
+    @Override
+    public void onRequestPermissionsResult(int requestCode, @NonNull String[] permissions, @NonNull int[] grantResults) {
+        super.onRequestPermissionsResult(requestCode, permissions, grantResults);
+        if(requestCode == REQUEST_PERMISSION_CODE){
+            if (grantResults.length > 0 &&
+                    grantResults[0] == PackageManager.PERMISSION_GRANTED) {
+                Toast.makeText(this, "위치 권한을 허용하였습니다.", Toast.LENGTH_SHORT).show();
+            } else{
+                Toast.makeText(this, "위치 권한을 허용해주셔야 합니다.", Toast.LENGTH_SHORT).show();
+            }
+
+            if (grantResults.length > 0 &&
+                    grantResults[1] == PackageManager.PERMISSION_GRANTED) {
+                Toast.makeText(this, "블루투스 권한을 허용하였습니다.", Toast.LENGTH_SHORT).show();
+            } else{
+                Toast.makeText(this, "권한을 허용해주셔야 합니다.", Toast.LENGTH_SHORT).show();
+            }
+
+            if (grantResults.length > 0 &&
+                    grantResults[2] == PackageManager.PERMISSION_GRANTED) {
+//                Toast.makeText(this, "위치 권한을 허용하였습니다.", Toast.LENGTH_SHORT).show();
+            } else{
+//                requestPermissions(permissions, REQUEST_PERMISSION_CODE);
+//                Toast.makeText(this, "권한을 허용해주셔야 합니다.", Toast.LENGTH_SHORT).show();
+            }
+
+            if (grantResults.length > 0 &&
+                    grantResults[3] == PackageManager.PERMISSION_GRANTED) {
+//                Toast.makeText(this, "위치 권한을 허용하였습니다.", Toast.LENGTH_SHORT).show();
+            } else{
+//                requestPermissions(permissions, REQUEST_PERMISSION_CODE);
+//                Toast.makeText(this, "권한을 허용해주셔야 합니다.", Toast.LENGTH_SHORT).show();
+            }
+
+        }
+        if(requestCode == REQUEST_PERMISSION_UNDER_CODE){
+            if (grantResults.length > 0 &&
+                    grantResults[0] == PackageManager.PERMISSION_GRANTED) {
+                Toast.makeText(this, "위치 권한을 허용하였습니다.", Toast.LENGTH_SHORT).show();
+            } else{
+//                requestPermissions(permissions, REQUEST_PERMISSION_UNDER_CODE);
+                Toast.makeText(this, "권한을 허용해주셔야 합니다.", Toast.LENGTH_SHORT).show();
+            }
+        }
+
+    }
+
     public void getDataToFirestore(String id){
+        isBluetoothSet();
         FirebaseFirestore db = FirebaseFirestore.getInstance();
         DocumentReference docRef = db.collection("users").document(id);
         docRef.get().addOnSuccessListener(new OnSuccessListener<DocumentSnapshot>() {

@@ -16,7 +16,7 @@ public class PetChangeDialog extends Dialog {
     private ArrayList<PetChangeData> itemList = new ArrayList<>();
     private OnChangeDialogListener changeDialogListener;
     public interface OnChangeDialogListener{
-        void onChangeSelected(String data);
+        void onChangeSelected(String data, int position);
     }
 
     public void setChangeDialogListener(OnChangeDialogListener changeDialogListener) {
@@ -40,7 +40,7 @@ public class PetChangeDialog extends Dialog {
             @Override
             public void onItemSelected(View v, int position) {
                 String name = itemList.get(position).getName();
-                changeDialogListener.onChangeSelected(name);
+                changeDialogListener.onChangeSelected(name, position);
                 dismiss();
             }
         });
