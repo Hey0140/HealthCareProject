@@ -22,6 +22,8 @@ import org.checkerframework.checker.units.qual.C;
 
 import java.util.ArrayList;
 
+import de.hdodenhof.circleimageview.CircleImageView;
+
 
 public class PetmanageFragment extends Fragment implements View.OnClickListener{
     MainActivity mainActivity;
@@ -31,6 +33,8 @@ public class PetmanageFragment extends Fragment implements View.OnClickListener{
     private TextView Mcalorie, Tcalorie, Wcalorie, Thcalorie,  Fcalorie, Sacalorie, Sucalorie;
     private TextView hospital, hname;
     private View monStatusBox, tueStatusBox, wedStatusBox, thuStatusBox, friStatusBox, satStatusBox, sunStatusBox;
+    private CircleImageView petView;
+    private View petImageView;
     private ConstraintLayout petManageMentLayout;
 
     private final String WHITERED = "#EDA399";
@@ -39,6 +43,8 @@ public class PetmanageFragment extends Fragment implements View.OnClickListener{
     private ArrayList<PetChangeData> list = new ArrayList<>();
     private ArrayList<PetMedia> petDataList;
     private UserMedia userData;
+    private PetMedia petData;
+    private int petPostion;
 
     public PetmanageFragment() {
         // Required empty public constructor
@@ -61,6 +67,9 @@ public class PetmanageFragment extends Fragment implements View.OnClickListener{
 
         petStatusButton = view.findViewById(R.id.petManagementStatusButton);
         petChangeButton = view.findViewById(R.id.petManagementChangeButton);
+
+        petView = view.findViewById(R.id.petManagementView);
+        petImageView = view.findViewById(R.id.petMangementImageView);
 
         name = view.findViewById(R.id.petManagementName);
         weight = view.findViewById(R.id.petManagementWeightText);
@@ -121,6 +130,18 @@ public class PetmanageFragment extends Fragment implements View.OnClickListener{
         userData = (UserMedia) getActivity().getIntent().getSerializableExtra("userData");
         petDataList = (ArrayList<PetMedia>) getActivity().getIntent().getSerializableExtra("petDataList");
 
+
+        petPostion = 0;
+        if (petDataList.size() > 0) {
+            petData = petDataList.get(petPostion);
+            setPagePetData(petData);
+
+            petView.setImageResource(R.drawable.pet_temp_image);
+            petImageView.setVisibility(View.INVISIBLE);
+        } else {
+            petData.setPetName("이름");
+            name.setText("반려동물을 추가해주세요.");
+        }
         list.clear();
         setPetChangedList();
 
@@ -135,8 +156,9 @@ public class PetmanageFragment extends Fragment implements View.OnClickListener{
                     new PetChangeDialog.OnChangeDialogListener() {
                         @Override
                         public void onChangeSelected(String data, int position) {
-                            name.setText(data);
-
+                            petPostion = position;
+                            petData = petDataList.get(petPostion);
+                            setPagePetData(petData);
                         }
                     }
             );
@@ -169,6 +191,18 @@ public class PetmanageFragment extends Fragment implements View.OnClickListener{
             petChangeData.setName(petDataList.get(i).getPetName());
             list.add(petChangeData);
         }
+    }
+
+    public void setPagePetData(PetMedia data){
+        String petName = data.getPetName();
+        String petWeight = String.valueOf(data.getPetWeight());
+        String feedName = data.getPetFeed();
+        String feedCalorie = String.valueOf(data.getPetFeedCalorie());
+
+        name.setText(petName);
+        weight.setText(petWeight);
+        feed.setText(feedName);
+        calorie.setText(feedCalorie);
     }
 
 }
