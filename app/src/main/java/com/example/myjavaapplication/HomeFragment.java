@@ -41,6 +41,8 @@ import com.google.type.DateTime;
 import org.checkerframework.checker.units.qual.A;
 
 import java.io.IOException;
+import java.io.InputStream;
+import java.io.OutputStream;
 import java.text.DecimalFormat;
 import java.time.LocalTime;
 import java.time.format.DateTimeFormatter;
@@ -58,20 +60,19 @@ public class HomeFragment extends Fragment implements View.OnClickListener {
     private Set<BluetoothDevice> devices;
     private BluetoothDevice bluetoothDevice;
     private BluetoothSocket bluetoothSocket;
-    List<String> dataDevice;
-    List<String> dataPaired;
-    int selectDevice = -1;
-    WalkRecordAdapter adapter;
+    private OutputStream outputStream = null;
+    private InputStream inputStream = null;
+    private Thread workerThread = null;
+    private byte[] readBuffer;
+    private int readBufferPosition;
+    private List<String> dataPaired;
+    private WalkRecordAdapter adapter;
     private final static int  REQUEST_PERMISSION_CODE = 801;
     private final static int  REQUEST_PERMISSION_UNDER_CODE = 802;
     private final long MALE = 11;
     private final long FEMALE = 12;
     private final long MALENEUTER = 13;
     private final long FEMALENEUTER = 14;
-    private final long SMALL = 21;
-    private final long MIDDLE = 22;
-    private final long BIG = 23;
-
     private CircleImageView profileMainImage;
     private ImageView profile;
     private TextView puppyName;
@@ -83,7 +84,6 @@ public class HomeFragment extends Fragment implements View.OnClickListener {
     private Chronometer chronometer;
     private ArrayList<PetChangeData> petChangelist = new ArrayList<>();
     private ArrayList<WalkRecordData> walkList = new ArrayList<>();
-//    private WalkRecordAdapter adapter;
     private UserMedia userData;
     private PetMedia petData;
     private ArrayList<PetMedia> petDataList;
@@ -380,6 +380,50 @@ public class HomeFragment extends Fragment implements View.OnClickListener {
             }
         }
 
+    }
+
+    public void receiveData(){
+        final Handler handler = new Handler();
+        readBufferPosition = 0;
+        readBuffer = new byte[2048];
+
+        workerThread = new Thread(new Runnable() {
+            @Override
+            public void run() {
+                while(!Thread.currentThread().isInterrupted()){
+                    try {
+                        int byteAvailable = inputStream.available();
+                        if ( byteAvailable > 0){
+                            byte[] bytes = new byte[byteAvailable];
+                            inputStream.read(bytes);
+                            for ( int i = 0; i < byteAvailable; i++){
+                                byte tempByte = bytes[i];
+                                if (tempByte == '\n'){
+                                    byte[] encodedBytes = new byte[readBufferPosition];
+                                    System.arraycopy(readBuffer, 0, encodedBytes, 0, encodedBytes.length);
+                                    final String text = new String(encodedBytes, "UTF-8");
+                                    readBufferPosition = 0;
+                                    handler.post(new Runnable() {
+                                        @Override
+                                        public void run() {
+
+                                        }
+                                    });
+                                }
+                                else{
+                                    readBuffer[readBufferPosition++] = tempByte;
+                                }
+                            }
+                        }
+                    } catch (IOException e) {
+                        throw new RuntimeException(e);
+                    }
+
+
+                }
+            }
+        });
+        workerThread.start();
     }
 
     @Override
