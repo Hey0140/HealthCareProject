@@ -18,7 +18,7 @@
                 app:layout_constraintTop_toTopOf="parent"
                 android:layout_marginLeft="20dp"
                 android:layout_marginTop="20dp"
-                android:text="마이페이지"
+                android:text="My page"
                 android:textSize="20dp"/>
 
         <TextView

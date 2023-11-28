@@ -21,6 +21,7 @@ import android.widget.Toast;
 import org.checkerframework.checker.units.qual.C;
 
 import java.util.ArrayList;
+import java.util.Calendar;
 
 import de.hdodenhof.circleimageview.CircleImageView;
 
@@ -32,6 +33,7 @@ public class PetmanageFragment extends Fragment implements View.OnClickListener{
     private TextView name, weight, feed, calorie, months;
     private TextView Mcalorie, Tcalorie, Wcalorie, Thcalorie,  Fcalorie, Sacalorie, Sucalorie;
     private TextView hospital, hname;
+    private TextView hospitalCheckText, leftParse, rightParse;
     private View monStatusBox, tueStatusBox, wedStatusBox, thuStatusBox, friStatusBox, satStatusBox, sunStatusBox;
     private CircleImageView petView;
     private View petImageView;
@@ -85,6 +87,9 @@ public class PetmanageFragment extends Fragment implements View.OnClickListener{
         Sucalorie = view.findViewById(R.id.petManagementDaySunCalorie);
         hospital = view.findViewById(R.id.petManagementHospital);
         hname = view.findViewById(R.id.petManagmentDocter);
+        hospitalCheckText = view.findViewById(R.id.petManagementCheckHospitalText);
+        leftParse = view.findViewById(R.id.leftParse);
+        rightParse = view.findViewById(R.id.rightParse);
 
         monStatusBox = view.findViewById(R.id.petManagementDayMonBox);
         tueStatusBox = view.findViewById(R.id.petManagementDayTueBox);
@@ -96,21 +101,18 @@ public class PetmanageFragment extends Fragment implements View.OnClickListener{
         petManageMentLayout = view.findViewById(R.id.petManagementDayLayout);
 
 
-
-        name.setText("초코");
-        weight.setText("5Kg");
-        feed.setText("고급 사료");
-        calorie.setText("3,500Kcal/Kg");
-        months.setText("11");
-        Mcalorie.setText("2400Kcal");
-        Tcalorie.setText("3200Kcal");
-        Wcalorie.setText("1800Kcal");
-        Thcalorie.setText("2800Kcal");
-        Fcalorie.setText("2150Kcal");
-        Sacalorie.setText("1530Kcal");
-        Sucalorie.setText("2000Kcal");
-        hospital.setText("SJP 동물병원");
-        hname.setText("박소정");
+        Calendar now = Calendar.getInstance();
+        int month = now.get((Calendar.MONTH) + 1);
+        months.setText(String.valueOf(month));
+        Mcalorie.setText("00Kcal");
+        Tcalorie.setText("00Kcal");
+        Wcalorie.setText("00Kcal");
+        Thcalorie.setText("00Kcal");
+        Fcalorie.setText("00Kcal");
+        Sacalorie.setText("00Kcal");
+        Sucalorie.setText("00Kcal");
+        hospital.setText("병원");
+        hname.setText("주치의 이름");
         monStatusBox.setBackgroundColor(Color.parseColor(WHITEGREEN));
         tueStatusBox.setBackgroundColor(Color.parseColor(WHITEGREEN));
         wedStatusBox.setBackgroundColor(Color.parseColor(WHITEGREEN));
@@ -132,6 +134,7 @@ public class PetmanageFragment extends Fragment implements View.OnClickListener{
 
 
         petPostion = 0;
+        petData = new PetMedia();
         if (petDataList.size() > 0) {
             petData = petDataList.get(petPostion);
             setPagePetData(petData);
@@ -139,8 +142,15 @@ public class PetmanageFragment extends Fragment implements View.OnClickListener{
             petView.setImageResource(R.drawable.pet_temp_image);
             petImageView.setVisibility(View.INVISIBLE);
         } else {
-            petData.setPetName("이름");
             name.setText("반려동물을 추가해주세요.");
+            weight.setText("0Kg");
+            feed.setText("사료");
+            calorie.setText("00Kcal");
+            hospital.setVisibility(View.INVISIBLE);
+            hname.setVisibility(View.INVISIBLE);
+            leftParse.setVisibility(View.INVISIBLE);
+            rightParse.setVisibility(View.INVISIBLE);
+            hospitalCheckText.setVisibility(View.VISIBLE);
         }
         list.clear();
         setPetChangedList();
@@ -200,9 +210,16 @@ public class PetmanageFragment extends Fragment implements View.OnClickListener{
         String feedCalorie = String.valueOf(data.getPetFeedCalorie());
 
         name.setText(petName);
-        weight.setText(petWeight);
+        weight.setText(petWeight + "Kg");
         feed.setText(feedName);
-        calorie.setText(feedCalorie);
+        calorie.setText(feedCalorie + "kcal");
+        hospital.setText("SJP 동물병원");
+        hname.setText("박소정");
+        hospital.setVisibility(View.VISIBLE);
+        hname.setVisibility(View.VISIBLE);
+        leftParse.setVisibility(View.VISIBLE);
+        rightParse.setVisibility(View.VISIBLE);
+        hospitalCheckText.setVisibility(View.INVISIBLE);
     }
 
 }

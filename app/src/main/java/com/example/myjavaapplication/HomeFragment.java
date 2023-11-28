@@ -173,10 +173,10 @@ public class HomeFragment extends Fragment implements View.OnClickListener {
             petData.setPetName("이름");
             petData.setPetWeight(0);
             puppyName.setText("반려동물을 추가해주세요.");
-            homePageWalkNumber.setText(0);
-            homePageWalkTime.setText(0);
-            homePageHeart.setText(0);
-            homePageNeedCalorie.setText((int) needCalorie);
+            homePageWalkNumber.setText("0");
+            homePageWalkTime.setText("0");
+            homePageHeart.setText("0");
+            homePageNeedCalorie.setText( String.valueOf(needCalorie));
         }
 
         petChangelist.clear();
