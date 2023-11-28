@@ -16,7 +16,7 @@
             android:layout_height="wrap_content"
             android:layout_marginLeft="20dp"
             android:layout_marginTop="20dp"
-            android:text="펫 관리"
+            android:text="Pet"
             android:textSize="20dp"
             app:layout_constraintLeft_toLeftOf="parent"
             app:layout_constraintTop_toTopOf="parent" />
@@ -504,6 +504,7 @@
                 android:textSize="20dp" />
 
             <TextView
+                android:id="@+id/leftParse"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_marginLeft="5dp"
@@ -522,6 +523,7 @@
                 app:layout_constraintTop_toBottomOf="@id/petManagementCondition" />
 
             <TextView
+                android:id="@+id/rightParse"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_marginLeft="5dp"
