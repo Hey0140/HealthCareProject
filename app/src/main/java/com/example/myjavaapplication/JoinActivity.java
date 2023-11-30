@@ -27,6 +27,7 @@ import com.google.firebase.firestore.FirebaseFirestore;
 import com.google.firebase.ktx.Firebase;
 
 import java.util.HashMap;
+import java.util.Map;
 
 public class JoinActivity extends AppCompatActivity implements View.OnClickListener {
     private final boolean PROFESSIONAL = true;

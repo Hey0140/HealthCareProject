@@ -462,6 +462,22 @@ public class LoginActivity extends AppCompatActivity implements View.OnClickList
                     @Override
                     public void onSuccess(Void aVoid) {
                         Log.d("Firebase", "DocumentSnapshot successfully written!");
+                        Map<String, Object> walk = new HashMap<>();
+                        walk.put("uid", id);
+                        db.collection("walk").document(id)
+                                .set(walk)
+                                .addOnSuccessListener(new OnSuccessListener<Void>() {
+                                    @Override
+                                    public void onSuccess(Void aVoid) {
+                                        Log.d("Firebase", "DocumentSnapshot successfully written!");
+                                    }
+                                })
+                                .addOnFailureListener(new OnFailureListener() {
+                                    @Override
+                                    public void onFailure(@NonNull Exception e) {
+                                        Log.w("Firebase", "Error writing document", e);
+                                    }
+                                });
                     }
                 })
                 .addOnFailureListener(new OnFailureListener() {

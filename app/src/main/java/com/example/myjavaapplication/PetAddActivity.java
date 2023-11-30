@@ -36,7 +36,7 @@ public class PetAddActivity extends AppCompatActivity implements View.OnClickLis
     private UserMedia userData;
     private ArrayList<PetMedia> petDataList;
     private PetMedia petData;
-    private int petCount;
+    private int petNewId;
     private long petSex = 0;
     private long petKind = 0;
     private CircleImageView petProfileBox;
@@ -128,7 +128,7 @@ public class PetAddActivity extends AppCompatActivity implements View.OnClickLis
         userData = (UserMedia) intent.getSerializableExtra("userData");
         petDataList = (ArrayList<PetMedia>) intent.getSerializableExtra("petDataList");
 
-        petCount = userData.getCount();
+        petNewId = userData.getCount();
     }
 
 
@@ -252,7 +252,7 @@ public class PetAddActivity extends AppCompatActivity implements View.OnClickLis
         else{
             petData.setImage("");
         }
-        petData.setPetId(petCount);
+        petData.setPetId(petNewId);
         petData.setPetName(petName.getText().toString());
         petData.setPetKind(petKind);
         petData.setPetSex(petSex);

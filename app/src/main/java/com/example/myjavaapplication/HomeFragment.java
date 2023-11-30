@@ -36,6 +36,14 @@ import android.widget.SimpleAdapter;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.google.android.gms.tasks.OnCompleteListener;
+import com.google.android.gms.tasks.OnFailureListener;
+import com.google.android.gms.tasks.OnSuccessListener;
+import com.google.android.gms.tasks.Task;
+import com.google.firebase.Firebase;
+import com.google.firebase.firestore.DocumentReference;
+import com.google.firebase.firestore.DocumentSnapshot;
+import com.google.firebase.firestore.FirebaseFirestore;
 import com.google.type.DateTime;
 
 import org.checkerframework.checker.units.qual.A;
@@ -44,9 +52,11 @@ import java.io.IOException;
 import java.io.InputStream;
 import java.io.OutputStream;
 import java.text.DecimalFormat;
+import java.text.SimpleDateFormat;
 import java.time.LocalTime;
 import java.time.format.DateTimeFormatter;
 import java.util.ArrayList;
+import java.util.Calendar;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -86,7 +96,9 @@ public class HomeFragment extends Fragment implements View.OnClickListener {
     private ArrayList<WalkRecordData> walkList = new ArrayList<>();
     private UserMedia userData;
     private PetMedia petData;
+    private WalkRecordData walkRecordData;
     private ArrayList<PetMedia> petDataList;
+    private long walkNumber;
     private int petPostion = 0;
     private double needCalorie = 0;
     private long pauseTime = 0;
@@ -95,9 +107,10 @@ public class HomeFragment extends Fragment implements View.OnClickListener {
     private String duringTime = "";
 
     private double walkAllTime = 0;
+    private String heart = "0";
     private boolean isPaused = false;
     private Dialog bluetoothDialog;
-    private int walkListSize = 0;
+    private int walkListSize;
 
 
     public HomeFragment() {
@@ -148,14 +161,27 @@ public class HomeFragment extends Fragment implements View.OnClickListener {
 
         userData = new UserMedia();
         petDataList = new ArrayList<>();
+        walkList = new ArrayList<>();
         petData = new PetMedia();
+
+        walkAllTime = 0;
+        heart = "0";
 
         userData = (UserMedia) getActivity().getIntent().getSerializableExtra("userData");
         petDataList = (ArrayList<PetMedia>) getActivity().getIntent().getSerializableExtra("petDataList");
 
+        RecyclerView recyclerView = view.findViewById(R.id.walkRecyclerView);
+        recyclerView.setLayoutManager(new LinearLayoutManager(getContext(), LinearLayoutManager.VERTICAL,false));
+        adapter = new WalkRecordAdapter(walkList);
+        recyclerView.setAdapter(adapter);
+
+
+
         if (petDataList.size() > 0) {
             petData = petDataList.get(petPostion);
             puppyName.setText(petData.getPetName());
+
+            getWalkDataToFirestore(petData);
 
             long rer = petData.getPetWeight() * 30 + 70;
             if (petData.getPetSex() == MALE || petData.getPetSex() == FEMALE) {
@@ -182,14 +208,6 @@ public class HomeFragment extends Fragment implements View.OnClickListener {
         petChangelist.clear();
         setPetChangedList();
 
-        walkListSize = walkList.size();
-
-        walkList.clear();
-        RecyclerView recyclerView = view.findViewById(R.id.walkRecyclerView);
-        recyclerView.setLayoutManager(new LinearLayoutManager(getContext(), LinearLayoutManager.VERTICAL,false));
-        adapter = new WalkRecordAdapter(walkList);
-        recyclerView.setAdapter(adapter);
-
         bluetoothDialog = new Dialog(getActivity());
 
         return view;
@@ -208,6 +226,15 @@ public class HomeFragment extends Fragment implements View.OnClickListener {
 
                             petData = petDataList.get(petPostion);
                             puppyName.setText(petData.getPetName());
+
+                            walkAllTime = 0;
+                            heart = "0";
+
+                            adapter.notifyItemRangeRemoved(0,walkListSize);
+                            walkList.clear();
+                            walkListSize = 0;
+                            getWalkDataToFirestore(petData);
+
                             long rer = petData.getPetWeight() * 30 + 70;
                             if (petData.getPetSex() == MALE || petData.getPetSex() == FEMALE) {
                                 needCalorie = rer * 1.8;
@@ -217,7 +244,6 @@ public class HomeFragment extends Fragment implements View.OnClickListener {
                             }
                             String calorieName = String.valueOf(needCalorie);
                             homePageNeedCalorie.setText(calorieName);
-
 
                         }
                     }
@@ -290,8 +316,7 @@ public class HomeFragment extends Fragment implements View.OnClickListener {
             Log.i("check", startTime+", "+endTime+", "+duringTime);
             walkList.add(walkRecordData);
 
-            adapter.notifyItemInserted(walkListSize);
-            walkListSize++;
+            setWalkDataToFirebase(petData, walkList);
         }
         if (view == bluetoothButton) {
             bluetoothAdapter = BluetoothAdapter.getDefaultAdapter();
@@ -299,7 +324,13 @@ public class HomeFragment extends Fragment implements View.OnClickListener {
                 if (!bluetoothAdapter.isEnabled()) {
                     Toast.makeText(getContext(), "블루투스 활성화를 먼저 진행해주세요", Toast.LENGTH_SHORT).show();
                 } else {
-                    selectBluettothDevice();
+                    if(ActivityCompat.checkSelfPermission(getContext(), Manifest.permission.ACCESS_FINE_LOCATION)  == PackageManager.PERMISSION_GRANTED &&
+                            ActivityCompat.checkSelfPermission(getContext(), Manifest.permission.BLUETOOTH_CONNECT) == PackageManager.PERMISSION_GRANTED){
+                        selectBluettothDevice();
+                    }
+                    else{
+                        Toast.makeText(getContext(), "권한을 허가해주세요.", Toast.LENGTH_SHORT).show();
+                    }
                 }
             } else {
                 Toast.makeText(getContext(), "블루투스가 불가능한 안드로이드 입니다.", Toast.LENGTH_SHORT).show();
@@ -441,7 +472,7 @@ public class HomeFragment extends Fragment implements View.OnClickListener {
                     grantResults[1] == PackageManager.PERMISSION_GRANTED) {
                 Toast.makeText(getContext(), "블루투스 권한을 허용하였습니다.", Toast.LENGTH_SHORT).show();
             } else{
-                Toast.makeText(getContext(), "권한을 허용해주셔야 합니다.", Toast.LENGTH_SHORT).show();
+                Toast.makeText(getContext(), "블루투스 권한을 허용해주셔야 합니다.", Toast.LENGTH_SHORT).show();
             }
 
             if (grantResults.length > 0 &&
@@ -470,6 +501,143 @@ public class HomeFragment extends Fragment implements View.OnClickListener {
                 Toast.makeText(getContext(), "권한을 허용해주셔야 합니다.", Toast.LENGTH_SHORT).show();
             }
         }
+
+    }
+
+    public void getWalkDataToFirestore(PetMedia pet){
+        FirebaseFirestore db = FirebaseFirestore.getInstance();
+        String id = userData.getUid();
+        if(petDataList.size() > 0){
+            String petId = String.valueOf(pet.getPetId());
+
+            SimpleDateFormat sdf = new SimpleDateFormat("yyyyMMdd");
+            Calendar c1 = Calendar.getInstance();
+            String strToday = sdf.format(c1.getTime());
+            Log.i("strToday", strToday);
+
+            DocumentReference docRef = db.collection("users").document(id)
+                            .collection("pet").document(petId).collection("walk").document(strToday);
+            docRef.get().addOnCompleteListener(new OnCompleteListener<DocumentSnapshot>() {
+                @Override
+                public void onComplete(@NonNull Task<DocumentSnapshot> task) {
+                    if (task.isSuccessful()) {
+                        DocumentSnapshot document = task.getResult();
+                        if (document.exists()) {
+                            Log.d("Firebase", "DocumentSnapshot data: " + document.getData());
+                            Map<String, Object> map = document.getData();
+                            ArrayList<Map<String, Object>> tempList = (ArrayList<Map<String, Object>>) map.get("walkList");
+
+                            for (int i = 0; i < tempList.size(); i++) {
+                                Map<String, Object> temp = tempList.get(i);
+                                WalkRecordData walkRecordData = new WalkRecordData();
+                                walkRecordData.setStartTime((String) temp.get("startTime"));
+                                walkRecordData.setEndTime((String) temp.get("endTime"));
+                                walkRecordData.setDuringTime((String) temp.get("duringTime"));
+                                walkList.add(walkRecordData);
+                                String tempTime = (String) temp.get("duringTime");
+                                walkAllTime += Double.valueOf(tempTime);
+                                Log.i("walkLlist", "항목추가");
+                            }
+                            DecimalFormat df = new DecimalFormat("0.0");
+
+                            adapter.notifyItemRangeChanged(0, tempList.size());
+                            walkListSize = walkList.size();
+                            homePageWalkTime.setText(df.format(walkAllTime));
+                        }
+                        else{
+                            homePageWalkTime.setText("0.0");
+                        }
+
+                    } else {
+                        Log.d("Firebase", "get failed with ", task.getException());
+                    }
+                }
+            });
+
+            DocumentReference docRefa = db.collection("users").document(id)
+                    .collection("pet").document(petId).collection("status").document(strToday);
+            docRefa.get().addOnCompleteListener(new OnCompleteListener<DocumentSnapshot>() {
+                @Override
+                public void onComplete(@NonNull Task<DocumentSnapshot> task) {
+                    if (task.isSuccessful()) {
+                        DocumentSnapshot document = task.getResult();
+                        if (document.exists()) {
+                            Log.d("Firebase", "DocumentSnapshot data: " + document.getData());
+                            Map<String, Object> map = document.getData();
+
+                            String heart = (String) map.get("heart");
+                            homePageHeart.setText(heart);
+                        }
+                        else {
+                            homePageHeart.setText("00");
+                        }
+                    } else {
+                        Log.d("Firebase", "get failed with ", task.getException());
+                    }
+                }
+
+            });
+
+        }
+        else{
+            Log.i("HomeFragment", "펫이 없음");
+        }
+    }
+
+    public void setWalkDataToFirebase(PetMedia pet, ArrayList<WalkRecordData> walk){
+        String uid = pet.getuId();
+        String petId = String.valueOf(pet.getPetId());
+        FirebaseFirestore db = FirebaseFirestore.getInstance();
+
+        SimpleDateFormat sdf = new SimpleDateFormat("yyyyMMdd");
+        Calendar c1 = Calendar.getInstance();
+        String strToday = sdf.format(c1.getTime());
+        Log.i("strToday", strToday);
+
+        HashMap<String, Object> hashMap = new HashMap<>();
+        hashMap.put("walkList", walk);
+
+        db.collection("users").document(uid)
+                .collection("pet").document(petId)
+                .collection("walk").document(strToday)
+                .set(hashMap)
+                .addOnSuccessListener(new OnSuccessListener<Void>() {
+                    @Override
+                    public void onSuccess(Void unused) {
+                        adapter.notifyItemInserted(walkListSize);
+                        walkListSize++;
+                        Log.i("Firebase", "Success");
+                    }
+                });
+
+    }
+
+    public void setHeartDataToFirebase(PetMedia pet, String heartBPM){
+        String uid = pet.getuId();
+        String petId = String.valueOf(pet.getPetId());
+        FirebaseFirestore db = FirebaseFirestore.getInstance();
+
+        SimpleDateFormat sdf = new SimpleDateFormat("yyyyMMdd");
+        Calendar c1 = Calendar.getInstance();
+        String strToday = sdf.format(c1.getTime());
+        Log.i("strToday", strToday);
+
+        heart = heartBPM;
+
+        HashMap<String, String> hashMap = new HashMap<>();
+        hashMap.put("heart", heartBPM);
+
+        db.collection("users").document(uid)
+                .collection("pet").document(petId)
+                .collection("status").document(strToday)
+                .set(hashMap)
+                .addOnSuccessListener(new OnSuccessListener<Void>() {
+                    @Override
+                    public void onSuccess(Void unused) {
+                        homePageHeart.setText(heartBPM);
+                        Log.i("Firebase", "Success");
+                    }
+                });
 
     }
 
