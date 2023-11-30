@@ -102,6 +102,7 @@ public class HomeFragment extends Fragment implements View.OnClickListener {
     private int petPostion = 0;
     private double needCalorie = 0;
     private long pauseTime = 0;
+    private long walk = 0;
     private String startTime = "";
     private String endTime = "";
     private String duringTime = "";
@@ -166,6 +167,7 @@ public class HomeFragment extends Fragment implements View.OnClickListener {
 
         walkAllTime = 0;
         heart = "0";
+        walk = 0;
 
         userData = (UserMedia) getActivity().getIntent().getSerializableExtra("userData");
         petDataList = (ArrayList<PetMedia>) getActivity().getIntent().getSerializableExtra("petDataList");
@@ -180,6 +182,8 @@ public class HomeFragment extends Fragment implements View.OnClickListener {
         if (petDataList.size() > 0) {
             petData = petDataList.get(petPostion);
             puppyName.setText(petData.getPetName());
+            homePageWalkNumber.setText(String.valueOf(petData.getWalk()));
+            walk = petData.getWalk();
 
             getWalkDataToFirestore(petData);
 
@@ -221,14 +225,15 @@ public class HomeFragment extends Fragment implements View.OnClickListener {
                     new PetChangeDialog.OnChangeDialogListener() {
                         @Override
                         public void onChangeSelected(String data, int position) {
-                            puppyName.setText(data);
                             petPostion = position;
 
                             petData = petDataList.get(petPostion);
                             puppyName.setText(petData.getPetName());
+                            homePageWalkNumber.setText(String.valueOf(petData.getWalk()));
 
                             walkAllTime = 0;
                             heart = "0";
+                            walk = petData.getWalk();
 
                             adapter.notifyItemRangeRemoved(0,walkListSize);
                             walkList.clear();
@@ -584,7 +589,7 @@ public class HomeFragment extends Fragment implements View.OnClickListener {
         }
     }
 
-    public void setWalkDataToFirebase(PetMedia pet, ArrayList<WalkRecordData> walk){
+    public void setWalkDataToFirebase(PetMedia pet, ArrayList<WalkRecordData> walkRecordList){
         String uid = pet.getuId();
         String petId = String.valueOf(pet.getPetId());
         FirebaseFirestore db = FirebaseFirestore.getInstance();
@@ -595,7 +600,7 @@ public class HomeFragment extends Fragment implements View.OnClickListener {
         Log.i("strToday", strToday);
 
         HashMap<String, Object> hashMap = new HashMap<>();
-        hashMap.put("walkList", walk);
+        hashMap.put("walkList", walkRecordList);
 
         db.collection("users").document(uid)
                 .collection("pet").document(petId)
@@ -607,6 +612,29 @@ public class HomeFragment extends Fragment implements View.OnClickListener {
                         adapter.notifyItemInserted(walkListSize);
                         walkListSize++;
                         Log.i("Firebase", "Success");
+
+                        DocumentReference documentReference = db.collection("users").document(uid)
+                                .collection("pet").document(petId);
+                        documentReference.update("walk", pet.getWalk()+1)
+                                .addOnSuccessListener(new OnSuccessListener<Void>() {
+                                    @Override
+                                    public void onSuccess(Void aVoid) {
+
+                                        long preCount = pet.getWalk();
+                                        petData.setWalk(preCount+1);
+                                        walk = walk + 1;
+
+                                        homePageWalkNumber.setText(String.valueOf(walk));
+                                        Log.d("Firebase", "DocumentSnapshot successfully updated!");
+                                    }
+                                })
+                                .addOnFailureListener(new OnFailureListener() {
+                                    @Override
+                                    public void onFailure(@NonNull Exception e) {
+                                        Log.w("Firebase", "Error updating document", e);
+                                    }
+                                });
+
                     }
                 });
 

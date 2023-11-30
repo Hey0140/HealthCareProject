@@ -159,6 +159,7 @@ public class PetAdd2Activity extends AppCompatActivity implements View.OnClickLi
         petData.setPetFeat(petFeat.getText().toString());
         petData.setPetLike(petLikeList);
         petData.setPetVaccine(vaccineList);
+        petData.setWalk(0);
     }
 
     private void onSetDataToFirebase(PetMedia pet){
@@ -176,6 +177,7 @@ public class PetAdd2Activity extends AppCompatActivity implements View.OnClickLi
         hashMap.put("name", pet.getPetName());
         hashMap.put("sex", pet.getPetSex());
         hashMap.put("weight", pet.getPetWeight());
+        hashMap.put("walk", pet.getWalk());
         hashMap.put("petLike", pet.getPetLike());
         hashMap.put("petVaccine", pet.getPetVaccine());
 
