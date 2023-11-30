@@ -27,6 +27,7 @@ public class PetMedia implements Serializable {
         this.kind = 0;
         this.weight = 0;
         this.sex = 0;
+        this.walk = 0;
         this.petVaccine = new HashMap<>();
         this.petLike = new HashMap<>();
     }
@@ -41,6 +42,7 @@ public class PetMedia implements Serializable {
     private String image;
     private String feed;
     private String feat;
+    private long walk;
     private HashMap<String, Boolean> petLike;
     private HashMap<String, Boolean> petVaccine;
 
@@ -85,6 +87,9 @@ public class PetMedia implements Serializable {
         return id;
     }
 
+    public long getWalk() {
+        return walk;
+    }
 
     public void setImage(String image) {
         this.image = image;
@@ -135,5 +140,9 @@ public class PetMedia implements Serializable {
 
     public void setPetId(int petId) {
         this.id = petId;
+    }
+
+    public void setWalk(long walkNumber) {
+        this.walk = walkNumber;
     }
 }

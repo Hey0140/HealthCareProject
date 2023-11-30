@@ -401,7 +401,8 @@ public class LoginActivity extends AppCompatActivity implements View.OnClickList
     public PetMedia setPetMeida(Map<String, Object> map, int position){
         PetMedia petMedia = new PetMedia();
         petMedia.setuId(map.get("uid").toString());
-        petMedia.setPetId(position);
+        long tempId = (long) map.get("id");
+        petMedia.setPetId((int) tempId);
         petMedia.setPetBirth(map.get("birth").toString());
         petMedia.setPetFeat(map.get("feat").toString());
         petMedia.setPetFeed(map.get("feed").toString());
@@ -411,6 +412,7 @@ public class LoginActivity extends AppCompatActivity implements View.OnClickList
         petMedia.setPetName(map.get("name").toString());
         petMedia.setPetSex((Long) map.get("sex"));
         petMedia.setPetWeight((Long) map.get("weight"));
+        petMedia.setWalk((Long) map.get("walk"));
         petMedia.setPetLike((HashMap<String, Boolean>) map.get("petLike"));
         petMedia.setPetVaccine((HashMap<String, Boolean>) map.get("petVaccine"));
         return petMedia;
