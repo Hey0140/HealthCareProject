@@ -26,15 +26,22 @@ import android.widget.*;
 import android.os.Bundle;
 
 import com.google.android.gms.tasks.OnCompleteListener;
+import com.google.android.gms.tasks.OnFailureListener;
+import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.android.gms.tasks.Task;
 import com.google.android.material.bottomnavigation.BottomNavigationView;
+import com.google.firebase.auth.FirebaseAuth;
+import com.google.firebase.firestore.DocumentReference;
 import com.google.firebase.firestore.DocumentSnapshot;
 import com.google.firebase.firestore.FirebaseFirestore;
 import com.google.firebase.firestore.QueryDocumentSnapshot;
 import com.google.firebase.firestore.QuerySnapshot;
 import com.google.firebase.firestore.auth.User;
 
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
+import java.util.Calendar;
+import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.Objects;
@@ -49,13 +56,19 @@ public class MainActivity extends AppCompatActivity {
 
     private PetStatusFragment petStatusFragment = new PetStatusFragment();
     //    private CommunityFragment communityFragment = new CommunityFragment();
+    private FirebaseAuth auth;
     private UserMedia userData;
-    private ArrayList<PetMedia> petDataList;
+    private ArrayList<PetMedia> petDataList = new ArrayList<>();
+    private ArrayList<WalkRecordData> walkList = new ArrayList<>();
+
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.main_page);
+
+        auth = FirebaseAuth.getInstance();
+
 
         Intent intent = new Intent(this.getIntent());
         userData = (UserMedia) intent.getSerializableExtra("userData");

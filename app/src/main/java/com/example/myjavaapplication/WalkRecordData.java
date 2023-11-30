@@ -1,6 +1,8 @@
 package com.example.myjavaapplication;
 
-public class WalkRecordData {
+import java.io.Serializable;
+
+public class WalkRecordData implements Serializable {
     private String startTime;
     private String endTime;
     private String duringTime;
