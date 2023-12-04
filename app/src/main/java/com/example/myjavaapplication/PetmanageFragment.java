@@ -196,6 +196,10 @@ public class PetmanageFragment extends Fragment implements View.OnClickListener{
                             MainActivity.petPosition = position;
                             petData = petDataList.get(petPostion);
                             setPagePetData(petData);
+
+                            Calendar now = Calendar.getInstance();
+                            int day = now.get(Calendar.DAY_OF_WEEK);
+                            setWeekStatus(day);
                         }
                     }
             );
