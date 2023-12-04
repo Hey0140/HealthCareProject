@@ -82,8 +82,7 @@
                 android:id="@+id/petDayWalkMonBox"
                 android:layout_width="20dp"
                 android:layout_height="20dp"
-                android:background="@drawable/vaccine_clicked_drawable"
-                android:backgroundTint="@color/whitegreen"
+                android:background="@drawable/status_none"
                 app:layout_constraintLeft_toLeftOf="parent"
                 app:layout_constraintRight_toRightOf="parent"
                 app:layout_constraintTop_toBottomOf="@id/petDayWalkMonText"
@@ -123,8 +122,7 @@
                 android:id="@+id/petDayWalkTueBox"
                 android:layout_width="20dp"
                 android:layout_height="20dp"
-                android:background="@drawable/vaccine_clicked_drawable"
-                android:backgroundTint="@color/whitegreen"
+                android:background="@drawable/status_none"
                 app:layout_constraintLeft_toLeftOf="parent"
                 app:layout_constraintRight_toRightOf="parent"
                 app:layout_constraintTop_toBottomOf="@id/petDayWalkTueText"
@@ -164,8 +162,7 @@
                 android:id="@+id/petDayWalkWedBox"
                 android:layout_width="20dp"
                 android:layout_height="20dp"
-                android:background="@drawable/vaccine_clicked_drawable"
-                android:backgroundTint="@color/whitegreen"
+                android:background="@drawable/status_none"
                 app:layout_constraintLeft_toLeftOf="parent"
                 app:layout_constraintRight_toRightOf="parent"
                 app:layout_constraintTop_toBottomOf="@id/petDayWalkWedText"
@@ -205,8 +202,7 @@
                 android:id="@+id/petDayWalkThuBox"
                 android:layout_width="20dp"
                 android:layout_height="20dp"
-                android:background="@drawable/vaccine_clicked_drawable"
-                android:backgroundTint="@color/whitegreen"
+                android:background="@drawable/status_none"
                 app:layout_constraintLeft_toLeftOf="parent"
                 app:layout_constraintRight_toRightOf="parent"
                 app:layout_constraintTop_toBottomOf="@id/petDayWalkThuText"
@@ -245,8 +241,7 @@
                 android:id="@+id/petDayWalkFriBox"
                 android:layout_width="20dp"
                 android:layout_height="20dp"
-                android:background="@drawable/vaccine_clicked_drawable"
-                android:backgroundTint="@color/whitegreen"
+                android:background="@drawable/status_none"
                 app:layout_constraintLeft_toLeftOf="parent"
                 app:layout_constraintRight_toRightOf="parent"
                 app:layout_constraintTop_toBottomOf="@id/petDayWalkFriText"
@@ -285,8 +280,7 @@
                 android:id="@+id/petDayWalkSatBox"
                 android:layout_width="20dp"
                 android:layout_height="20dp"
-                android:background="@drawable/vaccine_clicked_drawable"
-                android:backgroundTint="@color/whitegreen"
+                android:background="@drawable/status_none"
                 app:layout_constraintLeft_toLeftOf="parent"
                 app:layout_constraintRight_toRightOf="parent"
                 app:layout_constraintTop_toBottomOf="@id/petDayWalkSatText"
@@ -326,8 +320,7 @@
                 android:id="@+id/petDayWalkSunBox"
                 android:layout_width="20dp"
                 android:layout_height="20dp"
-                android:background="@drawable/vaccine_clicked_drawable"
-                android:backgroundTint="@color/whitegreen"
+                android:background="@drawable/status_none"
                 app:layout_constraintLeft_toLeftOf="parent"
                 app:layout_constraintRight_toRightOf="parent"
                 app:layout_constraintTop_toBottomOf="@id/petDayWalkSunText"
@@ -379,7 +372,7 @@
             android:layout_height="50dp"
             android:layout_marginLeft="20dp"
             android:layout_marginTop="20dp"
-            android:text="칼로리 소모량"
+            android:text="심박수"
             android:textSize="28dp"
             app:layout_constraintLeft_toLeftOf="parent"
             app:layout_constraintTop_toBottomOf="@id/dayWalkPageWalkHourText" />
@@ -390,7 +383,7 @@
             android:layout_height="50dp"
             android:layout_marginTop="20dp"
             android:orientation="horizontal"
-            android:text="남은 칼로리 양"
+            android:text="필요 활동 열량"
             android:textSize="28dp"
             android:layout_marginLeft="20dp"
             app:layout_constraintLeft_toLeftOf="parent"
@@ -409,11 +402,11 @@
             >
 
             <TextView
-                android:id="@+id/dayWalkPageWalk"
+                android:id="@+id/dayWalkPageWalkNumber"
                 android:layout_width="wrap_content"
                 android:layout_height="50dp"
                 android:text="00"
-                android:textSize="28dp" />
+                android:textSize="28dp"/>
 
             <TextView
                 android:layout_width="wrap_content"
@@ -471,7 +464,7 @@
             <TextView
                 android:layout_width="wrap_content"
                 android:layout_height="50dp"
-                android:text="kcal"
+                android:text="bpm"
                 android:textSize="28dp"/>
 
         </LinearLayout>

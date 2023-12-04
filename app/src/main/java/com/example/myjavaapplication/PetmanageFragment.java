@@ -28,6 +28,7 @@ import com.google.firebase.firestore.FirebaseFirestore;
 
 import org.checkerframework.checker.units.qual.C;
 
+import java.io.Serializable;
 import java.text.DecimalFormat;
 import java.text.SimpleDateFormat;
 import java.time.DayOfWeek;
@@ -55,15 +56,9 @@ public class PetmanageFragment extends Fragment implements View.OnClickListener{
     private final long SMALL = 21;
     private final long MIDDLE = 22;
     private final long BIG = 23;
-    private final double SGOOD = 41;
-    private final double SNORMAL = 42;
-    private final double SWORSE = 43;
-    private final double MGOOD = 51;
-    private final double MNORMAL = 52;
-    private final double MWORSE = 53;
-    private final double BGOOD = 61;
-    private final double BNORMAL = 62;
-    private final double BWORSE = 63;
+    private final long GOOD = 41;
+    private final long NORMAL = 42;
+    private final long WORSE = 43;
 
     private final String WHITERED = "#EDA399";
     private final String WHITEGREEN = "#ACE997";
@@ -73,7 +68,7 @@ public class PetmanageFragment extends Fragment implements View.OnClickListener{
     private UserMedia userData;
     private PetMedia petData;
     private int petPostion;
-    private Map<String, Double> weekStatus;
+    private WeekStatusData weekStatus;
 
     public PetmanageFragment() {
         // Required empty public constructor
@@ -144,13 +139,6 @@ public class PetmanageFragment extends Fragment implements View.OnClickListener{
         Sucalorie.setText("00Kcal");
         hospital.setText("병원");
         hname.setText("주치의 이름");
-//        monStatusBox.setBackgroundColor(Color.parseColor(WHITEGREEN));
-        tueStatusBox.setBackgroundColor(Color.parseColor(WHITEGREEN));
-        wedStatusBox.setBackgroundColor(Color.parseColor(WHITEGREEN));
-        thuStatusBox.setBackgroundColor(Color.parseColor(WHITEGREEN));
-        friStatusBox.setBackgroundColor(Color.parseColor(WHITEGREEN));
-        satStatusBox.setBackgroundColor(Color.parseColor(WHITEGREEN));
-        sunStatusBox.setBackgroundColor(Color.parseColor(WHITEGREEN));
 
         petChangeButton.setOnClickListener(this);
         petStatusButton.setOnClickListener(this);
@@ -159,7 +147,7 @@ public class PetmanageFragment extends Fragment implements View.OnClickListener{
 
         userData = new UserMedia();
         petDataList = new ArrayList<>();
-        weekStatus = new HashMap<>();
+        weekStatus = new WeekStatusData();
 
         userData = (UserMedia) getActivity().getIntent().getSerializableExtra("userData");
         petDataList = (ArrayList<PetMedia>) getActivity().getIntent().getSerializableExtra("petDataList");
@@ -217,6 +205,9 @@ public class PetmanageFragment extends Fragment implements View.OnClickListener{
         }
         if(v == petManageMentLayout){
             Intent intent = new Intent(getActivity(), DaywalkActivity.class);
+            intent.putExtra("weekStatus", weekStatus);
+            intent.putExtra("petDataList", petDataList);
+            intent.putExtra("petPosition", petPostion);
             startActivity(intent);
         }
     }
@@ -346,9 +337,9 @@ public class PetmanageFragment extends Fragment implements View.OnClickListener{
 
 
         FirebaseFirestore db = FirebaseFirestore.getInstance();
-        DocumentReference docRef = db.collection("users").document(id)
+        DocumentReference docRefm = db.collection("users").document(id)
                 .collection("pet").document(petId).collection("walk").document(monday);
-        docRef.get().addOnCompleteListener(new OnCompleteListener<DocumentSnapshot>() {
+        docRefm.get().addOnCompleteListener(new OnCompleteListener<DocumentSnapshot>() {
             @Override
             public void onComplete(@NonNull Task<DocumentSnapshot> task) {
                 if (task.isSuccessful()) {
@@ -365,38 +356,428 @@ public class PetmanageFragment extends Fragment implements View.OnClickListener{
                             dayTotal += Double.valueOf((String) temp.get("duringTime"));
                         }
 
-                        weekStatus.put("mon", dayTotal);
-                        Log.i("check", String.valueOf(dayTotal));
-                        Log.i("check2", String.valueOf(kind));
                         if (kind == SMALL) {
                             if (dayTotal < 10 || dayTotal > 40) {
-                                monStatusBox.setBackgroundColor(Color.parseColor(WHITERED));
+                                monStatusBox.setBackgroundResource(R.drawable.status_red);
+                                weekStatus.setMonday(WORSE);
                             } else if (dayTotal >= 10 && dayTotal < 20) {
-                                monStatusBox.setBackgroundColor(Color.parseColor(WHITEYELLOW));
+                                monStatusBox.setBackgroundResource(R.drawable.status_yellow);
+                                weekStatus.setMonday(NORMAL);
                             } else if (dayTotal >= 20 && dayTotal <= 40) {
-                                monStatusBox.setBackgroundColor(Color.parseColor(WHITEGREEN));
+                                monStatusBox.setBackgroundResource(R.drawable.status_green);
+                                weekStatus.setMonday(GOOD);
                             }
                         } else if (kind == MIDDLE) {
                             if (dayTotal < 30 || dayTotal > 70) {
-                                monStatusBox.setBackgroundColor(Color.parseColor(WHITERED));
+                                monStatusBox.setBackgroundResource(R.drawable.status_red);
+                                weekStatus.setMonday(WORSE);
                             } else if (dayTotal >= 30 && dayTotal < 45) {
-                                monStatusBox.setBackgroundColor(Color.parseColor(WHITEYELLOW));
+                                monStatusBox.setBackgroundResource(R.drawable.status_yellow);
+                                weekStatus.setMonday(NORMAL);
                             } else if (dayTotal >= 45 && dayTotal <= 70) {
-                                monStatusBox.setBackgroundColor(Color.parseColor(WHITEGREEN));
+                                monStatusBox.setBackgroundResource(R.drawable.status_green);
+                                weekStatus.setMonday(GOOD);
                             }
                         } else if (kind == BIG) {
                             if (dayTotal < 40 || dayTotal > 130) {
-                                monStatusBox.setBackgroundColor(Color.parseColor(WHITERED));
+                                monStatusBox.setBackgroundResource(R.drawable.status_red);
+                                weekStatus.setMonday(WORSE);
                             } else if (dayTotal >= 40 && dayTotal < 90) {
-                                monStatusBox.setBackgroundColor(Color.parseColor(WHITEYELLOW));
+                                monStatusBox.setBackgroundResource(R.drawable.status_yellow);
+                                weekStatus.setMonday(NORMAL);
                             } else if (dayTotal >= 90 && dayTotal <= 130) {
-                                monStatusBox.setBackgroundColor(Color.parseColor(WHITEGREEN));
+                                monStatusBox.setBackgroundResource(R.drawable.status_green);
+                                weekStatus.setMonday(GOOD);
                             }
                         }
                     }
                     else{
-                        weekStatus.put("mon", 0.0);
-                        
+                        weekStatus.setMonday(WORSE);
+                        monStatusBox.setBackgroundResource(R.drawable.status_red);
+                    }
+                } else {
+                    Log.d("Firebase", "get failed with ", task.getException());
+                }
+            }
+        });
+
+        DocumentReference docReft = db.collection("users").document(id)
+                .collection("pet").document(petId).collection("walk").document(tuesday);
+        docReft.get().addOnCompleteListener(new OnCompleteListener<DocumentSnapshot>() {
+            @Override
+            public void onComplete(@NonNull Task<DocumentSnapshot> task) {
+                if (task.isSuccessful()) {
+                    DocumentSnapshot document = task.getResult();
+
+                    if (document.exists()) {
+                        Log.d("Firebase", "DocumentSnapshot data: " + document.getData());
+                        Map<String, Object> map = document.getData();
+                        ArrayList<Map<String, Object>> tempList = (ArrayList<Map<String, Object>>) map.get("walkList");
+
+                        double dayTotal = 0;
+                        for (int i = 0; i < tempList.size(); i++) {
+                            Map<String, Object> temp = tempList.get(i);
+                            dayTotal += Double.valueOf((String) temp.get("duringTime"));
+                        }
+
+                        if (kind == SMALL) {
+                            if (dayTotal < 10 || dayTotal > 40) {
+                                tueStatusBox.setBackgroundColor(Color.parseColor(WHITERED));
+                                weekStatus.setTuesday(WORSE);
+                            } else if (dayTotal >= 10 && dayTotal < 20) {
+                                tueStatusBox.setBackgroundColor(Color.parseColor(WHITEYELLOW));
+                                weekStatus.setTuesday(NORMAL);
+                            } else if (dayTotal >= 20 && dayTotal <= 40) {
+                                tueStatusBox.setBackgroundColor(Color.parseColor(WHITEGREEN));
+                                weekStatus.setTuesday(GOOD);
+                            }
+                        } else if (kind == MIDDLE) {
+                            if (dayTotal < 30 || dayTotal > 70) {
+                                tueStatusBox.setBackgroundColor(Color.parseColor(WHITERED));
+                                weekStatus.setTuesday(WORSE);
+                            } else if (dayTotal >= 30 && dayTotal < 45) {
+                                tueStatusBox.setBackgroundColor(Color.parseColor(WHITEYELLOW));
+                                weekStatus.setTuesday(NORMAL);
+                            } else if (dayTotal >= 45 && dayTotal <= 70) {
+                                tueStatusBox.setBackgroundColor(Color.parseColor(WHITEGREEN));
+                                weekStatus.setTuesday(GOOD);
+                            }
+                        } else if (kind == BIG) {
+                            if (dayTotal < 40 || dayTotal > 130) {
+                                tueStatusBox.setBackgroundColor(Color.parseColor(WHITERED));
+                                weekStatus.setTuesday(WORSE);
+                            } else if (dayTotal >= 40 && dayTotal < 90) {
+                                tueStatusBox.setBackgroundColor(Color.parseColor(WHITEYELLOW));
+                                weekStatus.setTuesday(NORMAL);
+                            } else if (dayTotal >= 90 && dayTotal <= 130) {
+                                tueStatusBox.setBackgroundColor(Color.parseColor(WHITEGREEN));
+                                weekStatus.setTuesday(GOOD);
+                            }
+                        }
+                    }
+                    else{
+                        weekStatus.setTuesday(WORSE);
+                        tueStatusBox.setBackgroundResource(R.drawable.status_red);
+                    }
+                } else {
+                    Log.d("Firebase", "get failed with ", task.getException());
+                }
+            }
+        });
+
+        DocumentReference docRefw = db.collection("users").document(id)
+                .collection("pet").document(petId).collection("walk").document(wednesday);
+        docRefw.get().addOnCompleteListener(new OnCompleteListener<DocumentSnapshot>() {
+            @Override
+            public void onComplete(@NonNull Task<DocumentSnapshot> task) {
+                if (task.isSuccessful()) {
+                    DocumentSnapshot document = task.getResult();
+
+                    if (document.exists()) {
+                        Log.d("Firebase", "DocumentSnapshot data: " + document.getData());
+                        Map<String, Object> map = document.getData();
+                        ArrayList<Map<String, Object>> tempList = (ArrayList<Map<String, Object>>) map.get("walkList");
+
+                        double dayTotal = 0;
+                        for (int i = 0; i < tempList.size(); i++) {
+                            Map<String, Object> temp = tempList.get(i);
+                            dayTotal += Double.valueOf((String) temp.get("duringTime"));
+                        }
+
+                        if (kind == SMALL) {
+                            if (dayTotal < 10 || dayTotal > 40) {
+                                wedStatusBox.setBackgroundColor(Color.parseColor(WHITERED));
+                                weekStatus.setWednesday(WORSE);
+                            } else if (dayTotal >= 10 && dayTotal < 20) {
+                                wedStatusBox.setBackgroundColor(Color.parseColor(WHITEYELLOW));
+                                weekStatus.setWednesday(NORMAL);
+                            } else if (dayTotal >= 20 && dayTotal <= 40) {
+                                wedStatusBox.setBackgroundColor(Color.parseColor(WHITEGREEN));
+                                weekStatus.setWednesday(GOOD);
+                            }
+                        } else if (kind == MIDDLE) {
+                            if (dayTotal < 30 || dayTotal > 70) {
+                                wedStatusBox.setBackgroundColor(Color.parseColor(WHITERED));
+                                weekStatus.setWednesday(WORSE);
+                            } else if (dayTotal >= 30 && dayTotal < 45) {
+                                wedStatusBox.setBackgroundColor(Color.parseColor(WHITEYELLOW));
+                                weekStatus.setWednesday(NORMAL);
+                            } else if (dayTotal >= 45 && dayTotal <= 70) {
+                                wedStatusBox.setBackgroundColor(Color.parseColor(WHITEGREEN));
+                                weekStatus.setWednesday(GOOD);
+                            }
+                        } else if (kind == BIG) {
+                            if (dayTotal < 40 || dayTotal > 130) {
+                                wedStatusBox.setBackgroundColor(Color.parseColor(WHITERED));
+                                weekStatus.setWednesday(WORSE);
+                            } else if (dayTotal >= 40 && dayTotal < 90) {
+                                wedStatusBox.setBackgroundColor(Color.parseColor(WHITEYELLOW));
+                                weekStatus.setWednesday(NORMAL);
+                            } else if (dayTotal >= 90 && dayTotal <= 130) {
+                                wedStatusBox.setBackgroundColor(Color.parseColor(WHITEGREEN));
+                                weekStatus.setWednesday(GOOD);
+                            }
+                        }
+                    }
+                    else{
+                        weekStatus.setWednesday(WORSE);
+                        wedStatusBox.setBackgroundResource(R.drawable.status_red);
+                    }
+                } else {
+                    Log.d("Firebase", "get failed with ", task.getException());
+                }
+            }
+        });
+
+        DocumentReference docRefth = db.collection("users").document(id)
+                .collection("pet").document(petId).collection("walk").document(thursday);
+        docRefth.get().addOnCompleteListener(new OnCompleteListener<DocumentSnapshot>() {
+            @Override
+            public void onComplete(@NonNull Task<DocumentSnapshot> task) {
+                if (task.isSuccessful()) {
+                    DocumentSnapshot document = task.getResult();
+
+                    if (document.exists()) {
+                        Log.d("Firebase", "DocumentSnapshot data: " + document.getData());
+                        Map<String, Object> map = document.getData();
+                        ArrayList<Map<String, Object>> tempList = (ArrayList<Map<String, Object>>) map.get("walkList");
+
+                        double dayTotal = 0;
+                        for (int i = 0; i < tempList.size(); i++) {
+                            Map<String, Object> temp = tempList.get(i);
+                            dayTotal += Double.valueOf((String) temp.get("duringTime"));
+                        }
+
+                        if (kind == SMALL) {
+                            if (dayTotal < 10 || dayTotal > 40) {
+                                thuStatusBox.setBackgroundColor(Color.parseColor(WHITERED));
+                                weekStatus.setThursday(WORSE);
+                            } else if (dayTotal >= 10 && dayTotal < 20) {
+                                thuStatusBox.setBackgroundColor(Color.parseColor(WHITEYELLOW));
+                                weekStatus.setThursday(NORMAL);
+                            } else if (dayTotal >= 20 && dayTotal <= 40) {
+                                thuStatusBox.setBackgroundColor(Color.parseColor(WHITEGREEN));
+                                weekStatus.setThursday(GOOD);
+                            }
+                        } else if (kind == MIDDLE) {
+                            if (dayTotal < 30 || dayTotal > 70) {
+                                thuStatusBox.setBackgroundColor(Color.parseColor(WHITERED));
+                                weekStatus.setThursday(WORSE);
+                            } else if (dayTotal >= 30 && dayTotal < 45) {
+                                thuStatusBox.setBackgroundColor(Color.parseColor(WHITEYELLOW));
+                                weekStatus.setThursday(NORMAL);
+                            } else if (dayTotal >= 45 && dayTotal <= 70) {
+                                thuStatusBox.setBackgroundColor(Color.parseColor(WHITEGREEN));
+                                weekStatus.setThursday(GOOD);
+                            }
+                        } else if (kind == BIG) {
+                            if (dayTotal < 40 || dayTotal > 130) {
+                                thuStatusBox.setBackgroundColor(Color.parseColor(WHITERED));
+                                weekStatus.setThursday(WORSE);
+                            } else if (dayTotal >= 40 && dayTotal < 90) {
+                                thuStatusBox.setBackgroundColor(Color.parseColor(WHITEYELLOW));
+                                weekStatus.setThursday(NORMAL);
+                            } else if (dayTotal >= 90 && dayTotal <= 130) {
+                                thuStatusBox.setBackgroundColor(Color.parseColor(WHITEGREEN));
+                                weekStatus.setThursday(GOOD);
+                            }
+                        }
+                    }
+                    else{
+                        weekStatus.setThursday(WORSE);
+                        thuStatusBox.setBackgroundResource(R.drawable.status_red);
+                    }
+                } else {
+                    Log.d("Firebase", "get failed with ", task.getException());
+                }
+            }
+        });
+
+        DocumentReference docReff = db.collection("users").document(id)
+                .collection("pet").document(petId).collection("walk").document(friday);
+        docReff.get().addOnCompleteListener(new OnCompleteListener<DocumentSnapshot>() {
+            @Override
+            public void onComplete(@NonNull Task<DocumentSnapshot> task) {
+                if (task.isSuccessful()) {
+                    DocumentSnapshot document = task.getResult();
+
+                    if (document.exists()) {
+                        Log.d("Firebase", "DocumentSnapshot data: " + document.getData());
+                        Map<String, Object> map = document.getData();
+                        ArrayList<Map<String, Object>> tempList = (ArrayList<Map<String, Object>>) map.get("walkList");
+
+                        double dayTotal = 0;
+                        for (int i = 0; i < tempList.size(); i++) {
+                            Map<String, Object> temp = tempList.get(i);
+                            dayTotal += Double.valueOf((String) temp.get("duringTime"));
+                        }
+
+                        if (kind == SMALL) {
+                            if (dayTotal < 10 || dayTotal > 40) {
+                                friStatusBox.setBackgroundColor(Color.parseColor(WHITERED));
+                                weekStatus.setFriday(WORSE);
+                            } else if (dayTotal >= 10 && dayTotal < 20) {
+                                friStatusBox.setBackgroundColor(Color.parseColor(WHITEYELLOW));
+                                weekStatus.setFriday(NORMAL);
+                            } else if (dayTotal >= 20 && dayTotal <= 40) {
+                                friStatusBox.setBackgroundColor(Color.parseColor(WHITEGREEN));
+                                weekStatus.setFriday(GOOD);
+                            }
+                        } else if (kind == MIDDLE) {
+                            if (dayTotal < 30 || dayTotal > 70) {
+                                friStatusBox.setBackgroundColor(Color.parseColor(WHITERED));
+                                weekStatus.setFriday(WORSE);
+                            } else if (dayTotal >= 30 && dayTotal < 45) {
+                                friStatusBox.setBackgroundColor(Color.parseColor(WHITEYELLOW));
+                                weekStatus.setFriday(NORMAL);
+                            } else if (dayTotal >= 45 && dayTotal <= 70) {
+                                friStatusBox.setBackgroundColor(Color.parseColor(WHITEGREEN));
+                                weekStatus.setFriday(GOOD);
+                            }
+                        } else if (kind == BIG) {
+                            if (dayTotal < 40 || dayTotal > 130) {
+                                friStatusBox.setBackgroundColor(Color.parseColor(WHITERED));
+                                weekStatus.setFriday(WORSE);
+                            } else if (dayTotal >= 40 && dayTotal < 90) {
+                                friStatusBox.setBackgroundColor(Color.parseColor(WHITEYELLOW));
+                                weekStatus.setFriday(NORMAL);
+                            } else if (dayTotal >= 90 && dayTotal <= 130) {
+                                friStatusBox.setBackgroundColor(Color.parseColor(WHITEGREEN));
+                                weekStatus.setFriday(GOOD);
+                            }
+                        }
+                    }
+                    else{
+                        weekStatus.setFriday(WORSE);
+                        friStatusBox.setBackgroundResource(R.drawable.status_red);
+                    }
+                } else {
+                    Log.d("Firebase", "get failed with ", task.getException());
+                }
+            }
+        });
+
+        DocumentReference docRefsa = db.collection("users").document(id)
+                .collection("pet").document(petId).collection("walk").document(saturday);
+        docRefsa.get().addOnCompleteListener(new OnCompleteListener<DocumentSnapshot>() {
+            @Override
+            public void onComplete(@NonNull Task<DocumentSnapshot> task) {
+                if (task.isSuccessful()) {
+                    DocumentSnapshot document = task.getResult();
+
+                    if (document.exists()) {
+                        Log.d("Firebase", "DocumentSnapshot data: " + document.getData());
+                        Map<String, Object> map = document.getData();
+                        ArrayList<Map<String, Object>> tempList = (ArrayList<Map<String, Object>>) map.get("walkList");
+
+                        double dayTotal = 0;
+                        for (int i = 0; i < tempList.size(); i++) {
+                            Map<String, Object> temp = tempList.get(i);
+                            dayTotal += Double.valueOf((String) temp.get("duringTime"));
+                        }
+
+                        if (kind == SMALL) {
+                            if (dayTotal < 10 || dayTotal > 40) {
+                                satStatusBox.setBackgroundColor(Color.parseColor(WHITERED));
+                                weekStatus.setSaturday(WORSE);
+                            } else if (dayTotal >= 10 && dayTotal < 20) {
+                                satStatusBox.setBackgroundColor(Color.parseColor(WHITEYELLOW));
+                                weekStatus.setSaturday(NORMAL);
+                            } else if (dayTotal >= 20 && dayTotal <= 40) {
+                                satStatusBox.setBackgroundColor(Color.parseColor(WHITEGREEN));
+                                weekStatus.setSaturday(GOOD);
+                            }
+                        } else if (kind == MIDDLE) {
+                            if (dayTotal < 30 || dayTotal > 70) {
+                                satStatusBox.setBackgroundColor(Color.parseColor(WHITERED));
+                                weekStatus.setSaturday(WORSE);
+                            } else if (dayTotal >= 30 && dayTotal < 45) {
+                                satStatusBox.setBackgroundColor(Color.parseColor(WHITEYELLOW));
+                                weekStatus.setSaturday(NORMAL);
+                            } else if (dayTotal >= 45 && dayTotal <= 70) {
+                                satStatusBox.setBackgroundColor(Color.parseColor(WHITEGREEN));
+                                weekStatus.setSaturday(GOOD);
+                            }
+                        } else if (kind == BIG) {
+                            if (dayTotal < 40 || dayTotal > 130) {
+                                satStatusBox.setBackgroundColor(Color.parseColor(WHITERED));
+                                weekStatus.setSaturday(WORSE);
+                            } else if (dayTotal >= 40 && dayTotal < 90) {
+                                satStatusBox.setBackgroundColor(Color.parseColor(WHITEYELLOW));
+                                weekStatus.setSaturday(NORMAL);
+                            } else if (dayTotal >= 90 && dayTotal <= 130) {
+                                satStatusBox.setBackgroundColor(Color.parseColor(WHITEGREEN));
+                                weekStatus.setSaturday(GOOD);
+                            }
+                        }
+                    }
+                    else{
+                        weekStatus.setSaturday(WORSE);
+                        satStatusBox.setBackgroundResource(R.drawable.status_red);
+                    }
+                } else {
+                    Log.d("Firebase", "get failed with ", task.getException());
+                }
+            }
+        });
+
+        DocumentReference docRefs = db.collection("users").document(id)
+                .collection("pet").document(petId).collection("walk").document(sunday);
+        docRefs.get().addOnCompleteListener(new OnCompleteListener<DocumentSnapshot>() {
+            @Override
+            public void onComplete(@NonNull Task<DocumentSnapshot> task) {
+                if (task.isSuccessful()) {
+                    DocumentSnapshot document = task.getResult();
+
+                    if (document.exists()) {
+                        Log.d("Firebase", "DocumentSnapshot data: " + document.getData());
+                        Map<String, Object> map = document.getData();
+                        ArrayList<Map<String, Object>> tempList = (ArrayList<Map<String, Object>>) map.get("walkList");
+
+                        double dayTotal = 0;
+                        for (int i = 0; i < tempList.size(); i++) {
+                            Map<String, Object> temp = tempList.get(i);
+                            dayTotal += Double.valueOf((String) temp.get("duringTime"));
+                        }
+
+                        if (kind == SMALL) {
+                            if (dayTotal < 10 || dayTotal > 40) {
+                                sunStatusBox.setBackgroundColor(Color.parseColor(WHITERED));
+                                weekStatus.setSunday(WORSE);
+                            } else if (dayTotal >= 10 && dayTotal < 20) {
+                                sunStatusBox.setBackgroundColor(Color.parseColor(WHITEYELLOW));
+                                weekStatus.setSunday(NORMAL);
+                            } else if (dayTotal >= 20 && dayTotal <= 40) {
+                                sunStatusBox.setBackgroundColor(Color.parseColor(WHITEGREEN));
+                                weekStatus.setSunday(GOOD);
+                            }
+                        } else if (kind == MIDDLE) {
+                            if (dayTotal < 30 || dayTotal > 70) {
+                                sunStatusBox.setBackgroundColor(Color.parseColor(WHITERED));
+                                weekStatus.setSunday(WORSE);
+                            } else if (dayTotal >= 30 && dayTotal < 45) {
+                                sunStatusBox.setBackgroundColor(Color.parseColor(WHITEYELLOW));
+                                weekStatus.setSunday(NORMAL);
+                            } else if (dayTotal >= 45 && dayTotal <= 70) {
+                                sunStatusBox.setBackgroundColor(Color.parseColor(WHITEGREEN));
+                                weekStatus.setSunday(GOOD);
+                            }
+                        } else if (kind == BIG) {
+                            if (dayTotal < 40 || dayTotal > 130) {
+                                sunStatusBox.setBackgroundColor(Color.parseColor(WHITERED));
+                                weekStatus.setSunday(WORSE);
+                            } else if (dayTotal >= 40 && dayTotal < 90) {
+                                sunStatusBox.setBackgroundColor(Color.parseColor(WHITEYELLOW));
+                                weekStatus.setSunday(NORMAL);
+                            } else if (dayTotal >= 90 && dayTotal <= 130) {
+                                sunStatusBox.setBackgroundColor(Color.parseColor(WHITEGREEN));
+                                weekStatus.setSunday(GOOD);
+                            }
+                        }
+                    }
+                    else{
+                        weekStatus.setSunday(WORSE);
+                        sunStatusBox.setBackgroundResource(R.drawable.status_red);
                     }
                 } else {
                     Log.d("Firebase", "get failed with ", task.getException());
