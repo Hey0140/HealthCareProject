@@ -408,7 +408,7 @@ public class HomeFragment extends Fragment implements View.OnClickListener {
             try {
                 bluetoothSocket = bluetoothDevice.createRfcommSocketToServiceRecord(uuid);
                 bluetoothSocket.connect();
-
+                receiveData();
 
 
             } catch (IOException e) {
