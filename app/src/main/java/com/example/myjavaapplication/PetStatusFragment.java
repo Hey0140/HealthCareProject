@@ -4,14 +4,26 @@ import androidx.annotation.NonNull;
 import androidx.fragment.app.Fragment;
 
 import android.content.Context;
+import android.content.Intent;
 import android.graphics.Color;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.TextView;
+
+import com.google.android.gms.tasks.OnCompleteListener;
+import com.google.android.gms.tasks.Task;
+import com.google.firebase.firestore.DocumentReference;
+import com.google.firebase.firestore.DocumentSnapshot;
+import com.google.firebase.firestore.FirebaseFirestore;
+
+import java.text.DecimalFormat;
+import java.util.ArrayList;
+import java.util.Map;
 
 public class PetStatusFragment extends Fragment implements View.OnClickListener {
     private MainActivity mainActivity;
@@ -21,12 +33,17 @@ public class PetStatusFragment extends Fragment implements View.OnClickListener 
     private View petStatusLeftView, petStatusCenterView, petStatusRightView;
     private TextView name, hospitalname, address;
     private TextView petStatusRightText, petStatusWeight, petStatusCenterText;
-    private TextView petStatusActivity, petStatusHeart, petStatusLeftText;
+    private TextView petStatusActivity, petStatusHeart, petStatusLeftText, showText;
     private Button end;
 
     private final String WHITERED = "#EDA399";
     private final String WHITEGREEN = "#ACE997";
     private final String WHITEYELLOW = "#F1EEA1";
+
+    private ArrayList<PetMedia> petDataList = new ArrayList<>();
+    private PetMedia petData = new PetMedia();
+    private UserMedia userData = new UserMedia();
+    private int petPosition = 0;
 
     public PetStatusFragment() {
 
@@ -58,6 +75,7 @@ public class PetStatusFragment extends Fragment implements View.OnClickListener 
         petStatusRightText = view.findViewById(R.id.petStatusRightText);
         petStatusWeight = view.findViewById(R.id.petStatusWeight);
         petStatusActivity =view.findViewById(R.id.petStatusActivity);
+        showText = view.findViewById(R.id.petFeatrueAddText);
         petStatusHeart=view.findViewById(R.id.petStatusHeart);
         end=view.findViewById(R.id.petFeatureEndButton);
         hospitalInfo = view.findViewById(R.id.petHospitalInfoButton);
@@ -65,11 +83,13 @@ public class PetStatusFragment extends Fragment implements View.OnClickListener 
         end.setOnClickListener(this);
         hospitalInfo.setOnClickListener(this);
         backButton.setOnClickListener(this);
+        showText.setOnClickListener(this);
 
-        note.setText("입력하세요");
-        name.setText("초코");
+
         hospitalname.setText("SJP병원");
-        address.setText("서울시 동작구 상도로 123길");
+        address.setText("");
+        address.setVisibility(View.VISIBLE);
+
         petStatusLeftView.setBackgroundColor(Color.parseColor(WHITEGREEN));
         petStatusLeftText.setVisibility(View.INVISIBLE);
         petStatusCenterView.setBackgroundColor(Color.parseColor(WHITEGREEN));
@@ -79,7 +99,17 @@ public class PetStatusFragment extends Fragment implements View.OnClickListener 
         petStatusWeight.setText("8");
         petStatusActivity.setText("2000");
         petStatusHeart.setText("200");
-        end.setText("완료");
+        showText.setText("");
+
+
+        userData = (UserMedia) getActivity().getIntent().getSerializableExtra("userData");
+        petDataList = (ArrayList<PetMedia>) getActivity().getIntent().getSerializableExtra("petDataList");
+
+        petData = petDataList.get(MainActivity.petPosition);
+        Log.i("check", petData.getPetName());
+        name.setText(petData.getPetName());
+
+        getHospitalDataToFire(petData);
 
 
         return view;
@@ -104,10 +134,56 @@ public class PetStatusFragment extends Fragment implements View.OnClickListener 
         }
         if(v == hospitalInfo){
 
+
         }
         if( v == end){
             String feature = note.getText().toString();
+            showText.setText(feature);
+            note.setText("");
         }
+        if(v == showText){
+            String fText = showText.getText().toString();
+            note.setText(fText);
+        }
+    }
+
+    public void getHospitalDataToFire (PetMedia pet){
+        String id = pet.getuId();
+        String petId = String.valueOf(pet.getPetId());
+        FirebaseFirestore db = FirebaseFirestore.getInstance();
+
+        DocumentReference docRef = db.collection("users").document(id)
+                .collection("pet").document(petId).collection("hospital").document("hospital");
+        docRef.get().addOnCompleteListener(new OnCompleteListener<DocumentSnapshot>() {
+            @Override
+            public void onComplete(@NonNull Task<DocumentSnapshot> task) {
+                if (task.isSuccessful()) {
+                    DocumentSnapshot document = task.getResult();
+                    if (document.exists()) {
+                        Log.d("Firebase", "DocumentSnapshot data: " + document.getData());
+                        Map<String, Object> map = document.getData();
+
+
+//                        for (int i = 0; i < tempList.size(); i++) {
+//                            Map<String, Object> temp = tempList.get(i);
+//                            String tempTime = (String) temp.get("duringTime");
+//                            walkAllTime += Double.valueOf(tempTime);
+//                        }
+//                        DecimalFormat df = new DecimalFormat("0.0");
+//
+//                        walkHour.setText(df.format(walkAllTime));
+//                        walkText.setText(String.valueOf(petData.getWalk()));
+                    }
+                    else{
+                        hospitalname.setText("병원을 등록해주세요.");
+                        address.setVisibility(View.INVISIBLE);
+                    }
+
+                } else {
+                    Log.d("Firebase", "get failed with ", task.getException());
+                }
+            }
+        });
     }
 
 }

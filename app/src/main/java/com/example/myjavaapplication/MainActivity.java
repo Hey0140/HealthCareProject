@@ -58,6 +58,7 @@ public class MainActivity extends AppCompatActivity {
     //    private CommunityFragment communityFragment = new CommunityFragment();
     private FirebaseAuth auth;
     private UserMedia userData;
+    public static int petPosition = 0;
     private ArrayList<PetMedia> petDataList = new ArrayList<>();
     private ArrayList<WalkRecordData> walkList = new ArrayList<>();
 
@@ -117,10 +118,18 @@ public class MainActivity extends AppCompatActivity {
     }
 
     public void onChangeToPetStatusFragment(){
+        Bundle bundle = new Bundle();
+        bundle.putSerializable("userData", userData);
+        bundle.putSerializable("petDataList", petDataList);
+        petStatusFragment.setArguments(bundle);
         FragmentTransaction ftransaction = fmanager.beginTransaction();
         ftransaction.replace(R.id.mainFragmentLayout, petStatusFragment).commitAllowingStateLoss();
     }
     public void onChangeToPetManageFragment(){
+        Bundle bundle = new Bundle();
+        bundle.putSerializable("userData", userData);
+        bundle.putSerializable("petDataList", petDataList);
+        petmanageFragment.setArguments(bundle);
         FragmentTransaction ftransaction = fmanager.beginTransaction();
         ftransaction.replace(R.id.mainFragmentLayout, petmanageFragment).commitAllowingStateLoss();
     }

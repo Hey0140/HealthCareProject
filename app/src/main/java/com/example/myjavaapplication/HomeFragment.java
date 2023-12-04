@@ -112,6 +112,7 @@ public class HomeFragment extends Fragment implements View.OnClickListener {
     private boolean isPaused = false;
     private Dialog bluetoothDialog;
     private int walkListSize;
+    private boolean isPet = false;
 
 
     public HomeFragment() {
@@ -178,8 +179,9 @@ public class HomeFragment extends Fragment implements View.OnClickListener {
         recyclerView.setAdapter(adapter);
 
 
-
+        petPostion = MainActivity.petPosition;
         if (petDataList.size() > 0) {
+            isPet = true;
             petData = petDataList.get(petPostion);
             puppyName.setText(petData.getPetName());
             homePageWalkNumber.setText(String.valueOf(petData.getWalk()));
@@ -200,6 +202,7 @@ public class HomeFragment extends Fragment implements View.OnClickListener {
             profileMainImage.setImageResource(R.drawable.pet_temp_image);
             profile.setVisibility(View.INVISIBLE);
         } else {
+            isPet = false;
             petData.setPetName("이름");
             petData.setPetWeight(0);
             puppyName.setText("반려동물을 추가해주세요.");
@@ -226,6 +229,7 @@ public class HomeFragment extends Fragment implements View.OnClickListener {
                         @Override
                         public void onChangeSelected(String data, int position) {
                             petPostion = position;
+                            MainActivity.petPosition = position;
 
                             petData = petDataList.get(petPostion);
                             puppyName.setText(petData.getPetName());
@@ -256,24 +260,30 @@ public class HomeFragment extends Fragment implements View.OnClickListener {
             dialog.show();
         }
         if (view == walkStartButton) {
-            chronometer.setVisibility(View.VISIBLE);
-            walkStartText.setVisibility(View.INVISIBLE);
+            if(isPet == true){
+                chronometer.setVisibility(View.VISIBLE);
+                walkStartText.setVisibility(View.INVISIBLE);
 
-            restartButton.setVisibility(View.VISIBLE);
-            pauseButton.setVisibility(View.VISIBLE);
-            replayButton.setVisibility(View.VISIBLE);
+                restartButton.setVisibility(View.VISIBLE);
+                pauseButton.setVisibility(View.VISIBLE);
+                replayButton.setVisibility(View.VISIBLE);
 
-            chronometer.setBase(SystemClock.elapsedRealtime());
-            chronometer.start();
-            LocalTime localTime = null;
-            if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
-                localTime = LocalTime.now();
-                startTime = localTime.format(DateTimeFormatter.ofPattern("HH:mm:ss"));
-                Log.i("check111", startTime);
+                chronometer.setBase(SystemClock.elapsedRealtime());
+                chronometer.start();
+                LocalTime localTime = null;
+                if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
+                    localTime = LocalTime.now();
+                    startTime = localTime.format(DateTimeFormatter.ofPattern("HH:mm:ss"));
+                    Log.i("check111", startTime);
+                }
+                else{
+                    Toast.makeText(getContext(), "버전이 낮습니다.", Toast.LENGTH_SHORT).show();
+                }
             }
             else{
-                Toast.makeText(getContext(), "버전이 낮습니다.", Toast.LENGTH_SHORT).show();
+                Toast.makeText(getContext(), "펫을 먼저 등록해주세요.", Toast.LENGTH_SHORT).show();
             }
+
         }
         if (view == restartButton) {
             if (isPaused) {

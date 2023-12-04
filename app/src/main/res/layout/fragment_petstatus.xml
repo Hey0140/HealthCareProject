@@ -25,7 +25,7 @@
             android:layout_height="wrap_content"
             android:layout_marginLeft="10dp"
             android:layout_marginTop="20dp"
-            android:text="초코"
+            android:text="하하"
             android:textSize="18dp"
             app:layout_constraintLeft_toRightOf="@id/petStatusBackButton"
             app:layout_constraintTop_toTopOf="parent" />
@@ -302,10 +302,12 @@
             />
 
         <LinearLayout
+            android:id="@+id/petfeatureLayout"
             android:layout_width="350dp"
             android:layout_height="wrap_content"
             app:layout_constraintLeft_toLeftOf="parent"
             app:layout_constraintRight_toRightOf="parent"
+            android:layout_marginTop="10dp"
             android:orientation="horizontal"
             app:layout_constraintTop_toBottomOf="@id/petFeatureTitle">
 
@@ -315,7 +317,6 @@
                 android:layout_height="wrap_content"
                 app:layout_constraintLeft_toLeftOf="parent"
                 app:layout_constraintRight_toRightOf="parent"
-                android:layout_marginTop="20dp"
                 app:layout_constraintTop_toBottomOf="@id/petFeatureTitle"
                 android:maxLines="4"
                 android:maxLength="30"
@@ -332,6 +333,21 @@
                 android:background="@color/skyblue"
                 />
         </LinearLayout>
+
+        <TextView
+            android:id="@+id/petFeatrueAddText"
+            android:layout_width="350dp"
+            android:layout_height="80dp"
+            app:layout_constraintTop_toBottomOf="@id/petfeatureLayout"
+            app:layout_constraintLeft_toLeftOf="parent"
+            app:layout_constraintRight_toRightOf="parent"
+            android:layout_marginTop="7dp"
+            android:textSize="12dp"
+            android:ellipsize="end"
+            android:textColor="@color/middlegray"
+            android:text="예시로 글써보기"
+            />
+
 
 
 
