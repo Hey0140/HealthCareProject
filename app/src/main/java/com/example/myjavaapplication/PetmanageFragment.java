@@ -430,35 +430,35 @@ public class PetmanageFragment extends Fragment implements View.OnClickListener{
 
                         if (kind == SMALL) {
                             if (dayTotal < 10 || dayTotal > 40) {
-                                tueStatusBox.setBackgroundColor(Color.parseColor(WHITERED));
+                                tueStatusBox.setBackgroundResource(R.drawable.status_red);
                                 weekStatus.setTuesday(WORSE);
                             } else if (dayTotal >= 10 && dayTotal < 20) {
-                                tueStatusBox.setBackgroundColor(Color.parseColor(WHITEYELLOW));
+                                tueStatusBox.setBackgroundResource(R.drawable.status_yellow);
                                 weekStatus.setTuesday(NORMAL);
                             } else if (dayTotal >= 20 && dayTotal <= 40) {
-                                tueStatusBox.setBackgroundColor(Color.parseColor(WHITEGREEN));
+                                tueStatusBox.setBackgroundResource(R.drawable.status_green);
                                 weekStatus.setTuesday(GOOD);
                             }
                         } else if (kind == MIDDLE) {
                             if (dayTotal < 30 || dayTotal > 70) {
-                                tueStatusBox.setBackgroundColor(Color.parseColor(WHITERED));
+                                tueStatusBox.setBackgroundResource(R.drawable.status_red);
                                 weekStatus.setTuesday(WORSE);
                             } else if (dayTotal >= 30 && dayTotal < 45) {
-                                tueStatusBox.setBackgroundColor(Color.parseColor(WHITEYELLOW));
+                                tueStatusBox.setBackgroundResource(R.drawable.status_yellow);
                                 weekStatus.setTuesday(NORMAL);
                             } else if (dayTotal >= 45 && dayTotal <= 70) {
-                                tueStatusBox.setBackgroundColor(Color.parseColor(WHITEGREEN));
+                                tueStatusBox.setBackgroundResource(R.drawable.status_green);
                                 weekStatus.setTuesday(GOOD);
                             }
                         } else if (kind == BIG) {
                             if (dayTotal < 40 || dayTotal > 130) {
-                                tueStatusBox.setBackgroundColor(Color.parseColor(WHITERED));
+                                tueStatusBox.setBackgroundResource(R.drawable.status_red);
                                 weekStatus.setTuesday(WORSE);
                             } else if (dayTotal >= 40 && dayTotal < 90) {
-                                tueStatusBox.setBackgroundColor(Color.parseColor(WHITEYELLOW));
+                                tueStatusBox.setBackgroundResource(R.drawable.status_yellow);
                                 weekStatus.setTuesday(NORMAL);
                             } else if (dayTotal >= 90 && dayTotal <= 130) {
-                                tueStatusBox.setBackgroundColor(Color.parseColor(WHITEGREEN));
+                                tueStatusBox.setBackgroundResource(R.drawable.status_green);
                                 weekStatus.setTuesday(GOOD);
                             }
                         }
@@ -494,35 +494,35 @@ public class PetmanageFragment extends Fragment implements View.OnClickListener{
 
                         if (kind == SMALL) {
                             if (dayTotal < 10 || dayTotal > 40) {
-                                wedStatusBox.setBackgroundColor(Color.parseColor(WHITERED));
+                                wedStatusBox.setBackgroundResource(R.drawable.status_red);
                                 weekStatus.setWednesday(WORSE);
                             } else if (dayTotal >= 10 && dayTotal < 20) {
-                                wedStatusBox.setBackgroundColor(Color.parseColor(WHITEYELLOW));
+                                wedStatusBox.setBackgroundResource(R.drawable.status_yellow);
                                 weekStatus.setWednesday(NORMAL);
                             } else if (dayTotal >= 20 && dayTotal <= 40) {
-                                wedStatusBox.setBackgroundColor(Color.parseColor(WHITEGREEN));
+                                wedStatusBox.setBackgroundResource(R.drawable.status_green);
                                 weekStatus.setWednesday(GOOD);
                             }
                         } else if (kind == MIDDLE) {
                             if (dayTotal < 30 || dayTotal > 70) {
-                                wedStatusBox.setBackgroundColor(Color.parseColor(WHITERED));
+                                wedStatusBox.setBackgroundResource(R.drawable.status_red);
                                 weekStatus.setWednesday(WORSE);
                             } else if (dayTotal >= 30 && dayTotal < 45) {
-                                wedStatusBox.setBackgroundColor(Color.parseColor(WHITEYELLOW));
+                                wedStatusBox.setBackgroundResource(R.drawable.status_yellow);
                                 weekStatus.setWednesday(NORMAL);
                             } else if (dayTotal >= 45 && dayTotal <= 70) {
-                                wedStatusBox.setBackgroundColor(Color.parseColor(WHITEGREEN));
+                                wedStatusBox.setBackgroundResource(R.drawable.status_green);
                                 weekStatus.setWednesday(GOOD);
                             }
                         } else if (kind == BIG) {
                             if (dayTotal < 40 || dayTotal > 130) {
-                                wedStatusBox.setBackgroundColor(Color.parseColor(WHITERED));
+                                wedStatusBox.setBackgroundResource(R.drawable.status_red);
                                 weekStatus.setWednesday(WORSE);
                             } else if (dayTotal >= 40 && dayTotal < 90) {
-                                wedStatusBox.setBackgroundColor(Color.parseColor(WHITEYELLOW));
+                                wedStatusBox.setBackgroundResource(R.drawable.status_yellow);
                                 weekStatus.setWednesday(NORMAL);
                             } else if (dayTotal >= 90 && dayTotal <= 130) {
-                                wedStatusBox.setBackgroundColor(Color.parseColor(WHITEGREEN));
+                                wedStatusBox.setBackgroundResource(R.drawable.status_green);
                                 weekStatus.setWednesday(GOOD);
                             }
                         }
@@ -558,35 +558,35 @@ public class PetmanageFragment extends Fragment implements View.OnClickListener{
 
                         if (kind == SMALL) {
                             if (dayTotal < 10 || dayTotal > 40) {
-                                thuStatusBox.setBackgroundColor(Color.parseColor(WHITERED));
+                                thuStatusBox.setBackgroundResource(R.drawable.status_red);
                                 weekStatus.setThursday(WORSE);
                             } else if (dayTotal >= 10 && dayTotal < 20) {
-                                thuStatusBox.setBackgroundColor(Color.parseColor(WHITEYELLOW));
+                                thuStatusBox.setBackgroundResource(R.drawable.status_yellow);
                                 weekStatus.setThursday(NORMAL);
                             } else if (dayTotal >= 20 && dayTotal <= 40) {
-                                thuStatusBox.setBackgroundColor(Color.parseColor(WHITEGREEN));
+                                thuStatusBox.setBackgroundResource(R.drawable.status_green);
                                 weekStatus.setThursday(GOOD);
                             }
                         } else if (kind == MIDDLE) {
                             if (dayTotal < 30 || dayTotal > 70) {
-                                thuStatusBox.setBackgroundColor(Color.parseColor(WHITERED));
+                                thuStatusBox.setBackgroundResource(R.drawable.status_red);
                                 weekStatus.setThursday(WORSE);
                             } else if (dayTotal >= 30 && dayTotal < 45) {
-                                thuStatusBox.setBackgroundColor(Color.parseColor(WHITEYELLOW));
+                                thuStatusBox.setBackgroundResource(R.drawable.status_yellow);
                                 weekStatus.setThursday(NORMAL);
                             } else if (dayTotal >= 45 && dayTotal <= 70) {
-                                thuStatusBox.setBackgroundColor(Color.parseColor(WHITEGREEN));
+                                thuStatusBox.setBackgroundResource(R.drawable.status_green);
                                 weekStatus.setThursday(GOOD);
                             }
                         } else if (kind == BIG) {
                             if (dayTotal < 40 || dayTotal > 130) {
-                                thuStatusBox.setBackgroundColor(Color.parseColor(WHITERED));
+                                thuStatusBox.setBackgroundResource(R.drawable.status_red);
                                 weekStatus.setThursday(WORSE);
                             } else if (dayTotal >= 40 && dayTotal < 90) {
-                                thuStatusBox.setBackgroundColor(Color.parseColor(WHITEYELLOW));
+                                thuStatusBox.setBackgroundResource(R.drawable.status_yellow);
                                 weekStatus.setThursday(NORMAL);
                             } else if (dayTotal >= 90 && dayTotal <= 130) {
-                                thuStatusBox.setBackgroundColor(Color.parseColor(WHITEGREEN));
+                                thuStatusBox.setBackgroundResource(R.drawable.status_green);
                                 weekStatus.setThursday(GOOD);
                             }
                         }
@@ -622,35 +622,35 @@ public class PetmanageFragment extends Fragment implements View.OnClickListener{
 
                         if (kind == SMALL) {
                             if (dayTotal < 10 || dayTotal > 40) {
-                                friStatusBox.setBackgroundColor(Color.parseColor(WHITERED));
+                                friStatusBox.setBackgroundResource(R.drawable.status_red);
                                 weekStatus.setFriday(WORSE);
                             } else if (dayTotal >= 10 && dayTotal < 20) {
-                                friStatusBox.setBackgroundColor(Color.parseColor(WHITEYELLOW));
+                                friStatusBox.setBackgroundResource(R.drawable.status_yellow);
                                 weekStatus.setFriday(NORMAL);
                             } else if (dayTotal >= 20 && dayTotal <= 40) {
-                                friStatusBox.setBackgroundColor(Color.parseColor(WHITEGREEN));
+                                friStatusBox.setBackgroundResource(R.drawable.status_green);
                                 weekStatus.setFriday(GOOD);
                             }
                         } else if (kind == MIDDLE) {
                             if (dayTotal < 30 || dayTotal > 70) {
-                                friStatusBox.setBackgroundColor(Color.parseColor(WHITERED));
+                                friStatusBox.setBackgroundResource(R.drawable.status_red);
                                 weekStatus.setFriday(WORSE);
                             } else if (dayTotal >= 30 && dayTotal < 45) {
-                                friStatusBox.setBackgroundColor(Color.parseColor(WHITEYELLOW));
+                                friStatusBox.setBackgroundResource(R.drawable.status_yellow);
                                 weekStatus.setFriday(NORMAL);
                             } else if (dayTotal >= 45 && dayTotal <= 70) {
-                                friStatusBox.setBackgroundColor(Color.parseColor(WHITEGREEN));
+                                friStatusBox.setBackgroundResource(R.drawable.status_green);
                                 weekStatus.setFriday(GOOD);
                             }
                         } else if (kind == BIG) {
                             if (dayTotal < 40 || dayTotal > 130) {
-                                friStatusBox.setBackgroundColor(Color.parseColor(WHITERED));
+                                friStatusBox.setBackgroundResource(R.drawable.status_red);
                                 weekStatus.setFriday(WORSE);
                             } else if (dayTotal >= 40 && dayTotal < 90) {
-                                friStatusBox.setBackgroundColor(Color.parseColor(WHITEYELLOW));
+                                friStatusBox.setBackgroundResource(R.drawable.status_yellow);
                                 weekStatus.setFriday(NORMAL);
                             } else if (dayTotal >= 90 && dayTotal <= 130) {
-                                friStatusBox.setBackgroundColor(Color.parseColor(WHITEGREEN));
+                                friStatusBox.setBackgroundResource(R.drawable.status_green);
                                 weekStatus.setFriday(GOOD);
                             }
                         }
@@ -686,35 +686,35 @@ public class PetmanageFragment extends Fragment implements View.OnClickListener{
 
                         if (kind == SMALL) {
                             if (dayTotal < 10 || dayTotal > 40) {
-                                satStatusBox.setBackgroundColor(Color.parseColor(WHITERED));
+                                satStatusBox.setBackgroundResource(R.drawable.status_red);
                                 weekStatus.setSaturday(WORSE);
                             } else if (dayTotal >= 10 && dayTotal < 20) {
-                                satStatusBox.setBackgroundColor(Color.parseColor(WHITEYELLOW));
+                                satStatusBox.setBackgroundResource(R.drawable.status_yellow);
                                 weekStatus.setSaturday(NORMAL);
                             } else if (dayTotal >= 20 && dayTotal <= 40) {
-                                satStatusBox.setBackgroundColor(Color.parseColor(WHITEGREEN));
+                                satStatusBox.setBackgroundResource(R.drawable.status_green);
                                 weekStatus.setSaturday(GOOD);
                             }
                         } else if (kind == MIDDLE) {
                             if (dayTotal < 30 || dayTotal > 70) {
-                                satStatusBox.setBackgroundColor(Color.parseColor(WHITERED));
+                                satStatusBox.setBackgroundResource(R.drawable.status_red);
                                 weekStatus.setSaturday(WORSE);
                             } else if (dayTotal >= 30 && dayTotal < 45) {
-                                satStatusBox.setBackgroundColor(Color.parseColor(WHITEYELLOW));
+                                satStatusBox.setBackgroundResource(R.drawable.status_yellow);
                                 weekStatus.setSaturday(NORMAL);
                             } else if (dayTotal >= 45 && dayTotal <= 70) {
-                                satStatusBox.setBackgroundColor(Color.parseColor(WHITEGREEN));
+                                satStatusBox.setBackgroundResource(R.drawable.status_green);
                                 weekStatus.setSaturday(GOOD);
                             }
                         } else if (kind == BIG) {
                             if (dayTotal < 40 || dayTotal > 130) {
-                                satStatusBox.setBackgroundColor(Color.parseColor(WHITERED));
+                                satStatusBox.setBackgroundResource(R.drawable.status_red);
                                 weekStatus.setSaturday(WORSE);
                             } else if (dayTotal >= 40 && dayTotal < 90) {
-                                satStatusBox.setBackgroundColor(Color.parseColor(WHITEYELLOW));
+                                satStatusBox.setBackgroundResource(R.drawable.status_yellow);
                                 weekStatus.setSaturday(NORMAL);
                             } else if (dayTotal >= 90 && dayTotal <= 130) {
-                                satStatusBox.setBackgroundColor(Color.parseColor(WHITEGREEN));
+                                satStatusBox.setBackgroundResource(R.drawable.status_green);
                                 weekStatus.setSaturday(GOOD);
                             }
                         }
@@ -750,35 +750,35 @@ public class PetmanageFragment extends Fragment implements View.OnClickListener{
 
                         if (kind == SMALL) {
                             if (dayTotal < 10 || dayTotal > 40) {
-                                sunStatusBox.setBackgroundColor(Color.parseColor(WHITERED));
+                                sunStatusBox.setBackgroundResource(R.drawable.status_red);
                                 weekStatus.setSunday(WORSE);
                             } else if (dayTotal >= 10 && dayTotal < 20) {
-                                sunStatusBox.setBackgroundColor(Color.parseColor(WHITEYELLOW));
+                                sunStatusBox.setBackgroundResource(R.drawable.status_yellow);
                                 weekStatus.setSunday(NORMAL);
                             } else if (dayTotal >= 20 && dayTotal <= 40) {
-                                sunStatusBox.setBackgroundColor(Color.parseColor(WHITEGREEN));
+                                sunStatusBox.setBackgroundResource(R.drawable.status_green);
                                 weekStatus.setSunday(GOOD);
                             }
                         } else if (kind == MIDDLE) {
                             if (dayTotal < 30 || dayTotal > 70) {
-                                sunStatusBox.setBackgroundColor(Color.parseColor(WHITERED));
+                                sunStatusBox.setBackgroundResource(R.drawable.status_red);
                                 weekStatus.setSunday(WORSE);
                             } else if (dayTotal >= 30 && dayTotal < 45) {
-                                sunStatusBox.setBackgroundColor(Color.parseColor(WHITEYELLOW));
+                                sunStatusBox.setBackgroundResource(R.drawable.status_yellow);
                                 weekStatus.setSunday(NORMAL);
                             } else if (dayTotal >= 45 && dayTotal <= 70) {
-                                sunStatusBox.setBackgroundColor(Color.parseColor(WHITEGREEN));
+                                sunStatusBox.setBackgroundResource(R.drawable.status_green);
                                 weekStatus.setSunday(GOOD);
                             }
                         } else if (kind == BIG) {
                             if (dayTotal < 40 || dayTotal > 130) {
-                                sunStatusBox.setBackgroundColor(Color.parseColor(WHITERED));
+                                sunStatusBox.setBackgroundResource(R.drawable.status_red);
                                 weekStatus.setSunday(WORSE);
                             } else if (dayTotal >= 40 && dayTotal < 90) {
-                                sunStatusBox.setBackgroundColor(Color.parseColor(WHITEYELLOW));
+                                sunStatusBox.setBackgroundResource(R.drawable.status_yellow);
                                 weekStatus.setSunday(NORMAL);
                             } else if (dayTotal >= 90 && dayTotal <= 130) {
-                                sunStatusBox.setBackgroundColor(Color.parseColor(WHITEGREEN));
+                                sunStatusBox.setBackgroundResource(R.drawable.status_green);
                                 weekStatus.setSunday(GOOD);
                             }
                         }
