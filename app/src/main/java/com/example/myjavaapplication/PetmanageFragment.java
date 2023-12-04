@@ -11,17 +11,31 @@ import androidx.annotation.NonNull;
 import androidx.constraintlayout.widget.ConstraintLayout;
 import androidx.fragment.app.Fragment;
 
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
+import android.widget.ImageView;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.google.android.gms.tasks.OnCompleteListener;
+import com.google.android.gms.tasks.Task;
+import com.google.firebase.firestore.DocumentReference;
+import com.google.firebase.firestore.DocumentSnapshot;
+import com.google.firebase.firestore.FirebaseFirestore;
+
 import org.checkerframework.checker.units.qual.C;
 
+import java.text.DecimalFormat;
+import java.text.SimpleDateFormat;
+import java.time.DayOfWeek;
+import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.Calendar;
+import java.util.HashMap;
+import java.util.Map;
 
 import de.hdodenhof.circleimageview.CircleImageView;
 
@@ -38,6 +52,18 @@ public class PetmanageFragment extends Fragment implements View.OnClickListener{
     private CircleImageView petView;
     private View petImageView;
     private ConstraintLayout petManageMentLayout;
+    private final long SMALL = 21;
+    private final long MIDDLE = 22;
+    private final long BIG = 23;
+    private final double SGOOD = 41;
+    private final double SNORMAL = 42;
+    private final double SWORSE = 43;
+    private final double MGOOD = 51;
+    private final double MNORMAL = 52;
+    private final double MWORSE = 53;
+    private final double BGOOD = 61;
+    private final double BNORMAL = 62;
+    private final double BWORSE = 63;
 
     private final String WHITERED = "#EDA399";
     private final String WHITEGREEN = "#ACE997";
@@ -47,6 +73,7 @@ public class PetmanageFragment extends Fragment implements View.OnClickListener{
     private UserMedia userData;
     private PetMedia petData;
     private int petPostion;
+    private Map<String, Double> weekStatus;
 
     public PetmanageFragment() {
         // Required empty public constructor
@@ -102,8 +129,12 @@ public class PetmanageFragment extends Fragment implements View.OnClickListener{
 
 
         Calendar now = Calendar.getInstance();
-        int month = now.get((Calendar.MONTH) + 1);
-        months.setText(String.valueOf(month));
+        DecimalFormat df = new DecimalFormat("00");
+        String m  = df.format(now.get(Calendar.MONTH) + 1);
+
+
+
+        months.setText(m);
         Mcalorie.setText("00Kcal");
         Tcalorie.setText("00Kcal");
         Wcalorie.setText("00Kcal");
@@ -113,7 +144,7 @@ public class PetmanageFragment extends Fragment implements View.OnClickListener{
         Sucalorie.setText("00Kcal");
         hospital.setText("병원");
         hname.setText("주치의 이름");
-        monStatusBox.setBackgroundColor(Color.parseColor(WHITEGREEN));
+//        monStatusBox.setBackgroundColor(Color.parseColor(WHITEGREEN));
         tueStatusBox.setBackgroundColor(Color.parseColor(WHITEGREEN));
         wedStatusBox.setBackgroundColor(Color.parseColor(WHITEGREEN));
         thuStatusBox.setBackgroundColor(Color.parseColor(WHITEGREEN));
@@ -128,6 +159,7 @@ public class PetmanageFragment extends Fragment implements View.OnClickListener{
 
         userData = new UserMedia();
         petDataList = new ArrayList<>();
+        weekStatus = new HashMap<>();
 
         userData = (UserMedia) getActivity().getIntent().getSerializableExtra("userData");
         petDataList = (ArrayList<PetMedia>) getActivity().getIntent().getSerializableExtra("petDataList");
@@ -138,6 +170,9 @@ public class PetmanageFragment extends Fragment implements View.OnClickListener{
         if (petDataList.size() > 0) {
             petData = petDataList.get(petPostion);
             setPagePetData(petData);
+
+            int day = now.get(Calendar.DAY_OF_WEEK);
+            setWeekStatus(day);
 
             petView.setImageResource(R.drawable.pet_temp_image);
             petImageView.setVisibility(View.INVISIBLE);
@@ -154,6 +189,9 @@ public class PetmanageFragment extends Fragment implements View.OnClickListener{
         }
         list.clear();
         setPetChangedList();
+
+
+
 
         return view;
     }
@@ -221,5 +259,153 @@ public class PetmanageFragment extends Fragment implements View.OnClickListener{
         rightParse.setVisibility(View.VISIBLE);
         hospitalCheckText.setVisibility(View.INVISIBLE);
     }
+
+    public void getWalkStatusDataToFirestore(PetMedia pet){
+
+        if(petDataList.size() > 0){
+            String petId = String.valueOf(pet.getPetId());
+
+            SimpleDateFormat sdf = new SimpleDateFormat("yyyyMMdd");
+            Calendar c1 = Calendar.getInstance();
+            String strToday = sdf.format(c1.getTime());
+            Log.i("strToday", strToday);
+
+
+        }
+        else{
+            Log.i("HomeFragment", "펫이 없음");
+        }
+    }
+
+
+    public void setWeekStatus(int day){
+        Calendar cal = Calendar.getInstance();
+        Calendar nowTime = Calendar.getInstance();
+        DecimalFormat df = new DecimalFormat("00");
+        String month  = df.format(nowTime.get(Calendar.MONTH) + 1);
+        String year = String.valueOf(nowTime.get(Calendar.YEAR));
+        String mon = "";
+
+        if(day == 1){
+            cal.add(Calendar.DATE, -6);
+            mon = cal.get(Calendar.DATE)<10?"0"+cal.get(Calendar.DATE): String.valueOf(cal.get(Calendar.DATE));
+        }
+        else if (day == 2){
+            mon = cal.get(Calendar.DATE)<10?"0"+cal.get(Calendar.DATE): String.valueOf(cal.get(Calendar.DATE));
+        }
+        else if(day == 3){
+            cal.add(Calendar.DATE, -1);
+            mon = cal.get(Calendar.DATE)<10?"0"+cal.get(Calendar.DATE): String.valueOf(cal.get(Calendar.DATE));
+        }
+        else if(day == 4){
+            cal.add(Calendar.DATE, -2);
+            mon = cal.get(Calendar.DATE)<10?"0"+cal.get(Calendar.DATE): String.valueOf(cal.get(Calendar.DATE));
+        }
+        else if(day == 5){
+            cal.add(Calendar.DATE, -3);
+            mon = cal.get(Calendar.DATE)<10?"0"+cal.get(Calendar.DATE): String.valueOf(cal.get(Calendar.DATE));
+        }
+        else if(day == 6){
+            cal.add(Calendar.DATE, -4);
+            mon = cal.get(Calendar.DATE)<10?"0"+cal.get(Calendar.DATE): String.valueOf(cal.get(Calendar.DATE));
+        }
+        else if(day == 7){
+            cal.add(Calendar.DATE, -5);
+            mon = cal.get(Calendar.DATE)<10?"0"+cal.get(Calendar.DATE): String.valueOf(cal.get(Calendar.DATE));
+        }
+
+        String monday = year + month + mon;
+
+        cal.add(Calendar.DATE, 1);
+        String tue = cal.get(Calendar.DATE)<10?"0"+cal.get(Calendar.DATE): String.valueOf(cal.get(Calendar.DATE));
+        String tuesday = year + month + tue;
+
+        cal.add(Calendar.DATE, 1);
+        String wed = cal.get(Calendar.DATE)<10?"0"+cal.get(Calendar.DATE): String.valueOf(cal.get(Calendar.DATE));
+        String wednesday = year + month + wed;
+
+        cal.add(Calendar.DATE, 1);
+        String thu = cal.get(Calendar.DATE)<10?"0"+cal.get(Calendar.DATE): String.valueOf(cal.get(Calendar.DATE));
+        String thursday = year + month + thu;
+
+        cal.add(Calendar.DATE, 1);
+        String fri = cal.get(Calendar.DATE)<10?"0"+cal.get(Calendar.DATE): String.valueOf(cal.get(Calendar.DATE));
+        String friday = year + month + fri;
+
+        cal.add(Calendar.DATE, 1);
+        String sat = cal.get(Calendar.DATE)<10?"0"+cal.get(Calendar.DATE): String.valueOf(cal.get(Calendar.DATE));
+        String saturday = year + month + sat;
+
+        cal.add(Calendar.DATE, 1);
+        String sun = cal.get(Calendar.DATE)<10?"0"+cal.get(Calendar.DATE): String.valueOf(cal.get(Calendar.DATE));
+        String sunday = year + month + sun;
+
+        String id = userData.getUid();
+        String petId = String.valueOf(petDataList.get(petPostion).getPetId());
+        long kind = petDataList.get(petPostion).getPetKind();
+
+
+        FirebaseFirestore db = FirebaseFirestore.getInstance();
+        DocumentReference docRef = db.collection("users").document(id)
+                .collection("pet").document(petId).collection("walk").document(monday);
+        docRef.get().addOnCompleteListener(new OnCompleteListener<DocumentSnapshot>() {
+            @Override
+            public void onComplete(@NonNull Task<DocumentSnapshot> task) {
+                if (task.isSuccessful()) {
+                    DocumentSnapshot document = task.getResult();
+
+                    if (document.exists()) {
+                        Log.d("Firebase", "DocumentSnapshot data: " + document.getData());
+                        Map<String, Object> map = document.getData();
+                        ArrayList<Map<String, Object>> tempList = (ArrayList<Map<String, Object>>) map.get("walkList");
+
+                        double dayTotal = 0;
+                        for (int i = 0; i < tempList.size(); i++) {
+                            Map<String, Object> temp = tempList.get(i);
+                            dayTotal += Double.valueOf((String) temp.get("duringTime"));
+                        }
+
+                        weekStatus.put("mon", dayTotal);
+                        Log.i("check", String.valueOf(dayTotal));
+                        Log.i("check2", String.valueOf(kind));
+                        if (kind == SMALL) {
+                            if (dayTotal < 10 || dayTotal > 40) {
+                                monStatusBox.setBackgroundColor(Color.parseColor(WHITERED));
+                            } else if (dayTotal >= 10 && dayTotal < 20) {
+                                monStatusBox.setBackgroundColor(Color.parseColor(WHITEYELLOW));
+                            } else if (dayTotal >= 20 && dayTotal <= 40) {
+                                monStatusBox.setBackgroundColor(Color.parseColor(WHITEGREEN));
+                            }
+                        } else if (kind == MIDDLE) {
+                            if (dayTotal < 30 || dayTotal > 70) {
+                                monStatusBox.setBackgroundColor(Color.parseColor(WHITERED));
+                            } else if (dayTotal >= 30 && dayTotal < 45) {
+                                monStatusBox.setBackgroundColor(Color.parseColor(WHITEYELLOW));
+                            } else if (dayTotal >= 45 && dayTotal <= 70) {
+                                monStatusBox.setBackgroundColor(Color.parseColor(WHITEGREEN));
+                            }
+                        } else if (kind == BIG) {
+                            if (dayTotal < 40 || dayTotal > 130) {
+                                monStatusBox.setBackgroundColor(Color.parseColor(WHITERED));
+                            } else if (dayTotal >= 40 && dayTotal < 90) {
+                                monStatusBox.setBackgroundColor(Color.parseColor(WHITEYELLOW));
+                            } else if (dayTotal >= 90 && dayTotal <= 130) {
+                                monStatusBox.setBackgroundColor(Color.parseColor(WHITEGREEN));
+                            }
+                        }
+                    }
+                    else{
+                        weekStatus.put("mon", 0.0);
+                        
+                    }
+                } else {
+                    Log.d("Firebase", "get failed with ", task.getException());
+                }
+            }
+        });
+
+
+    }
+
 
 }
