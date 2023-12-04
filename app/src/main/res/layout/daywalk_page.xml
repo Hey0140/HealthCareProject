@@ -12,7 +12,7 @@
         android:layout_height="30dp"
         android:layout_marginLeft="20dp"
         android:layout_marginTop="20dp"
-        android:text="펫 관리"
+        android:text="pet"
         android:textSize="20dp"
         app:layout_constraintLeft_toLeftOf="parent"
         app:layout_constraintTop_toTopOf="parent" />
@@ -405,7 +405,7 @@
                 android:id="@+id/dayWalkPageWalkNumber"
                 android:layout_width="wrap_content"
                 android:layout_height="50dp"
-                android:text="00"
+                android:text="0"
                 android:textSize="28dp"/>
 
             <TextView

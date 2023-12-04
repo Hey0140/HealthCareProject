@@ -153,7 +153,7 @@ public class PetmanageFragment extends Fragment implements View.OnClickListener{
         petDataList = (ArrayList<PetMedia>) getActivity().getIntent().getSerializableExtra("petDataList");
 
 
-        petPostion = 0;
+        petPostion = MainActivity.petPosition;
         petData = new PetMedia();
         if (petDataList.size() > 0) {
             petData = petDataList.get(petPostion);
@@ -193,6 +193,7 @@ public class PetmanageFragment extends Fragment implements View.OnClickListener{
                         @Override
                         public void onChangeSelected(String data, int position) {
                             petPostion = position;
+                            MainActivity.petPosition = position;
                             petData = petDataList.get(petPostion);
                             setPagePetData(petData);
                         }
@@ -201,7 +202,13 @@ public class PetmanageFragment extends Fragment implements View.OnClickListener{
             dialog.show();
         }
         if(v == petStatusButton){
-            mainActivity.onChangeToPetStatusFragment();
+            if(petDataList.size() > 0 ){
+                MainActivity.petPosition = petPostion;
+                mainActivity.onChangeToPetStatusFragment();
+            }
+            else{
+                Toast.makeText(getContext(), "펫을 먼저 등록해주세요.", Toast.LENGTH_SHORT).show();
+            }
         }
         if(v == petManageMentLayout){
             Intent intent = new Intent(getActivity(), DaywalkActivity.class);
@@ -310,6 +317,7 @@ public class PetmanageFragment extends Fragment implements View.OnClickListener{
         cal.add(Calendar.DATE, 1);
         String tue = cal.get(Calendar.DATE)<10?"0"+cal.get(Calendar.DATE): String.valueOf(cal.get(Calendar.DATE));
         String tuesday = year + month + tue;
+        Log.i("today", tuesday);
 
         cal.add(Calendar.DATE, 1);
         String wed = cal.get(Calendar.DATE)<10?"0"+cal.get(Calendar.DATE): String.valueOf(cal.get(Calendar.DATE));

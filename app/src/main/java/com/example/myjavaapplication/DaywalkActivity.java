@@ -78,9 +78,26 @@ public class DaywalkActivity extends AppCompatActivity {
 
         if(petDataList.size() > 0){
             petData = petDataList.get(petPosition);
+
+            long rer = petData.getPetWeight() * 30 + 70;
+            if (petData.getPetSex() == MALE || petData.getPetSex() == FEMALE) {
+                needCalorie = rer * 1.8;
+            }
+            if (petData.getPetSex() == MALENEUTER || petData.getPetSex() == FEMALENEUTER) {
+                needCalorie = rer * 1.6;
+            }
+            String calorieName = String.valueOf(needCalorie);
+            leftCalorie.setText(calorieName);
+
+            long walk =  petData.getWalk();
+            walkText.setText(String.valueOf(walk));
+
             getWalkDataToFirestore(petData);
         }
-        walkText.setText("0");
+        else{
+            leftCalorie.setText("0.0");
+            walkText.setText("0");
+        }
         walkHour.setText("0.0");
 
         setCalender();
@@ -260,17 +277,6 @@ public class DaywalkActivity extends AppCompatActivity {
                             DecimalFormat df = new DecimalFormat("0.0");
 
                             walkHour.setText(df.format(walkAllTime));
-                            walkText.setText(String.valueOf(petData.getWalk()));
-
-                            long rer = petData.getPetWeight() * 30 + 70;
-                            if (petData.getPetSex() == MALE || petData.getPetSex() == FEMALE) {
-                                needCalorie = rer * 1.8;
-                            }
-                            if (petData.getPetSex() == MALENEUTER || petData.getPetSex() == FEMALENEUTER) {
-                                needCalorie = rer * 1.6;
-                            }
-                            String calorieName = String.valueOf(needCalorie);
-                            leftCalorie.setText(calorieName);
                         }
                         else{
                             walkHour.setText("0.0");
