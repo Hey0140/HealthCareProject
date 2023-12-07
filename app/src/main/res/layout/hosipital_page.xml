@@ -4,7 +4,7 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context=".HosipitalActivity">
+    tools:context=".HospitalActivity">
 
     <TextView
         android:id="@+id/petManagementTitle"
@@ -22,7 +22,7 @@
         android:layout_width="match_parent"
         android:layout_height="40dp"
         android:layout_marginLeft="20dp"
-        android:layout_marginTop="80dp"
+        android:layout_marginTop="70dp"
         android:text="병원 등록하기"
         android:textSize="20dp"
         app:layout_constraintLeft_toLeftOf="parent"
@@ -33,7 +33,7 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginLeft="40dp"
-        android:layout_marginTop="50dp"
+        android:layout_marginTop="35dp"
         android:text="병원 이름"
         android:textSize="14dp"
         app:layout_constraintLeft_toLeftOf="parent"
@@ -62,7 +62,7 @@
         app:layout_constraintTop_toBottomOf="@id/hosipitalNameTitle" />
 
     <EditText
-        android:id="@+id/hosipitalName"
+        android:id="@+id/hospitalName"
         android:layout_width="334dp"
         android:layout_height="40dp"
         android:layout_marginLeft="13dp"
@@ -70,7 +70,9 @@
         android:layout_marginBottom="3dp"
         android:background="@null"
         android:inputType="text"
+        android:maxLines="1"
         android:textSize="17dp"
+        android:ellipsize="end"
         android:privateImeOptions="defaultInputmode=korean"
         app:layout_constraintBottom_toBottomOf="@id/hosipitalNameBox"
         app:layout_constraintLeft_toLeftOf="@id/hosipitalNameBox" />
@@ -109,14 +111,14 @@
         app:layout_constraintTop_toBottomOf="@id/doctornameTitle" />
 
     <EditText
-        android:id="@+id/doctorname"
+        android:id="@+id/doctorName"
         android:layout_width="334dp"
         android:layout_height="40dp"
         android:layout_marginLeft="13dp"
         android:layout_marginRight="20dp"
         android:layout_marginBottom="3dp"
+        android:maxLines="1"
         android:background="@null"
-        android:inputType="number"
         android:textSize="17dp"
         app:layout_constraintBottom_toBottomOf="@id/doctornameBox"
         app:layout_constraintLeft_toLeftOf="@id/doctornameBox" />
@@ -156,7 +158,7 @@
         app:layout_constraintTop_toBottomOf="@id/hosipitaladdressTitle" />
 
     <EditText
-        android:id="@+id/hosipitaladdress"
+        android:id="@+id/hospitalAddress"
         android:layout_width="334dp"
         android:layout_height="40dp"
         android:layout_marginLeft="13dp"
@@ -164,7 +166,9 @@
         android:layout_marginBottom="3dp"
         android:background="@null"
         android:inputType="text"
+        android:maxLines="1"
         android:textSize="17dp"
+        android:ellipsize="end"
         app:layout_constraintBottom_toBottomOf="@id/hosipitaladdressBox"
         app:layout_constraintLeft_toLeftOf="@id/hosipitaladdressBox" />
 
@@ -202,20 +206,21 @@
         app:layout_constraintTop_toBottomOf="@id/hosipitalphonenumberTitle" />
 
     <EditText
-        android:id="@+id/hosipitalphonenumber"
+        android:id="@+id/hospitalPhoneNumber"
         android:layout_width="334dp"
         android:layout_height="40dp"
         android:layout_marginLeft="13dp"
         android:layout_marginRight="20dp"
         android:layout_marginBottom="3dp"
         android:background="@null"
-        android:inputType="textPassword"
+        android:inputType="text"
         android:textSize="17dp"
+        android:maxLines="1"
         app:layout_constraintBottom_toBottomOf="@id/hosipitalphonenumberBox"
         app:layout_constraintLeft_toLeftOf="@id/hosipitalphonenumberBox" />
 
     <androidx.appcompat.widget.AppCompatButton
-        android:id="@+id/hosipitaljoinButton"
+        android:id="@+id/hospitalEndButton"
         android:layout_width="match_parent"
         android:layout_height="70dp"
         app:layout_constraintBottom_toBottomOf="parent"

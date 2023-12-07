@@ -17,7 +17,7 @@ import java.io.InputStream;
 import java.util.ArrayList;
 
 public class MonthWalkActivity extends AppCompatActivity {
-    private ArrayList<MonthWalkData> itemList;
+    private ArrayList<MonthWalkMedia> itemList;
     private final int REQUEST_CODE = 2032;
     private Bitmap image;
     private TextView plus;
@@ -30,10 +30,10 @@ public class MonthWalkActivity extends AppCompatActivity {
         setContentView(R.layout.monthwalk_page);
 
         itemList = new ArrayList<>();
-        MonthWalkData monthWalkData = new MonthWalkData();
-        monthWalkData.setImage("");
+        MonthWalkMedia monthWalkMedia = new MonthWalkMedia();
+        monthWalkMedia.setImage("");
 
-        itemList.add(monthWalkData);
+        itemList.add(monthWalkMedia);
 
         RecyclerView recyclerView = findViewById(R.id.monthWalkRecyclerView);
         recyclerView.setLayoutManager(new LinearLayoutManager(this, LinearLayoutManager.HORIZONTAL,false));

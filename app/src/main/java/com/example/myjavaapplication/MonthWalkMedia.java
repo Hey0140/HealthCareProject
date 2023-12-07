@@ -2,7 +2,7 @@ package com.example.myjavaapplication;
 
 import android.graphics.Bitmap;
 
-public class MonthWalkData {
+public class MonthWalkMedia {
     private String image;
     private Bitmap bitmap;
     private int type;

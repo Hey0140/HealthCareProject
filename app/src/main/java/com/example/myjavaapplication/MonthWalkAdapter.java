@@ -1,7 +1,6 @@
 package com.example.myjavaapplication;
 
 import android.content.Context;
-import android.graphics.Bitmap;
 import android.net.Uri;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -16,13 +15,13 @@ import java.util.ArrayList;
 
 public class MonthWalkAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> {
 
-    ArrayList<MonthWalkData> itemList;
+    ArrayList<MonthWalkMedia> itemList;
     private MonthWalkAdapter.OnListItemSelected mListener;
     public interface OnListItemSelected {
         void onItemSelected(View v, int position);
     }
 
-    MonthWalkAdapter(ArrayList<MonthWalkData> list) {
+    MonthWalkAdapter(ArrayList<MonthWalkMedia> list) {
         this.itemList = list;
     }
 
@@ -68,7 +67,7 @@ public class MonthWalkAdapter extends RecyclerView.Adapter<RecyclerView.ViewHold
 
     @Override
     public void onBindViewHolder(@NonNull RecyclerView.ViewHolder holder, int position) {
-        MonthWalkData item = itemList.get(position);
+        MonthWalkMedia item = itemList.get(position);
         if( item.getType() == Code.ViewType.BITMAP){
             if(item.getImage() == null){
 

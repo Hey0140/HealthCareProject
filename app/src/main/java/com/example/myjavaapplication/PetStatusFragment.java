@@ -3,7 +3,9 @@ package com.example.myjavaapplication;
 import androidx.annotation.NonNull;
 import androidx.fragment.app.Fragment;
 
+import android.app.AlertDialog;
 import android.content.Context;
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.graphics.Color;
 import android.os.Bundle;
@@ -14,8 +16,11 @@ import android.view.ViewGroup;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import com.google.android.gms.tasks.OnCompleteListener;
+import com.google.android.gms.tasks.OnFailureListener;
+import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.android.gms.tasks.Task;
 import com.google.firebase.firestore.DocumentReference;
 import com.google.firebase.firestore.DocumentSnapshot;
@@ -36,9 +41,15 @@ public class PetStatusFragment extends Fragment implements View.OnClickListener 
     private TextView petStatusActivity, petStatusHeart, petStatusLeftText, showText;
     private Button end;
 
-    private final String WHITERED = "#EDA399";
-    private final String WHITEGREEN = "#ACE997";
-    private final String WHITEYELLOW = "#F1EEA1";
+    private final long GOOD = 41;
+    private final long NORMAL = 42;
+    private final long WORSE = 43;
+    private final long MALE = 11;
+    private final long FEMALE = 12;
+    private final long MALENEUTER = 13;
+    private final long FEMALENEUTER = 14;
+    private double needCalorie = 0;
+    private boolean isHospital = false;
 
     private ArrayList<PetMedia> petDataList = new ArrayList<>();
     private PetMedia petData = new PetMedia();
@@ -67,6 +78,7 @@ public class PetStatusFragment extends Fragment implements View.OnClickListener 
         name = view.findViewById(R.id.petNameTitle);
         hospitalname = view.findViewById(R.id.petHospitalName);
         address = view.findViewById(R.id.petHospitalAddress);
+
         petStatusLeftView = view.findViewById(R.id.petStatusLeftView);
         petStatusLeftText = view.findViewById(R.id.petStatusLeftText);
         petStatusCenterView = view.findViewById(R.id.petStatusCenterView);
@@ -85,31 +97,34 @@ public class PetStatusFragment extends Fragment implements View.OnClickListener 
         backButton.setOnClickListener(this);
         showText.setOnClickListener(this);
 
-
-        hospitalname.setText("SJP병원");
-        address.setText("");
-        address.setVisibility(View.VISIBLE);
-
-        petStatusLeftView.setBackgroundColor(Color.parseColor(WHITEGREEN));
-        petStatusLeftText.setVisibility(View.INVISIBLE);
-        petStatusCenterView.setBackgroundColor(Color.parseColor(WHITEGREEN));
-        petStatusCenterText.setVisibility(View.VISIBLE);
-        petStatusRightView.setBackgroundColor(Color.parseColor(WHITEGREEN));
-        petStatusRightText.setVisibility(View.INVISIBLE);
-        petStatusWeight.setText("8");
-        petStatusActivity.setText("2000");
-        petStatusHeart.setText("200");
-        showText.setText("");
-
-
         userData = (UserMedia) getActivity().getIntent().getSerializableExtra("userData");
         petDataList = (ArrayList<PetMedia>) getActivity().getIntent().getSerializableExtra("petDataList");
 
         petData = petDataList.get(MainActivity.petPosition);
-        Log.i("check", petData.getPetName());
-        name.setText(petData.getPetName());
 
-        getHospitalDataToFire(petData);
+
+
+        name.setText(petData.getPetName());
+        setPetStatus(MainActivity.petTodayStatus);
+
+
+        petStatusWeight.setText(String.valueOf(petData.getPetWeight()));
+
+        long rer = petData.getPetWeight() * 30 + 70;
+        if (petData.getPetSex() == MALE || petData.getPetSex() == FEMALE) {
+            needCalorie = rer * 1.8;
+        }
+        if (petData.getPetSex() == MALENEUTER || petData.getPetSex() == FEMALENEUTER) {
+            needCalorie = rer * 1.6;
+        }
+        String calorieName = String.valueOf(needCalorie);
+        petStatusActivity.setText(calorieName);
+
+        petStatusHeart.setText("00");
+
+
+        isHospital = MainActivity.isHospital;
+        getHospitalData(MainActivity.hospitalData);
 
 
         return view;
@@ -133,57 +148,113 @@ public class PetStatusFragment extends Fragment implements View.OnClickListener 
             mainActivity.onChangeToPetManageFragment();
         }
         if(v == hospitalInfo){
+            if( isHospital){
+                AlertDialog.Builder builder = new AlertDialog.Builder(getActivity());
+                builder.setTitle("확인창")
+                        .setMessage("수정하시겠습니까?")
+                        .setCancelable(false)
+                        .setPositiveButton("확인", new DialogInterface.OnClickListener() {
+                            @Override
+                            public void onClick(DialogInterface dialogInterface, int i) {
+                                Intent intent = new Intent(getActivity(), HospitalActivity.class);
+                                intent.putExtra("petData", petData);
+                                startActivity(intent);
+                            }
+                        })
+                        .setNegativeButton("취소", new DialogInterface.OnClickListener() {
+                            @Override
+                            public void onClick(DialogInterface dialogInterface, int i) {
 
-
+                            }
+                        });
+                AlertDialog dialog = builder.create();
+                dialog.show();
+            }
+            else{
+                //병원 등록이 되지 않았을 시
+                Intent intent = new Intent(getActivity(), HospitalActivity.class);
+                intent.putExtra("petData", petData);
+                startActivity(intent);
+            }
         }
         if( v == end){
-            String feature = note.getText().toString();
-            showText.setText(feature);
-            note.setText("");
+            if (isHospital){
+                String feature = note.getText().toString();
+                updateFeatureToFirestore(MainActivity.hospitalData, feature);
+            } else{
+                Toast.makeText(getContext(), "병원 등록부터 해주세요.", Toast.LENGTH_SHORT).show();
+            }
         }
         if(v == showText){
-            String fText = showText.getText().toString();
-            note.setText(fText);
+            if (isHospital){
+                String fText = showText.getText().toString();
+                note.setText(fText);
+            }
         }
     }
 
-    public void getHospitalDataToFire (PetMedia pet){
-        String id = pet.getuId();
-        String petId = String.valueOf(pet.getPetId());
-        FirebaseFirestore db = FirebaseFirestore.getInstance();
-
-        DocumentReference docRef = db.collection("users").document(id)
-                .collection("pet").document(petId).collection("hospital").document("hospital");
-        docRef.get().addOnCompleteListener(new OnCompleteListener<DocumentSnapshot>() {
-            @Override
-            public void onComplete(@NonNull Task<DocumentSnapshot> task) {
-                if (task.isSuccessful()) {
-                    DocumentSnapshot document = task.getResult();
-                    if (document.exists()) {
-                        Log.d("Firebase", "DocumentSnapshot data: " + document.getData());
-                        Map<String, Object> map = document.getData();
-
-
-//                        for (int i = 0; i < tempList.size(); i++) {
-//                            Map<String, Object> temp = tempList.get(i);
-//                            String tempTime = (String) temp.get("duringTime");
-//                            walkAllTime += Double.valueOf(tempTime);
-//                        }
-//                        DecimalFormat df = new DecimalFormat("0.0");
-//
-//                        walkHour.setText(df.format(walkAllTime));
-//                        walkText.setText(String.valueOf(petData.getWalk()));
-                    }
-                    else{
-                        hospitalname.setText("병원을 등록해주세요.");
-                        address.setVisibility(View.INVISIBLE);
-                    }
-
-                } else {
-                    Log.d("Firebase", "get failed with ", task.getException());
-                }
-            }
-        });
+    public void getHospitalData (HospitalMedia hospital){
+        if (isHospital){
+            hospitalname.setText(hospital.getName());
+            address.setVisibility(View.VISIBLE);
+            address.setText(hospital.getAddress());
+            showText.setText(hospital.getFeature());
+        }
+        else{
+            hospitalname.setText("병원을 등록해주세요.");
+            address.setVisibility(View.INVISIBLE);
+        }
     }
 
+    public void setPetStatus(long status){
+        if(status == GOOD){
+            petStatusLeftText.setVisibility(View.INVISIBLE);
+            petStatusCenterText.setVisibility(View.INVISIBLE);
+            petStatusRightText.setVisibility(View.VISIBLE);
+        } else if (status == NORMAL) {
+            petStatusLeftText.setVisibility(View.INVISIBLE);
+            petStatusCenterText.setVisibility(View.VISIBLE);
+            petStatusRightText.setVisibility(View.INVISIBLE);
+        } else if (status == WORSE){
+            petStatusLeftText.setVisibility(View.VISIBLE);
+            petStatusCenterText.setVisibility(View.INVISIBLE);
+            petStatusRightText.setVisibility(View.INVISIBLE);
+        }
+        else{
+            petStatusLeftText.setVisibility(View.INVISIBLE);
+            petStatusCenterText.setVisibility(View.INVISIBLE);
+            petStatusRightText.setVisibility(View.INVISIBLE);
+        }
+    }
+
+    public void updateFeatureToFirestore(HospitalMedia hospital, String feature){
+        FirebaseFirestore db = FirebaseFirestore.getInstance();
+        String uid = hospital.getUid();
+        String petId = String.valueOf(hospital.getId());
+        DocumentReference documentReference = db.collection("hospital").document(uid)
+                .collection("pet").document(petId);
+
+        documentReference.update("feature", feature)
+                .addOnSuccessListener(new OnSuccessListener<Void>() {
+                    @Override
+                    public void onSuccess(Void aVoid) {
+                        showText.setText(feature);
+                        note.setText("");
+                        MainActivity.hospitalData.setFeature(feature);
+                    }
+                })
+                .addOnFailureListener(new OnFailureListener() {
+                    @Override
+                    public void onFailure(@NonNull Exception e) {
+                        Log.w("Firebase", "Error updating document", e);
+                    }
+                });
+    }
+
+    @Override
+    public void onStart() {
+        super.onStart();
+        isHospital = MainActivity.isHospital;
+        getHospitalData(MainActivity.hospitalData);
+    }
 }
