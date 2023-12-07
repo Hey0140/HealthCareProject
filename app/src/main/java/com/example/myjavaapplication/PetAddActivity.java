@@ -7,6 +7,7 @@ import android.app.Dialog;
 import android.content.Intent;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
+import android.net.Uri;
 import android.os.Bundle;
 import android.text.Editable;
 import android.text.TextWatcher;
@@ -47,6 +48,7 @@ public class PetAddActivity extends AppCompatActivity implements View.OnClickLis
     private CheckBox male, female, maleNeutering, femaleNeutering;
     private Button petAddNextButton, petKindButton;
     private Bitmap image;
+    private Uri imageUri;
 
 
     @Override
@@ -231,6 +233,7 @@ public class PetAddActivity extends AppCompatActivity implements View.OnClickLis
         super.onActivityResult(requestCode, resultCode, data);
         if( requestCode == REQUEST_CODE){
             if(resultCode == RESULT_OK){
+                imageUri = data.getData();
                 try{
                     InputStream in = getContentResolver().openInputStream(data.getData());
                     image = BitmapFactory.decodeStream(in);
@@ -247,7 +250,8 @@ public class PetAddActivity extends AppCompatActivity implements View.OnClickLis
     private void onSetPetData(){
         petData.setuId(userData.getUid());
         if(image != null){
-            petData.setImage(image.toString());
+            petData.setImage(String.valueOf(imageUri));
+            Log.i("check", String.valueOf(imageUri));
         }
         else{
             petData.setImage("");
