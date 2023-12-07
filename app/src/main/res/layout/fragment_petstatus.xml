@@ -25,7 +25,7 @@
             android:layout_height="wrap_content"
             android:layout_marginLeft="10dp"
             android:layout_marginTop="20dp"
-            android:text="하하"
+            android:text="이름"
             android:textSize="18dp"
             app:layout_constraintLeft_toRightOf="@id/petStatusBackButton"
             app:layout_constraintTop_toTopOf="parent" />
@@ -107,8 +107,7 @@
                     android:id="@+id/petStatusLeftView"
                     android:layout_width="20dp"
                     android:layout_height="20dp"
-                    android:background="@drawable/vaccine_clicked_drawable"
-                    android:backgroundTint="@color/whitered"
+                    android:background="@drawable/status_red"
                     app:layout_constraintTop_toTopOf="parent"
                     app:layout_constraintLeft_toLeftOf="parent"
                     app:layout_constraintRight_toRightOf="parent"
@@ -144,8 +143,7 @@
                     android:id="@+id/petStatusCenterView"
                     android:layout_width="20dp"
                     android:layout_height="20dp"
-                    android:background="@drawable/vaccine_clicked_drawable"
-                    android:backgroundTint="@color/whiteyellow"
+                    android:background="@drawable/status_yellow"
                     app:layout_constraintTop_toTopOf="parent"
                     app:layout_constraintLeft_toLeftOf="parent"
                     app:layout_constraintRight_toRightOf="parent"
@@ -177,8 +175,7 @@
                     android:id="@+id/petStatusRightView"
                     android:layout_width="20dp"
                     android:layout_height="20dp"
-                    android:background="@drawable/vaccine_clicked_drawable"
-                    android:backgroundTint="@color/whitegreen"
+                    android:background="@drawable/status_green"
                     app:layout_constraintTop_toTopOf="parent"
                     app:layout_constraintRight_toRightOf="parent"
                     app:layout_constraintLeft_toLeftOf="parent"
@@ -345,7 +342,7 @@
             android:textSize="12dp"
             android:ellipsize="end"
             android:textColor="@color/middlegray"
-            android:text="예시로 글써보기"
+            android:text=""
             />
 
 

@@ -67,6 +67,7 @@ public class PetmanageFragment extends Fragment implements View.OnClickListener{
     private ArrayList<PetMedia> petDataList;
     private UserMedia userData;
     private PetMedia petData;
+    private HospitalMedia hospitalData;
     private int petPostion;
     private WeekStatusData weekStatus;
 
@@ -127,8 +128,6 @@ public class PetmanageFragment extends Fragment implements View.OnClickListener{
         DecimalFormat df = new DecimalFormat("00");
         String m  = df.format(now.get(Calendar.MONTH) + 1);
 
-
-
         months.setText(m);
         Mcalorie.setText("00Kcal");
         Tcalorie.setText("00Kcal");
@@ -137,8 +136,11 @@ public class PetmanageFragment extends Fragment implements View.OnClickListener{
         Fcalorie.setText("00Kcal");
         Sacalorie.setText("00Kcal");
         Sucalorie.setText("00Kcal");
-        hospital.setText("병원");
-        hname.setText("주치의 이름");
+        hospital.setVisibility(View.INVISIBLE);
+        hname.setVisibility(View.INVISIBLE);
+        leftParse.setVisibility(View.INVISIBLE);
+        rightParse.setVisibility(View.INVISIBLE);
+        hospitalCheckText.setVisibility(View.VISIBLE);
 
         petChangeButton.setOnClickListener(this);
         petStatusButton.setOnClickListener(this);
@@ -148,6 +150,7 @@ public class PetmanageFragment extends Fragment implements View.OnClickListener{
         userData = new UserMedia();
         petDataList = new ArrayList<>();
         weekStatus = new WeekStatusData();
+        hospitalData = new HospitalMedia();
 
         userData = (UserMedia) getActivity().getIntent().getSerializableExtra("userData");
         petDataList = (ArrayList<PetMedia>) getActivity().getIntent().getSerializableExtra("petDataList");
@@ -158,6 +161,7 @@ public class PetmanageFragment extends Fragment implements View.OnClickListener{
         if (petDataList.size() > 0) {
             petData = petDataList.get(petPostion);
             setPagePetData(petData);
+            getHospitalDataToFire(petData);
 
             int day = now.get(Calendar.DAY_OF_WEEK);
             setWeekStatus(day);
@@ -173,6 +177,7 @@ public class PetmanageFragment extends Fragment implements View.OnClickListener{
             hname.setVisibility(View.INVISIBLE);
             leftParse.setVisibility(View.INVISIBLE);
             rightParse.setVisibility(View.INVISIBLE);
+            hospitalCheckText.setText("반려동물을 추가해주세요.");
             hospitalCheckText.setVisibility(View.VISIBLE);
         }
         list.clear();
@@ -196,6 +201,7 @@ public class PetmanageFragment extends Fragment implements View.OnClickListener{
                             MainActivity.petPosition = position;
                             petData = petDataList.get(petPostion);
                             setPagePetData(petData);
+                            getHospitalDataToFire(petData);
 
                             Calendar now = Calendar.getInstance();
                             int day = now.get(Calendar.DAY_OF_WEEK);
@@ -208,6 +214,7 @@ public class PetmanageFragment extends Fragment implements View.OnClickListener{
         if(v == petStatusButton){
             if(petDataList.size() > 0 ){
                 MainActivity.petPosition = petPostion;
+
                 mainActivity.onChangeToPetStatusFragment();
             }
             else{
@@ -262,23 +269,6 @@ public class PetmanageFragment extends Fragment implements View.OnClickListener{
         hospitalCheckText.setVisibility(View.INVISIBLE);
     }
 
-    public void getWalkStatusDataToFirestore(PetMedia pet){
-
-        if(petDataList.size() > 0){
-            String petId = String.valueOf(pet.getPetId());
-
-            SimpleDateFormat sdf = new SimpleDateFormat("yyyyMMdd");
-            Calendar c1 = Calendar.getInstance();
-            String strToday = sdf.format(c1.getTime());
-            Log.i("strToday", strToday);
-
-
-        }
-        else{
-            Log.i("HomeFragment", "펫이 없음");
-        }
-    }
-
 
     public void setWeekStatus(int day){
         Calendar cal = Calendar.getInstance();
@@ -321,7 +311,6 @@ public class PetmanageFragment extends Fragment implements View.OnClickListener{
         cal.add(Calendar.DATE, 1);
         String tue = cal.get(Calendar.DATE)<10?"0"+cal.get(Calendar.DATE): String.valueOf(cal.get(Calendar.DATE));
         String tuesday = year + month + tue;
-        Log.i("today", tuesday);
 
         cal.add(Calendar.DATE, 1);
         String wed = cal.get(Calendar.DATE)<10?"0"+cal.get(Calendar.DATE): String.valueOf(cal.get(Calendar.DATE));
@@ -402,10 +391,17 @@ public class PetmanageFragment extends Fragment implements View.OnClickListener{
                                 weekStatus.setMonday(GOOD);
                             }
                         }
+
+                        if(day == 2){
+                            MainActivity.petTodayStatus = weekStatus.getMonday();
+                        }
                     }
                     else{
                         weekStatus.setMonday(WORSE);
                         monStatusBox.setBackgroundResource(R.drawable.status_red);
+                        if(day == 2){
+                            MainActivity.petTodayStatus = WORSE;
+                        }
                     }
                 } else {
                     Log.d("Firebase", "get failed with ", task.getException());
@@ -466,10 +462,16 @@ public class PetmanageFragment extends Fragment implements View.OnClickListener{
                                 weekStatus.setTuesday(GOOD);
                             }
                         }
+                        if(day == 3){
+                            MainActivity.petTodayStatus = weekStatus.getTuesday();
+                        }
                     }
                     else{
                         weekStatus.setTuesday(WORSE);
                         tueStatusBox.setBackgroundResource(R.drawable.status_red);
+                        if(day == 3){
+                            MainActivity.petTodayStatus = WORSE;
+                        }
                     }
                 } else {
                     Log.d("Firebase", "get failed with ", task.getException());
@@ -530,10 +532,16 @@ public class PetmanageFragment extends Fragment implements View.OnClickListener{
                                 weekStatus.setWednesday(GOOD);
                             }
                         }
+                        if(day == 4){
+                            MainActivity.petTodayStatus = weekStatus.getWednesday();
+                        }
                     }
                     else{
                         weekStatus.setWednesday(WORSE);
                         wedStatusBox.setBackgroundResource(R.drawable.status_red);
+                        if(day == 4){
+                            MainActivity.petTodayStatus = WORSE;
+                        }
                     }
                 } else {
                     Log.d("Firebase", "get failed with ", task.getException());
@@ -594,10 +602,16 @@ public class PetmanageFragment extends Fragment implements View.OnClickListener{
                                 weekStatus.setThursday(GOOD);
                             }
                         }
+                        if(day == 5){
+                            MainActivity.petTodayStatus = weekStatus.getThursday();
+                        }
                     }
                     else{
                         weekStatus.setThursday(WORSE);
                         thuStatusBox.setBackgroundResource(R.drawable.status_red);
+                        if(day == 5){
+                            MainActivity.petTodayStatus = WORSE;
+                        }
                     }
                 } else {
                     Log.d("Firebase", "get failed with ", task.getException());
@@ -658,10 +672,16 @@ public class PetmanageFragment extends Fragment implements View.OnClickListener{
                                 weekStatus.setFriday(GOOD);
                             }
                         }
+                        if(day == 6){
+                            MainActivity.petTodayStatus = weekStatus.getSaturday();
+                        }
                     }
                     else{
                         weekStatus.setFriday(WORSE);
                         friStatusBox.setBackgroundResource(R.drawable.status_red);
+                        if(day == 6){
+                            MainActivity.petTodayStatus = WORSE;
+                        }
                     }
                 } else {
                     Log.d("Firebase", "get failed with ", task.getException());
@@ -722,10 +742,16 @@ public class PetmanageFragment extends Fragment implements View.OnClickListener{
                                 weekStatus.setSaturday(GOOD);
                             }
                         }
+                        if(day == 1){
+                            MainActivity.petTodayStatus = weekStatus.getSunday();
+                        }
                     }
                     else{
                         weekStatus.setSaturday(WORSE);
                         satStatusBox.setBackgroundResource(R.drawable.status_red);
+                        if(day == 1){
+                            MainActivity.petTodayStatus = weekStatus.getSunday();
+                        }
                     }
                 } else {
                     Log.d("Firebase", "get failed with ", task.getException());
@@ -797,7 +823,64 @@ public class PetmanageFragment extends Fragment implements View.OnClickListener{
             }
         });
 
+    }
 
+    public void getHospitalDataToFire (PetMedia pet){
+        String id = pet.getuId();
+        String petId = String.valueOf(pet.getPetId());
+        FirebaseFirestore db = FirebaseFirestore.getInstance();
+
+        DocumentReference docRef = db.collection("hospital").document(id)
+                .collection("pet").document(petId);
+        docRef.get().addOnCompleteListener(new OnCompleteListener<DocumentSnapshot>() {
+            @Override
+            public void onComplete(@NonNull Task<DocumentSnapshot> task) {
+                if (task.isSuccessful()) {
+                    DocumentSnapshot document = task.getResult();
+                    if (document.exists()) {
+                        Log.d("Firebase", "DocumentSnapshot data: " + document.getData());
+                        Map<String, Object> map = document.getData();
+
+                        hospitalData.setUid(petData.getuId());
+                        hospitalData.setId(petData.getPetId());
+                        hospitalData.setName((String) map.get("name"));
+                        hospitalData.setDoctor((String) map.get("doctor"));
+                        hospitalData.setAddress((String) map.get("address"));
+                        hospitalData.setNumber((String) map.get("number"));
+                        hospitalData.setFeature((String) map.get("feature"));
+                        MainActivity.hospitalData = hospitalData;
+                        MainActivity.isHospital = true;
+
+                        hospital.setText(hospitalData.getName());
+                        hname.setText(hospitalData.getDoctor());
+                        hospital.setVisibility(View.VISIBLE);
+                        hname.setVisibility(View.VISIBLE);
+                        hospitalCheckText.setVisibility(View.INVISIBLE);
+                    }
+                    else{
+                        hospitalData = new HospitalMedia();
+                        MainActivity.hospitalData = hospitalData;
+                        MainActivity.isHospital = false;
+
+                        hospital.setVisibility(View.INVISIBLE);
+                        hname.setVisibility(View.INVISIBLE);
+                        leftParse.setVisibility(View.INVISIBLE);
+                        rightParse.setVisibility(View.INVISIBLE);
+                        hospitalCheckText.setVisibility(View.VISIBLE);
+                    }
+                } else {
+                    Log.d("Firebase", "get failed with ", task.getException());
+                    hospitalData = new HospitalMedia();
+                    MainActivity.hospitalData = hospitalData;
+
+                    hospital.setVisibility(View.INVISIBLE);
+                    hname.setVisibility(View.INVISIBLE);
+                    leftParse.setVisibility(View.INVISIBLE);
+                    rightParse.setVisibility(View.INVISIBLE);
+                    hospitalCheckText.setVisibility(View.VISIBLE);
+                }
+            }
+        });
     }
 
 

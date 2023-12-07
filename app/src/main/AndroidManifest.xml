@@ -25,7 +25,7 @@
         android:theme="@style/Theme.MyJavaApplication"
         tools:targetApi="31">
         <activity
-            android:name=".HosipitalActivity"
+            android:name=".HospitalActivity"
             android:exported="false" />
         <activity
             android:name=".MonthWalkActivity"

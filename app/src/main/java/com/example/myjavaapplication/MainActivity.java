@@ -59,6 +59,9 @@ public class MainActivity extends AppCompatActivity {
     private FirebaseAuth auth;
     private UserMedia userData;
     public static int petPosition = 0;
+    public static long petTodayStatus = 0;
+    public static HospitalMedia hospitalData = new HospitalMedia();
+    public static boolean isHospital = false;
     private ArrayList<PetMedia> petDataList = new ArrayList<>();
     private ArrayList<WalkRecordData> walkList = new ArrayList<>();
 
@@ -69,7 +72,6 @@ public class MainActivity extends AppCompatActivity {
         setContentView(R.layout.main_page);
 
         auth = FirebaseAuth.getInstance();
-
 
         Intent intent = new Intent(this.getIntent());
         userData = (UserMedia) intent.getSerializableExtra("userData");
