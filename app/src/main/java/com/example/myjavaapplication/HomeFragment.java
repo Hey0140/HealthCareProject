@@ -13,6 +13,7 @@ import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.IntentFilter;
 import android.content.pm.PackageManager;
+import android.net.Uri;
 import android.os.Build;
 import android.os.Bundle;
 
@@ -36,6 +37,11 @@ import android.widget.SimpleAdapter;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.bumptech.glide.Glide;
+import com.bumptech.glide.Registry;
+import com.bumptech.glide.annotation.GlideModule;
+import com.bumptech.glide.module.AppGlideModule;
+import com.firebase.ui.storage.images.FirebaseImageLoader;
 import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.OnFailureListener;
 import com.google.android.gms.tasks.OnSuccessListener;
@@ -44,6 +50,8 @@ import com.google.firebase.Firebase;
 import com.google.firebase.firestore.DocumentReference;
 import com.google.firebase.firestore.DocumentSnapshot;
 import com.google.firebase.firestore.FirebaseFirestore;
+import com.google.firebase.storage.FirebaseStorage;
+import com.google.firebase.storage.StorageReference;
 import com.google.type.DateTime;
 
 import org.checkerframework.checker.units.qual.A;
@@ -199,8 +207,13 @@ public class HomeFragment extends Fragment implements View.OnClickListener {
             String calorieName = String.valueOf(needCalorie);
             homePageNeedCalorie.setText(calorieName);
 
-            profileMainImage.setImageResource(R.drawable.pet_temp_image);
-            profile.setVisibility(View.INVISIBLE);
+            if(petData.getImage().equals("")){
+                profile.setVisibility(View.VISIBLE);
+                profileMainImage.setImageResource(R.drawable.my_pet_profile);
+            } else {
+                setPetProfileImage(petData);
+            }
+
         } else {
             isPet = false;
             petData.setPetName("이름");
@@ -253,6 +266,13 @@ public class HomeFragment extends Fragment implements View.OnClickListener {
                             }
                             String calorieName = String.valueOf(needCalorie);
                             homePageNeedCalorie.setText(calorieName);
+
+                            if(petData.getImage().equals("")){
+                                profile.setVisibility(View.VISIBLE);
+                                profileMainImage.setImageResource(R.drawable.my_pet_profile);
+                            } else {
+                                setPetProfileImage(petData);
+                            }
 
                         }
                     }
@@ -677,6 +697,33 @@ public class HomeFragment extends Fragment implements View.OnClickListener {
                     }
                 });
 
+    }
+
+    public void setPetProfileImage(PetMedia pet){
+        String userId = pet.getuId();
+        String petId = String.valueOf(pet.getPetId());
+        String fileName = userId + "_" + petId;
+        FirebaseStorage storage = FirebaseStorage.getInstance("gs://pet-healthcare-45a41.appspot.com");
+        StorageReference storageReference = storage.getReference().child("images/").child("pet/").child(fileName);
+
+        storageReference.getDownloadUrl().addOnSuccessListener(new OnSuccessListener<Uri>() {
+            @Override
+            public void onSuccess(Uri uri) {
+                //이미지 로드 성공시
+
+                Glide.with(getContext())
+                        .load(uri)
+                        .into(profileMainImage);
+
+                profile.setVisibility(View.INVISIBLE);
+            }
+        }).addOnFailureListener(new OnFailureListener() {
+            @Override
+            public void onFailure(@NonNull Exception exception) {
+                profileMainImage.setImageResource(R.drawable.my_pet_profile);
+                profile.setVisibility(View.VISIBLE);
+            }
+        });
     }
 
 }

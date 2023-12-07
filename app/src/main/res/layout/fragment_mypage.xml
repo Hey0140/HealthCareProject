@@ -40,7 +40,7 @@
             app:layout_constraintTop_toBottomOf="@id/mypageProfileInfoTitle"
             >
 
-            <View
+            <de.hdodenhof.circleimageview.CircleImageView
                 android:id="@+id/profileView"
                 android:layout_width="70dp"
                 android:layout_height="70dp"
@@ -48,11 +48,10 @@
                 app:layout_constraintTop_toTopOf="parent"
                 app:layout_constraintLeft_toLeftOf="parent"
                 android:layout_marginLeft="30dp"
-                android:backgroundTint="@color/whitegray"
-                android:background="@drawable/myprofile_circle"
+                android:background="@drawable/my_pet_profile"
                 />
 
-            <ImageView
+            <View
                 android:id="@+id/profileImage"
                 android:layout_width="40dp"
                 android:layout_height="40dp"

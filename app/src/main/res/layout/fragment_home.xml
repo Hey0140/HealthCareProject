@@ -135,39 +135,51 @@
                 android:layout_marginTop="20dp"
                 app:layout_constraintTop_toBottomOf="@+id/puppyName">
 
-
-                <de.hdodenhof.circleimageview.CircleImageView
-                    android:id="@+id/homePageProfileView"
-                    android:layout_width="79dp"
-                    android:layout_height="79dp"
-                    android:background="@drawable/myprofile_circle"
-                    android:backgroundTint="@color/whitegray"
+                <androidx.constraintlayout.widget.ConstraintLayout
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    app:layout_constraintLeft_toLeftOf="parent"
+                    app:layout_constraintRight_toLeftOf="@id/homePageSmallLayout"
+                    app:layout_constraintTop_toTopOf="parent"
                     app:layout_constraintBottom_toBottomOf="parent"
-                    app:layout_constraintLeft_toLeftOf="parent"
-                    app:layout_constraintRight_toLeftOf="@id/homePageSmallLayout"
-                    app:layout_constraintTop_toTopOf="parent" />
+                    >
 
-                <ImageView
-                    android:id="@+id/homePageProfileImageView"
-                    android:layout_width="55dp"
-                    android:layout_height="55dp"
-                    android:background="@drawable/mypage_icon"
-                    android:backgroundTint="@color/middlegray"
-                    app:layout_constraintBottom_toBottomOf="@id/homePageProfileView"
-                    app:layout_constraintLeft_toLeftOf="@id/homePageProfileView"
-                    app:layout_constraintRight_toRightOf="@id/homePageProfileView"
-                    app:layout_constraintTop_toTopOf="@id/homePageProfileView" />
+                    <de.hdodenhof.circleimageview.CircleImageView
+                        android:id="@+id/homePageProfileView"
+                        android:layout_width="70dp"
+                        android:layout_height="70dp"
+                        android:background="@drawable/my_pet_profile"
+                        app:layout_constraintBottom_toTopOf="@id/homePageChangeButton"
+                        app:layout_constraintLeft_toLeftOf="parent"
+                        app:layout_constraintRight_toRightOf="parent"
+                        app:layout_constraintTop_toTopOf="parent" />
 
-                <androidx.appcompat.widget.AppCompatButton
-                    android:id="@+id/homePageChangeButton"
-                    android:layout_width="100dp"
-                    android:layout_height="25dp"
-                    android:layout_marginTop="8dp"
-                    android:background="@drawable/petbox"
-                    android:text="반려동물변경"
-                    app:layout_constraintLeft_toLeftOf="parent"
-                    app:layout_constraintRight_toLeftOf="@id/homePageSmallLayout"
-                    app:layout_constraintTop_toBottomOf="@id/homePageProfileView" />
+                    <ImageView
+                        android:id="@+id/homePageProfileImageView"
+                        android:layout_width="40dp"
+                        android:layout_height="40dp"
+                        android:background="@drawable/pet_icon"
+                        android:backgroundTint="@color/middlegray"
+                        app:layout_constraintBottom_toBottomOf="@id/homePageProfileView"
+                        app:layout_constraintLeft_toLeftOf="@id/homePageProfileView"
+                        app:layout_constraintRight_toRightOf="@id/homePageProfileView"
+                        app:layout_constraintTop_toTopOf="@id/homePageProfileView" />
+
+                    <androidx.appcompat.widget.AppCompatButton
+                        android:id="@+id/homePageChangeButton"
+                        android:layout_width="100dp"
+                        android:layout_height="25dp"
+                        android:layout_marginTop="8dp"
+                        android:background="@drawable/petbox"
+                        android:text="반려동물변경"
+                        app:layout_constraintLeft_toLeftOf="parent"
+                        app:layout_constraintRight_toRightOf="parent"
+                        app:layout_constraintTop_toBottomOf="@id/homePageProfileView" />
+
+                </androidx.constraintlayout.widget.ConstraintLayout>
+
+
+
 
                 <androidx.constraintlayout.widget.ConstraintLayout
                     android:id="@+id/homePageSmallLayout"

@@ -5,6 +5,7 @@ import static com.example.myjavaapplication.R.color.whitegreen;
 import android.content.Context;
 import android.content.Intent;
 import android.graphics.Color;
+import android.net.Uri;
 import android.os.Bundle;
 
 import androidx.annotation.NonNull;
@@ -20,11 +21,16 @@ import android.widget.ImageView;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.bumptech.glide.Glide;
 import com.google.android.gms.tasks.OnCompleteListener;
+import com.google.android.gms.tasks.OnFailureListener;
+import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.android.gms.tasks.Task;
 import com.google.firebase.firestore.DocumentReference;
 import com.google.firebase.firestore.DocumentSnapshot;
 import com.google.firebase.firestore.FirebaseFirestore;
+import com.google.firebase.storage.FirebaseStorage;
+import com.google.firebase.storage.StorageReference;
 
 import org.checkerframework.checker.units.qual.C;
 
@@ -166,8 +172,13 @@ public class PetmanageFragment extends Fragment implements View.OnClickListener{
             int day = now.get(Calendar.DAY_OF_WEEK);
             setWeekStatus(day);
 
-            petView.setImageResource(R.drawable.pet_temp_image);
-            petImageView.setVisibility(View.INVISIBLE);
+            if(petData.getImage().equals("")){
+                petImageView.setVisibility(View.VISIBLE);
+                petView.setImageResource(R.drawable.my_pet_profile);
+            } else{
+                setPetProfileImage(petData);
+            }
+
         } else {
             name.setText("반려동물을 추가해주세요.");
             weight.setText("0Kg");
@@ -206,6 +217,13 @@ public class PetmanageFragment extends Fragment implements View.OnClickListener{
                             Calendar now = Calendar.getInstance();
                             int day = now.get(Calendar.DAY_OF_WEEK);
                             setWeekStatus(day);
+
+                            if(petData.getImage().equals("")){
+                                petImageView.setVisibility(View.VISIBLE);
+                                petView.setImageResource(R.drawable.my_pet_profile);
+                            } else{
+                                setPetProfileImage(petData);
+                            }
                         }
                     }
             );
@@ -879,6 +897,32 @@ public class PetmanageFragment extends Fragment implements View.OnClickListener{
                     rightParse.setVisibility(View.INVISIBLE);
                     hospitalCheckText.setVisibility(View.VISIBLE);
                 }
+            }
+        });
+    }
+
+    public void setPetProfileImage(PetMedia pet){
+        String userId = pet.getuId();
+        String petId = String.valueOf(pet.getPetId());
+        String fileName = userId + "_" + petId;
+        FirebaseStorage storage = FirebaseStorage.getInstance("gs://pet-healthcare-45a41.appspot.com");
+        StorageReference storageReference = storage.getReference().child("images/").child("pet/").child(fileName);
+        storageReference.getDownloadUrl().addOnSuccessListener(new OnSuccessListener<Uri>() {
+            @Override
+            public void onSuccess(Uri uri) {
+                //이미지 로드 성공시
+
+                Glide.with(getContext())
+                        .load(uri)
+                        .into(petView);
+
+                petImageView.setVisibility(View.INVISIBLE);
+            }
+        }).addOnFailureListener(new OnFailureListener() {
+            @Override
+            public void onFailure(@NonNull Exception exception) {
+                petImageView.setVisibility(View.VISIBLE);
+                petView.setImageResource(R.drawable.my_pet_profile);
             }
         });
     }

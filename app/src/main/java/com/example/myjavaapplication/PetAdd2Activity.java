@@ -38,6 +38,7 @@ public class PetAdd2Activity extends AppCompatActivity implements View.OnClickLi
     private EditText petFeed, petFeedCalorie, petVaccine, petFeat;
     private Button endButton, petVaccineButton;
     private FirebaseStorage mStorage = FirebaseStorage.getInstance();
+    private boolean isUpload = false;
 
     HashMap<String, Boolean> petLikeList = new HashMap<>();
     HashMap<String, Boolean> vaccineList = new HashMap<>();
@@ -76,6 +77,7 @@ public class PetAdd2Activity extends AppCompatActivity implements View.OnClickLi
         petLikeList.put("diet", false);
         petLikeList.put("health", false);
         petLikeList.put("walk", false);
+
     }
 
     @Override
@@ -135,6 +137,8 @@ public class PetAdd2Activity extends AppCompatActivity implements View.OnClickLi
         }
     }
 
+
+
     private void setItemList(){
         for(int i = 1; i <=5; i++){
             String name = "종합백신 "+i+"차 (생후 "+(i*2+4)+"주차)";
@@ -177,7 +181,9 @@ public class PetAdd2Activity extends AppCompatActivity implements View.OnClickLi
         hashMap.put("feat", pet.getPetFeat());
         hashMap.put("feed", pet.getPetFeed());
         hashMap.put("feedcal", pet.getPetFeedCalorie());
+
         hashMap.put("image", pet.getImage());
+
         hashMap.put("kind", pet.getPetKind());
         hashMap.put("name", pet.getPetName());
         hashMap.put("sex", pet.getPetSex());
@@ -206,13 +212,41 @@ public class PetAdd2Activity extends AppCompatActivity implements View.OnClickLi
                                         userData.setCount(preCount+1);
 
                                         Log.d("Firebase", "DocumentSnapshot successfully updated!");
-                                        Intent intent = new Intent(PetAdd2Activity.this, MainActivity.class);
-                                        intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
-                                        intent.putExtra("userData", userData);
-                                        intent.putExtra("petDataList", petDataList);
-                                        startActivity(intent);
-                                        finish();
 
+                                        if( !pet.getImage().equals("")){
+                                            Uri uri = Uri.parse(pet.getImage());
+                                            FirebaseStorage storage = FirebaseStorage.getInstance();
+                                            String fileName = pet.getuId() + "_" +pet.getPetId();
+                                            StorageReference storageRef = storage.getReference().child("images/").child("pet/").child(fileName);
+                                            UploadTask uploadTask = storageRef.putFile(uri);
+
+                                            Toast.makeText(PetAdd2Activity.this, "업로드 중입니다. 잠시만 기다려주세요.", Toast.LENGTH_SHORT).show();
+                                            uploadTask.addOnFailureListener(new OnFailureListener() {
+                                                @Override
+                                                public void onFailure(@NonNull Exception exception) {
+                                                    Log.i("Firebase Storage", "error");
+                                                }
+                                            }).addOnSuccessListener(new OnSuccessListener<UploadTask.TaskSnapshot>() {
+                                                @Override
+                                                public void onSuccess(UploadTask.TaskSnapshot taskSnapshot) {
+                                                    Log.i("Firebase Storage", "success");
+                                                    Intent intent = new Intent(PetAdd2Activity.this, MainActivity.class);
+                                                    intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
+                                                    intent.putExtra("userData", userData);
+                                                    intent.putExtra("petDataList", petDataList);
+                                                    startActivity(intent);
+                                                    finish();
+                                                }
+                                            });
+                                        }
+                                        else{
+                                            Intent intent = new Intent(PetAdd2Activity.this, MainActivity.class);
+                                            intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
+                                            intent.putExtra("userData", userData);
+                                            intent.putExtra("petDataList", petDataList);
+                                            startActivity(intent);
+                                            finish();
+                                        }
                                     }
                                 })
                                 .addOnFailureListener(new OnFailureListener() {
@@ -229,7 +263,6 @@ public class PetAdd2Activity extends AppCompatActivity implements View.OnClickLi
                         Log.w("Firebase", "Error writing document", e);
                     }
                 });
-
 
 
     }
