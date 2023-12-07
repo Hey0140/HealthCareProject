@@ -36,7 +36,7 @@ public class PetAdd2Activity extends AppCompatActivity implements View.OnClickLi
     private ArrayList<PetMedia> petDataList;
     private CheckBox diet, health, walk;
     private EditText petFeed, petFeedCalorie, petVaccine, petFeat;
-    private Button endButton, petVaccineButton, uploadButton;
+    private Button endButton, petVaccineButton;
     private FirebaseStorage mStorage = FirebaseStorage.getInstance();
     private boolean isUpload = false;
 
@@ -59,15 +59,10 @@ public class PetAdd2Activity extends AppCompatActivity implements View.OnClickLi
         petFeedCalorie = findViewById(R.id.petFeedCalorie);
         petVaccine = findViewById(R.id.petVaccine);
         petFeat = findViewById(R.id.petFeat);
-        uploadButton = findViewById(R.id.petAddUploadButton);
-
-
-
 
         petVaccine.setEnabled(false);
         
         endButton.setOnClickListener(this);
-        uploadButton.setOnClickListener(this);
         petVaccineButton.setOnClickListener(this);
         diet.setOnClickListener(this);
         health.setOnClickListener(this);
@@ -83,25 +78,10 @@ public class PetAdd2Activity extends AppCompatActivity implements View.OnClickLi
         petLikeList.put("health", false);
         petLikeList.put("walk", false);
 
-
-
-        if(!petData.getImage().equals("")){
-            uploadButton.setVisibility(View.VISIBLE);
-            endButton.setVisibility(View.INVISIBLE);
-            isUpload = false;
-        }
-        else{
-            uploadButton.setVisibility(View.INVISIBLE);
-            endButton.setVisibility(View.VISIBLE);
-            isUpload = true;
-        }
     }
 
     @Override
     public void onClick(View v) {
-        if(v == uploadButton){
-           onImageUpload(petData);
-        }
         if(v == endButton){
             if(petFeed.getText().toString().length() < 1){
                 Toast.makeText(this, "사료를 입력하세요.",Toast.LENGTH_SHORT).show();
@@ -201,7 +181,9 @@ public class PetAdd2Activity extends AppCompatActivity implements View.OnClickLi
         hashMap.put("feat", pet.getPetFeat());
         hashMap.put("feed", pet.getPetFeed());
         hashMap.put("feedcal", pet.getPetFeedCalorie());
+
         hashMap.put("image", pet.getImage());
+
         hashMap.put("kind", pet.getPetKind());
         hashMap.put("name", pet.getPetName());
         hashMap.put("sex", pet.getPetSex());
@@ -231,15 +213,40 @@ public class PetAdd2Activity extends AppCompatActivity implements View.OnClickLi
 
                                         Log.d("Firebase", "DocumentSnapshot successfully updated!");
 
+                                        if( !pet.getImage().equals("")){
+                                            Uri uri = Uri.parse(pet.getImage());
+                                            FirebaseStorage storage = FirebaseStorage.getInstance();
+                                            String fileName = pet.getuId() + "_" +pet.getPetId();
+                                            StorageReference storageRef = storage.getReference().child("images/").child("pet/").child(fileName);
+                                            UploadTask uploadTask = storageRef.putFile(uri);
 
-
-//                                        Intent intent = new Intent(PetAdd2Activity.this, MainActivity.class);
-//                                        intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
-//                                        intent.putExtra("userData", userData);
-//                                        intent.putExtra("petDataList", petDataList);
-//                                        startActivity(intent);
-//                                        finish();
-
+                                            Toast.makeText(PetAdd2Activity.this, "업로드 중입니다. 잠시만 기다려주세요.", Toast.LENGTH_SHORT).show();
+                                            uploadTask.addOnFailureListener(new OnFailureListener() {
+                                                @Override
+                                                public void onFailure(@NonNull Exception exception) {
+                                                    Log.i("Firebase Storage", "error");
+                                                }
+                                            }).addOnSuccessListener(new OnSuccessListener<UploadTask.TaskSnapshot>() {
+                                                @Override
+                                                public void onSuccess(UploadTask.TaskSnapshot taskSnapshot) {
+                                                    Log.i("Firebase Storage", "success");
+                                                    Intent intent = new Intent(PetAdd2Activity.this, MainActivity.class);
+                                                    intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
+                                                    intent.putExtra("userData", userData);
+                                                    intent.putExtra("petDataList", petDataList);
+                                                    startActivity(intent);
+                                                    finish();
+                                                }
+                                            });
+                                        }
+                                        else{
+                                            Intent intent = new Intent(PetAdd2Activity.this, MainActivity.class);
+                                            intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
+                                            intent.putExtra("userData", userData);
+                                            intent.putExtra("petDataList", petDataList);
+                                            startActivity(intent);
+                                            finish();
+                                        }
                                     }
                                 })
                                 .addOnFailureListener(new OnFailureListener() {
@@ -257,30 +264,6 @@ public class PetAdd2Activity extends AppCompatActivity implements View.OnClickLi
                     }
                 });
 
-
-    }
-
-    private void onImageUpload(PetMedia pet) {
-        Uri uri = Uri.parse(pet.getImage());
-        FirebaseStorage storage = FirebaseStorage.getInstance();
-        String fileName = pet.getuId() + "_" +pet.getPetId();
-        StorageReference storageRef = storage.getReference().child("images/").child("pet/").child(fileName);
-        UploadTask uploadTask = storageRef.putFile(uri);
-        uploadTask.addOnFailureListener(new OnFailureListener() {
-            @Override
-            public void onFailure(@NonNull Exception exception) {
-                Log.i("Firebase Storage", "error");
-            }
-        }).addOnSuccessListener(new OnSuccessListener<UploadTask.TaskSnapshot>() {
-            @Override
-            public void onSuccess(UploadTask.TaskSnapshot taskSnapshot) {
-                Log.i("Firebase Storage", "success");
-                isUpload = true;
-                Toast.makeText(PetAdd2Activity.this, "업로드되었습니다. 완료 버튼을 눌러주세요.", Toast.LENGTH_SHORT).show();
-                endButton.setVisibility(View.VISIBLE);
-                uploadButton.setVisibility(View.INVISIBLE);
-            }
-        });
 
     }
 

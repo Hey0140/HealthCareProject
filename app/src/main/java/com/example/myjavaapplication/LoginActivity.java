@@ -226,7 +226,7 @@ public class LoginActivity extends AppCompatActivity implements View.OnClickList
                 String email = gsia.getEmail();
                 Uri personPhoto = gsia.getPhotoUrl();
 
-                setDataToFirestore(id, email, personName, "", BASIC_MEMBER, personPhoto.toString());
+                setDataToFirestore(id, email, personName, "", BASIC_MEMBER, "");
             }
         } catch (ApiException e) {
             Log.e("google", "signInResult:failed code=" + e.getStatusCode());

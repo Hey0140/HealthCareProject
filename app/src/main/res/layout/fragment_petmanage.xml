@@ -93,8 +93,7 @@
                 android:layout_width="70dp"
                 android:layout_height="70dp"
                 android:layout_marginLeft="60dp"
-                android:background="@drawable/myprofile_circle"
-                android:backgroundTint="@color/whitegray"
+                android:background="@drawable/my_pet_profile"
                 app:layout_constraintLeft_toLeftOf="parent"
                 app:layout_constraintTop_toTopOf="parent"
                 app:layout_constraintBottom_toBottomOf="parent"/>

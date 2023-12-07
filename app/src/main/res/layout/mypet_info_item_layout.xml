@@ -13,7 +13,7 @@
         android:background="@drawable/mypet_info_item_box"
         />
 
-    <View
+    <de.hdodenhof.circleimageview.CircleImageView
         android:id="@+id/myPetInfoView"
         android:layout_width="40dp"
         android:layout_height="40dp"
@@ -24,13 +24,16 @@
         android:backgroundTint="@color/whitegray"
         android:background="@drawable/myprofile_circle"
         />
-    <ImageView
+
+    <View
         android:id="@+id/myPetInfoProfile"
         android:layout_width="30dp"
         android:layout_height="30dp"
         app:layout_constraintTop_toTopOf="@id/myPetInfoButton"
         app:layout_constraintBottom_toBottomOf="@id/myPetInfoButton"
         app:layout_constraintLeft_toLeftOf="@id/myPetInfoView"
+        android:background="@drawable/pet_icon"
+        android:backgroundTint="@color/middlegray"
         app:layout_constraintRight_toRightOf="@id/myPetInfoView"
         />
 

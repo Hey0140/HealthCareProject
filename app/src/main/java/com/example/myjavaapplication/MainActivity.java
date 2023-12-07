@@ -17,6 +17,7 @@ import android.bluetooth.BluetoothDevice;
 import android.bluetooth.BluetoothSocket;
 import android.content.Intent;
 import android.content.pm.PackageManager;
+import android.graphics.BitmapFactory;
 import android.media.MediaPlayer;
 import android.os.Handler;
 import android.util.Log;
@@ -38,6 +39,7 @@ import com.google.firebase.firestore.QueryDocumentSnapshot;
 import com.google.firebase.firestore.QuerySnapshot;
 import com.google.firebase.firestore.auth.User;
 
+import java.io.InputStream;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Calendar;
@@ -48,6 +50,7 @@ import java.util.Objects;
 import java.util.Set;
 
 public class MainActivity extends AppCompatActivity {
+    private final static int  REQUEST_IMAGE_CODE = 903;
 
     private FragmentManager fmanager = getSupportFragmentManager();
     private HomeFragment homeFragment = new HomeFragment();
@@ -144,4 +147,8 @@ public class MainActivity extends AppCompatActivity {
         petDataList = (ArrayList<PetMedia>) intent.getSerializableExtra("petDataList");
     }
 
+    @Override
+    protected void onActivityResult(int requestCode, int resultCode, @Nullable Intent data) {
+        super.onActivityResult(requestCode, resultCode, data);
+    }
 }

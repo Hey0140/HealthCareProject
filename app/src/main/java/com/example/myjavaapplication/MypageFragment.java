@@ -1,13 +1,18 @@
 package com.example.myjavaapplication;
 
+import static android.app.Activity.RESULT_OK;
+
 import android.app.AlertDialog;
 import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
+import android.graphics.Bitmap;
+import android.graphics.BitmapFactory;
 import android.net.Uri;
 import android.os.Bundle;
 
 import androidx.annotation.NonNull;
+import androidx.annotation.Nullable;
 import androidx.fragment.app.Fragment;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
@@ -21,15 +26,23 @@ import android.widget.ImageView;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.bumptech.glide.Glide;
 import com.google.android.gms.tasks.OnFailureListener;
 import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.firestore.DocumentReference;
 import com.google.firebase.firestore.FirebaseFirestore;
+import com.google.firebase.storage.FirebaseStorage;
+import com.google.firebase.storage.StorageReference;
+import com.google.firebase.storage.UploadTask;
 
+import java.io.InputStream;
 import java.util.ArrayList;
 
+import de.hdodenhof.circleimageview.CircleImageView;
+
 public class MypageFragment extends Fragment implements View.OnClickListener {
+    private final static int  REQUEST_IMAGE_CODE = 903;
     private FirebaseAuth auth;
 
     private ArrayList<MyPetInfoData> list= new ArrayList<>();
@@ -40,7 +53,12 @@ public class MypageFragment extends Fragment implements View.OnClickListener {
     private UserMedia userData;
     private ArrayList<PetMedia> petDataList;
     private TextView profileName, profileEmail;
-    private ImageView profileImage;
+    private View profileImage;
+    private CircleImageView profileView;
+    private Uri imageUri;
+    private Bitmap image;
+
+    private ArrayList<String> imageString = new ArrayList<>();
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
@@ -57,8 +75,10 @@ public class MypageFragment extends Fragment implements View.OnClickListener {
         profileName = view.findViewById(R.id.profileName);
         profileEmail = view.findViewById(R.id.profileEmail);
         profileImage = view.findViewById(R.id.profileImage);
+        profileView = view.findViewById(R.id.profileView);
 
         logoutButton.setOnClickListener(this);
+        profileView.setOnClickListener(this);
 
         petDataList = new ArrayList<>();
 
@@ -66,8 +86,12 @@ public class MypageFragment extends Fragment implements View.OnClickListener {
         petDataList = (ArrayList<PetMedia>) getActivity().getIntent().getSerializableExtra("petDataList");
 
         if(userData.getImage() != null){
-            if(!userData.getImage().equals("")){
-                profileImage.setImageURI(Uri.parse(userData.getImage()));
+            if(userData.getImage().equals("")){
+                profileImage.setVisibility(View.VISIBLE);
+                profileView.setImageResource(R.drawable.my_pet_profile);
+            }
+            else {
+                getPetProfileImage(userData);
             }
         }
         profileName.setText(userData.getName());
@@ -79,7 +103,12 @@ public class MypageFragment extends Fragment implements View.OnClickListener {
             MyPetInfoData mpid = new MyPetInfoData();
             PetMedia petMedia = petDataList.get(i);
             mpid.setName(petMedia.getPetName());
-            mpid.setImageId(R.drawable.mypetprofile_basic_icon);
+            if(!petMedia.getImage().equals("")){
+                String imageId = petMedia.getuId() + "_" + petMedia.getPetId();
+                mpid.setImageId(imageId);
+            }else{
+                mpid.setImageId("");
+            }
             mpid.setViewType(Code.ViewType.BASIC);
             Log.i("check", petMedia.getPetName());
             list.add(mpid);
@@ -89,7 +118,7 @@ public class MypageFragment extends Fragment implements View.OnClickListener {
 
         RecyclerView recyclerView = view.findViewById(R.id.myPetInfoRecyclerView);
         recyclerView.setLayoutManager(new LinearLayoutManager(getActivity(), LinearLayoutManager.HORIZONTAL,false));
-        adapter = new MypetInfoAdapter(list);
+        adapter = new MypetInfoAdapter(list, getContext());
         adapter.setOnItemClickListener(new MypetInfoAdapter.OnListItemSelected() {
             @Override
             public void onItemSelected(View v, int position, int vg) {
@@ -98,7 +127,7 @@ public class MypageFragment extends Fragment implements View.OnClickListener {
                             builder.setTitle("확인창")
                                     .setMessage("삭제하시겠습니까?")
                                     .setCancelable(false)
-                                    .setPositiveButton("확인", new DialogInterface.OnClickListener() {
+                                    .setPositiveButton("삭제", new DialogInterface.OnClickListener() {
                                         @Override
                                         public void onClick(DialogInterface dialogInterface, int i) {
 
@@ -141,6 +170,41 @@ public class MypageFragment extends Fragment implements View.OnClickListener {
             Toast.makeText(getActivity(), "로그아웃 되었습니다.", Toast.LENGTH_LONG).show();
             getActivity().finish();
         }
+        if(v == profileView){
+            Intent intent = new Intent();
+            intent.setType("image/*");
+            intent.setAction(intent.ACTION_GET_CONTENT);
+            startActivityForResult(intent, 903);
+        }
+    }
+
+    @Override
+    public void startActivityForResult(Intent intent, int requestCode) {
+        super.startActivityForResult(intent, requestCode);
+
+    }
+
+    @Override
+    public void onActivityResult(int requestCode, int resultCode, @Nullable Intent data) {
+        super.onActivityResult(requestCode, resultCode, data);
+        if( requestCode == REQUEST_IMAGE_CODE){
+            if(resultCode == RESULT_OK){
+                imageUri = data.getData();
+                try{
+
+                    InputStream in = getActivity().getContentResolver().openInputStream(data.getData());
+                    image = BitmapFactory.decodeStream(in);
+                    in.close();
+                    profileView.setImageBitmap(image);
+                    profileImage.setVisibility(View.INVISIBLE);
+
+                    userData.setImage(String.valueOf(imageUri));
+                    setProfileImage(userData, imageUri);
+                }catch (Exception e){
+
+                }
+            }
+        }
     }
 
     public void onSetDeletePet(PetMedia pet, int position){
@@ -171,4 +235,52 @@ public class MypageFragment extends Fragment implements View.OnClickListener {
 
     }
 
+
+    public void setProfileImage(UserMedia user, Uri uri){
+        FirebaseStorage storage = FirebaseStorage.getInstance();
+        String fileName = user.getUid();
+        StorageReference storageRef = storage.getReference().child("images/").child("users/").child(fileName);
+        UploadTask uploadTask = storageRef.putFile(uri);
+
+        Toast.makeText(getContext(), "업로드 중입니다. 잠시만 기다려주세요.", Toast.LENGTH_SHORT).show();
+        uploadTask.addOnFailureListener(new OnFailureListener() {
+            @Override
+            public void onFailure(@NonNull Exception exception) {
+                Log.i("Firebase Storage", "error");
+            }
+        }).addOnSuccessListener(new OnSuccessListener<UploadTask.TaskSnapshot>() {
+            @Override
+            public void onSuccess(UploadTask.TaskSnapshot taskSnapshot) {
+                Log.i("Firebase Storage", "success");
+                Toast.makeText(getContext(), "업로드 되었습니다!", Toast.LENGTH_SHORT).show();
+
+            }
+        });
+    }
+
+    public void getPetProfileImage(UserMedia user){
+        String userId = user.getUid();
+        String fileName = userId;
+        FirebaseStorage storage = FirebaseStorage.getInstance("gs://pet-healthcare-45a41.appspot.com");
+        StorageReference storageReference = storage.getReference().child("images/").child("users/").child(fileName);
+
+        storageReference.getDownloadUrl().addOnSuccessListener(new OnSuccessListener<Uri>() {
+            @Override
+            public void onSuccess(Uri uri) {
+                //이미지 로드 성공시
+
+                Glide.with(getContext())
+                        .load(uri)
+                        .into(profileView);
+
+                profileImage.setVisibility(View.INVISIBLE);
+            }
+        }).addOnFailureListener(new OnFailureListener() {
+            @Override
+            public void onFailure(@NonNull Exception exception) {
+                profileImage.setVisibility(View.VISIBLE);
+                profileView.setImageResource(R.drawable.my_pet_profile);
+            }
+        });
+    }
 }
