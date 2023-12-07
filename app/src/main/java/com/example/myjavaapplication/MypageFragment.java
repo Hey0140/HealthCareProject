@@ -101,6 +101,7 @@ public class MypageFragment extends Fragment implements View.OnClickListener {
                                     .setPositiveButton("확인", new DialogInterface.OnClickListener() {
                                         @Override
                                         public void onClick(DialogInterface dialogInterface, int i) {
+
                                             PetMedia data = petDataList.get(position);
                                             onSetDeletePet(data, position);
                                         }
@@ -154,8 +155,11 @@ public class MypageFragment extends Fragment implements View.OnClickListener {
                     @Override
                     public void onSuccess(Void aVoid) {
                         Log.d("Firestore", "DocumentSnapshot successfully deleted!");
-                        petDataList.remove(position);
                         adapter.notifyItemRemoved(position);
+                        list.remove(position);
+                        petDataList.remove(position);
+
+                        MainActivity.petPosition = 0;
                     }
                 })
                 .addOnFailureListener(new OnFailureListener() {

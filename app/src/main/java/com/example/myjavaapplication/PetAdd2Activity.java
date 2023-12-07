@@ -4,6 +4,7 @@ import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
 
 import android.content.Intent;
+import android.net.Uri;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.View;
@@ -16,6 +17,9 @@ import com.google.android.gms.tasks.OnFailureListener;
 import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.firebase.firestore.DocumentReference;
 import com.google.firebase.firestore.FirebaseFirestore;
+import com.google.firebase.storage.FirebaseStorage;
+import com.google.firebase.storage.StorageReference;
+import com.google.firebase.storage.UploadTask;
 
 import org.checkerframework.checker.units.qual.A;
 
@@ -33,6 +37,7 @@ public class PetAdd2Activity extends AppCompatActivity implements View.OnClickLi
     private CheckBox diet, health, walk;
     private EditText petFeed, petFeedCalorie, petVaccine, petFeat;
     private Button endButton, petVaccineButton;
+    private FirebaseStorage mStorage = FirebaseStorage.getInstance();
 
     HashMap<String, Boolean> petLikeList = new HashMap<>();
     HashMap<String, Boolean> vaccineList = new HashMap<>();
@@ -172,7 +177,7 @@ public class PetAdd2Activity extends AppCompatActivity implements View.OnClickLi
         hashMap.put("feat", pet.getPetFeat());
         hashMap.put("feed", pet.getPetFeed());
         hashMap.put("feedcal", pet.getPetFeedCalorie());
-        hashMap.put("image", "");
+        hashMap.put("image", pet.getImage());
         hashMap.put("kind", pet.getPetKind());
         hashMap.put("name", pet.getPetName());
         hashMap.put("sex", pet.getPetSex());
@@ -207,6 +212,7 @@ public class PetAdd2Activity extends AppCompatActivity implements View.OnClickLi
                                         intent.putExtra("petDataList", petDataList);
                                         startActivity(intent);
                                         finish();
+
                                     }
                                 })
                                 .addOnFailureListener(new OnFailureListener() {
