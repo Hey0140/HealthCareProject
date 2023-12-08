@@ -186,6 +186,7 @@
                 app:layout_constraintLeft_toLeftOf="parent"
                 app:layout_constraintRight_toRightOf="parent"
                 >
+
                 <TextView
                     android:id="@+id/myPetFriendTitle"
                     android:layout_width="wrap_content"
@@ -194,7 +195,7 @@
                     app:layout_constraintRight_toRightOf="parent"
                     app:layout_constraintTop_toTopOf="parent"
                     android:layout_marginTop="30dp"
-                    android:text="내 펫친구 "
+                    android:text="좋아요한 게시글"
                     android:textSize="15dp"
                     />
 
@@ -231,7 +232,7 @@
                     app:layout_constraintRight_toRightOf="parent"
                     app:layout_constraintTop_toTopOf="parent"
                     android:layout_marginTop="30dp"
-                    android:text="쪽지함"
+                    android:text="내 펫 친구"
                     android:textSize="15dp"
                     />
 

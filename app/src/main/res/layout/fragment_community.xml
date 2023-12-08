@@ -3,12 +3,118 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
     tools:context=".CommunityFragment">
 
-    <!-- TODO: Update blank fragment layout -->
-    <TextView
+    <androidx.constraintlayout.widget.ConstraintLayout
         android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        android:text="커뮤니티 fragment" />
+        android:layout_height="match_parent">
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:orientation="vertical">
+
+            <androidx.constraintlayout.widget.ConstraintLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content">
+
+                <TextView
+                    android:id="@+id/communityPageTitle"
+                    android:layout_width="match_parent"
+                    android:layout_height="30dp"
+                    android:layout_marginLeft="20dp"
+                    android:layout_marginTop="20dp"
+                    android:text="Community"
+                    android:textSize="20dp"
+                    app:layout_constraintLeft_toLeftOf="parent"
+                    app:layout_constraintTop_toTopOf="parent" />
+
+                <View
+                    android:id="@+id/communitySearchBox"
+                    android:layout_width="360dp"
+                    android:layout_height="40dp"
+                    android:layout_marginLeft="20dp"
+                    android:layout_marginTop="20dp"
+                    android:layout_marginRight="20dp"
+                    android:background="@drawable/join_write_box"
+                    app:layout_constraintLeft_toLeftOf="parent"
+                    app:layout_constraintRight_toRightOf="parent"
+                    app:layout_constraintTop_toBottomOf="@id/communityPageTitle"
+                    />
+
+                <EditText
+                    android:id="@+id/communitySearchText"
+                    android:layout_width="300dp"
+                    android:layout_height="30dp"
+                    android:layout_marginLeft="12dp"
+                    android:background="@null"
+                    android:inputType="text"
+                    android:maxLines="1"
+                    android:textSize="16dp"
+                    android:ellipsize="end"
+                    android:textColor="@color/deepblue"
+                    app:layout_constraintTop_toTopOf="@id/communitySearchBox"
+                    app:layout_constraintBottom_toBottomOf="@id/communitySearchBox"
+                    app:layout_constraintLeft_toLeftOf="@id/communitySearchBox" />
+
+                <View
+                    android:id="@+id/communitySearchIcon"
+                    android:layout_width="30dp"
+                    android:layout_height="30dp"
+                    android:background="@drawable/search_icon"
+                    android:layout_marginRight="12dp"
+                    app:layout_constraintRight_toRightOf="@id/communitySearchBox"
+                    app:layout_constraintBottom_toBottomOf="@id/communitySearchBox"
+                    app:layout_constraintTop_toTopOf="@id/communitySearchBox"
+                    />
+
+                <View
+                    android:layout_width="match_parent"
+                    android:layout_height="20dp"
+                    app:layout_constraintTop_toBottomOf="@id/communitySearchBox"
+                    />
+
+
+            </androidx.constraintlayout.widget.ConstraintLayout>
+
+            <androidx.recyclerview.widget.RecyclerView
+                android:id="@+id/communityRecyclerView"
+                android:layout_width="match_parent"
+                android:layout_height="0dp"
+                android:layout_weight="1"
+                android:layout_marginLeft="5dp"
+                android:layout_marginRight="5dp"
+                />
+
+        </LinearLayout>
+
+        <View
+            android:id="@+id/communityCreateView"
+            android:layout_width="60dp"
+            android:layout_height="60dp"
+            android:background="@drawable/myprofile_circle"
+            android:backgroundTint="@color/skyblue"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintRight_toRightOf="parent"
+            android:layout_marginBottom="30dp"
+            android:layout_marginRight="30dp"
+            />
+
+        <View
+            android:layout_width="30dp"
+            android:layout_height="30dp"
+            android:background="@drawable/create_icon"
+            app:layout_constraintLeft_toLeftOf="@id/communityCreateView"
+            app:layout_constraintRight_toRightOf="@id/communityCreateView"
+            app:layout_constraintTop_toTopOf="@id/communityCreateView"
+            app:layout_constraintBottom_toBottomOf="@id/communityCreateView"/>
+
+
+    </androidx.constraintlayout.widget.ConstraintLayout>
+
+
+
+
 
 </FrameLayout>

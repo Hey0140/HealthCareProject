@@ -16,13 +16,13 @@
         android:icon="@drawable/pet_icon"
         app:showAsAction="always"
         />
-<!--    <item-->
-<!--        android:id="@+id/communityIcon"-->
-<!--        android:enabled="true"-->
-<!--        android:title="community"-->
-<!--        android:icon="@drawable/community_icon"-->
-<!--        app:showAsAction="always"-->
-<!--        />-->
+    <item
+        android:id="@+id/communityIcon"
+        android:enabled="true"
+        android:title="community"
+        android:icon="@drawable/community_icon"
+        app:showAsAction="always"
+        />
     <item
         android:id="@+id/mypageIcon"
         android:enabled="true"
