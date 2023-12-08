@@ -44,6 +44,7 @@ import de.hdodenhof.circleimageview.CircleImageView;
 public class MypageFragment extends Fragment implements View.OnClickListener {
     private final static int  REQUEST_IMAGE_CODE = 903;
 //    private final static int  REQUEST_IMAGE_CODE2 = 1003;
+    private MainActivity mActivity;
     private FirebaseAuth auth;
 
     private ArrayList<MyPetInfoData> list= new ArrayList<>();
@@ -327,6 +328,18 @@ public class MypageFragment extends Fragment implements View.OnClickListener {
         });
     }
 
+    @Override
+    public void onAttach(@NonNull Context context) {
+        super.onAttach(context);
+        mActivity = (MainActivity) getActivity();
+    }
+
+    @Override
+    public void onDetach() {
+        super.onDetach();
+        mActivity = null;
+    }
+
     public void getPetProfileImage(UserMedia user){
         String userId = user.getUid();
         String fileName = userId;
@@ -337,12 +350,14 @@ public class MypageFragment extends Fragment implements View.OnClickListener {
             @Override
             public void onSuccess(Uri uri) {
                 //이미지 로드 성공시
+                if(mActivity != null){
+                    Glide.with(getContext())
+                            .load(uri)
+                            .into(profileView);
 
-                Glide.with(getContext())
-                        .load(uri)
-                        .into(profileView);
+                    profileImage.setVisibility(View.INVISIBLE);
+                }
 
-                profileImage.setVisibility(View.INVISIBLE);
             }
         }).addOnFailureListener(new OnFailureListener() {
             @Override

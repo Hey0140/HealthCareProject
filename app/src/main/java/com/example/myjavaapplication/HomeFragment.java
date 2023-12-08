@@ -85,6 +85,7 @@ public class HomeFragment extends Fragment implements View.OnClickListener {
     private int readBufferPosition;
     private List<String> dataPaired;
     private WalkRecordAdapter adapter;
+    private MainActivity mActivity;
     private final static int  REQUEST_PERMISSION_CODE = 801;
     private final static int  REQUEST_PERMISSION_UNDER_CODE = 802;
     private final long MALE = 11;
@@ -129,6 +130,8 @@ public class HomeFragment extends Fragment implements View.OnClickListener {
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+
+
     }
 
     @Override
@@ -711,11 +714,14 @@ public class HomeFragment extends Fragment implements View.OnClickListener {
             public void onSuccess(Uri uri) {
                 //이미지 로드 성공시
 
-                Glide.with(getContext())
-                        .load(uri)
-                        .into(profileMainImage);
+                if(mActivity != null){
+                    Glide.with(mActivity)
+                            .load(uri)
+                            .into(profileMainImage);
 
-                profile.setVisibility(View.INVISIBLE);
+                    profile.setVisibility(View.INVISIBLE);
+                }
+
             }
         }).addOnFailureListener(new OnFailureListener() {
             @Override
@@ -725,5 +731,19 @@ public class HomeFragment extends Fragment implements View.OnClickListener {
             }
         });
     }
+
+
+    @Override
+    public void onAttach(Context context) {
+        super.onAttach(context);
+        mActivity = (MainActivity) getActivity();
+    }
+
+    @Override
+    public void onDetach() {
+        super.onDetach();
+        mActivity = null;
+    }
+
 
 }

@@ -58,7 +58,7 @@ public class MainActivity extends AppCompatActivity {
     private MypageFragment mypageFragment = new MypageFragment();
 
     private PetStatusFragment petStatusFragment = new PetStatusFragment();
-    //    private CommunityFragment communityFragment = new CommunityFragment();
+    private CommunityFragment communityFragment = new CommunityFragment();
     private FirebaseAuth auth;
     private UserMedia userData;
     public static int petPosition = 0;
@@ -108,9 +108,12 @@ public class MainActivity extends AppCompatActivity {
                 petmanageFragment.setArguments(bundle);
                 ftransaction.replace(R.id.mainFragmentLayout, petmanageFragment).commitAllowingStateLoss();
             }
-//            if(item.getItemId() == R.id.communityIcon) {
-//                ftransaction.replace(R.id.mainFragmentLayout, communityFragment).commitAllowingStateLoss();
-//            }
+            if(item.getItemId() == R.id.communityIcon) {
+                Bundle bundle = new Bundle();
+                bundle.putSerializable("userData", userData);
+                communityFragment.setArguments(bundle);
+                ftransaction.replace(R.id.mainFragmentLayout, communityFragment).commitAllowingStateLoss();
+            }
             if(item.getItemId() == R.id.mypageIcon) {
                 Bundle bundle = new Bundle();
                 bundle.putSerializable("userData", userData);
