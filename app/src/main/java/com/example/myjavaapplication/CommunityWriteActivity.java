@@ -166,7 +166,7 @@ public class CommunityWriteActivity extends AppCompatActivity implements View.On
                                 .addOnSuccessListener(new OnSuccessListener<Void>() {
                                     @Override
                                     public void onSuccess(Void unused) {
-
+                                        CommunityFragment.isNew = true;
                                         if( !com.getImageUri().equals("")){
                                             Uri uri = Uri.parse(com.getImageUri());
                                             FirebaseStorage storage = FirebaseStorage.getInstance();

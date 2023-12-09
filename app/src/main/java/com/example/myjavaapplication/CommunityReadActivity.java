@@ -130,11 +130,13 @@ public class CommunityReadActivity extends AppCompatActivity implements View.OnC
                 isHeartCommunity = false;
                 communityData.setHeart(false);
                 heartButton.setBackgroundResource(R.drawable.not_fill_favorite_icon);
+                setFalseHeartOnFirebase(communityData);
             }
             else{
                 isHeartCommunity = true;
                 communityData.setHeart(true);
                 heartButton.setBackgroundResource(R.drawable.filled_favorite_icon);
+                setTrueHeartOnFirebase(communityData);
             }
         }
     }
@@ -223,9 +225,26 @@ public class CommunityReadActivity extends AppCompatActivity implements View.OnC
                 .addOnSuccessListener(new OnSuccessListener<DocumentReference>() {
                     @Override
                     public void onSuccess(DocumentReference documentReference) {
-                        itemList.add(data);
-                        adapter.notifyItemInserted(itemList.size()-1);
-                        commentDataList.add(com);
+                        DocumentReference dr = db.collection("community").document(com.getComId());
+                        dr.update("commentNumber", communityData.getCommentNumber() + 1)
+                                        .addOnCompleteListener(new OnCompleteListener<Void>() {
+                                            @Override
+                                            public void onComplete(@NonNull Task<Void> task) {
+                                                itemList.add(data);
+                                                long count = communityData.getCommentNumber() + 1;
+                                                communityData.setCommentNumber(count);
+                                                CommunityFragment.selectedCommentNumber  = count;
+                                                CommunityFragment.isComment = true;
+                                                adapter.notifyItemInserted(itemList.size()-1);
+                                                commentDataList.add(com);
+                                            }
+                                        })
+                                .addOnFailureListener(new OnFailureListener() {
+                                    @Override
+                                    public void onFailure(@NonNull Exception e) {
+
+                                    }
+                                });
                     }
                 })
                 .addOnFailureListener(new OnFailureListener() {
@@ -235,6 +254,105 @@ public class CommunityReadActivity extends AppCompatActivity implements View.OnC
                     }
                 });
 
+    }
+
+
+
+    public void setTrueHeartOnFirebase(CommunityMedia com){
+
+        FirebaseFirestore db = FirebaseFirestore.getInstance();
+
+        HashMap<String, Object> hashMap = new HashMap<>();
+        String uid = com.getUid();
+        hashMap.put("uid", uid);
+
+        SimpleDateFormat sdf1 = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
+        Date now = new Date();
+        String time = sdf1.format(now);
+
+        hashMap.put("timeStamp", time);
+        hashMap.put("title", com.getTitle());
+        hashMap.put("body", com.getBody());
+        hashMap.put("image", com.getImageUri());
+        hashMap.put("heart", com.isHeart());
+        hashMap.put("heartNumber", com.getHeartNumber());
+        hashMap.put("commentNumber", com.getCommentNumber());
+        hashMap.put("comId", com.getComid());
+
+
+        db.collection("communityUser").document(com.getUid())
+                .collection("like").document(com.getComid())
+                .set(hashMap)
+                .addOnSuccessListener(new OnSuccessListener<Void>() {
+                    @Override
+                    public void onSuccess(Void aVoid) {
+                        Log.d("Firestore", "DocumentSnapshot successfully written!");
+                        DocumentReference dr = db.collection("community").document(com.getComid());
+                        dr.update("heartNumber", com.getHeartNumber() + 1)
+                                .addOnSuccessListener(new OnSuccessListener<Void>() {
+                                    @Override
+                                    public void onSuccess(Void unused) {
+                                        long count = com.getHeartNumber() + 1;
+                                        communityData.setHeartNumber(count);
+                                        CommunityFragment.isHeart = true;
+                                        CommunityFragment.selectedHeartNumber = count;
+                                        CommunityFragment.statusHeart = true;
+                                    }
+                                })
+                                .addOnFailureListener(new OnFailureListener() {
+                                    @Override
+                                    public void onFailure(@NonNull Exception e) {
+
+                                    }
+                                });
+
+                    }
+                })
+                .addOnFailureListener(new OnFailureListener() {
+                    @Override
+                    public void onFailure(@NonNull Exception e) {
+                        Log.w("Firestore", "Error writing document", e);
+
+                    }
+                });
+
+    }
+    public void setFalseHeartOnFirebase(CommunityMedia com){
+        FirebaseFirestore db = FirebaseFirestore.getInstance();
+
+        db.collection("communityUser").document(com.getUid())
+                .collection("like").document(com.getComid())
+                .delete()
+                .addOnSuccessListener(new OnSuccessListener<Void>() {
+                    @Override
+                    public void onSuccess(Void unused) {
+
+                        DocumentReference dr = db.collection("community").document(com.getComid());
+                        dr.update("heartNumber", com.getHeartNumber() - 1)
+                                .addOnSuccessListener(new OnSuccessListener<Void>() {
+                                    @Override
+                                    public void onSuccess(Void unused) {
+                                        long count = com.getHeartNumber() - 1;
+                                        communityData.setHeartNumber(count);
+                                        CommunityFragment.isHeart = true;
+                                        CommunityFragment.selectedHeartNumber = count;
+                                        CommunityFragment.statusHeart = false;
+                                    }
+                                })
+                                .addOnFailureListener(new OnFailureListener() {
+                                    @Override
+                                    public void onFailure(@NonNull Exception e) {
+
+                                    }
+                                });
+                    }
+                })
+                .addOnFailureListener(new OnFailureListener() {
+                    @Override
+                    public void onFailure(@NonNull Exception e) {
+
+                    }
+                });
     }
 
 }
