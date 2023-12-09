@@ -135,13 +135,13 @@ public class PetmanageFragment extends Fragment implements View.OnClickListener{
         String m  = df.format(now.get(Calendar.MONTH) + 1);
 
         months.setText(m);
-        Mcalorie.setText("00Kcal");
-        Tcalorie.setText("00Kcal");
-        Wcalorie.setText("00Kcal");
-        Thcalorie.setText("00Kcal");
-        Fcalorie.setText("00Kcal");
-        Sacalorie.setText("00Kcal");
-        Sucalorie.setText("00Kcal");
+        Mcalorie.setText("0Kcal");
+        Tcalorie.setText("0Kcal");
+        Wcalorie.setText("0Kcal");
+        Thcalorie.setText("0Kcal");
+        Fcalorie.setText("0Kcal");
+        Sacalorie.setText("0Kcal");
+        Sucalorie.setText("0Kcal");
         hospital.setVisibility(View.INVISIBLE);
         hname.setVisibility(View.INVISIBLE);
         leftParse.setVisibility(View.INVISIBLE);
@@ -183,7 +183,7 @@ public class PetmanageFragment extends Fragment implements View.OnClickListener{
             name.setText("반려동물을 추가해주세요.");
             weight.setText("0Kg");
             feed.setText("사료");
-            calorie.setText("00Kcal");
+            calorie.setText("0Kcal");
             hospital.setVisibility(View.INVISIBLE);
             hname.setVisibility(View.INVISIBLE);
             leftParse.setVisibility(View.INVISIBLE);
@@ -418,7 +418,7 @@ public class PetmanageFragment extends Fragment implements View.OnClickListener{
                         }
                     }
                     else{
-                        Mcalorie.setText("00Kcal");
+                        Mcalorie.setText("0Kcal");
                         weekStatus.setMonday(WORSE);
                         monStatusBox.setBackgroundResource(R.drawable.status_red);
                         if(day == 2){
@@ -492,7 +492,7 @@ public class PetmanageFragment extends Fragment implements View.OnClickListener{
                         }
                     }
                     else{
-                        Tcalorie.setText("00Kcal");
+                        Tcalorie.setText("0Kcal");
                         weekStatus.setTuesday(WORSE);
                         tueStatusBox.setBackgroundResource(R.drawable.status_red);
                         if(day == 3){
@@ -566,7 +566,7 @@ public class PetmanageFragment extends Fragment implements View.OnClickListener{
                         }
                     }
                     else{
-                        Wcalorie.setText("00Kcal");
+                        Wcalorie.setText("0Kcal");
                         weekStatus.setWednesday(WORSE);
                         wedStatusBox.setBackgroundResource(R.drawable.status_red);
                         if(day == 4){
@@ -640,7 +640,7 @@ public class PetmanageFragment extends Fragment implements View.OnClickListener{
                         }
                     }
                     else{
-                        Thcalorie.setText("00Kcal");
+                        Thcalorie.setText("0Kcal");
                         weekStatus.setThursday(WORSE);
                         thuStatusBox.setBackgroundResource(R.drawable.status_red);
                         if(day == 5){
@@ -714,7 +714,7 @@ public class PetmanageFragment extends Fragment implements View.OnClickListener{
                         }
                     }
                     else{
-                        Fcalorie.setText("00Kcal");
+                        Fcalorie.setText("0Kcal");
                         weekStatus.setFriday(WORSE);
                         friStatusBox.setBackgroundResource(R.drawable.status_red);
                         if(day == 6){
@@ -783,16 +783,16 @@ public class PetmanageFragment extends Fragment implements View.OnClickListener{
                                 weekStatus.setSaturday(GOOD);
                             }
                         }
-                        if(day == 1){
-                            MainActivity.petTodayStatus = weekStatus.getSunday();
+                        if(day == 7){
+                            MainActivity.petTodayStatus = weekStatus.getSaturday();
                         }
                     }
                     else{
-                        Sacalorie.setText("00Kcal");
+                        Sacalorie.setText("0Kcal");
                         weekStatus.setSaturday(WORSE);
                         satStatusBox.setBackgroundResource(R.drawable.status_red);
                         if(day == 7){
-                            MainActivity.petTodayStatus = weekStatus.getSunday();
+                            MainActivity.petTodayStatus = WORSE;
                         }
                     }
                 } else {
@@ -857,9 +857,12 @@ public class PetmanageFragment extends Fragment implements View.OnClickListener{
                                 weekStatus.setSunday(GOOD);
                             }
                         }
+                        if(day == 1){
+                            MainActivity.petTodayStatus = weekStatus.getSunday();
+                        }
                     }
                     else{
-                        Sucalorie.setText("00Kcal");
+                        Sucalorie.setText("0Kcal");
                         weekStatus.setSunday(WORSE);
                         sunStatusBox.setBackgroundResource(R.drawable.status_red);
                         if(day == 1){
