@@ -42,11 +42,11 @@ import java.util.Map;
 public class CommunityFragment extends Fragment implements View.OnClickListener {
     private MainActivity mActivity;
     private UserMedia userData = new UserMedia();
-    public static long selectedCommentNumber = 0;
+//    public static long selectedCommentNumber = 0;
     public static boolean isComment = false;
-    public static long selectedHeartNumber = 0;
+//    public static long selectedHeartNumber = 0;
     public static boolean isHeart = false;
-    public static boolean statusHeart = false;
+//    public static boolean statusHeart = false;
     public static boolean isNew = false;
     private int fragmentStatus = 0;
     private ArrayList<CommunityItemData> itemList = new ArrayList<>();
@@ -152,12 +152,12 @@ public class CommunityFragment extends Fragment implements View.OnClickListener 
                     communityPosition = position;
                     communityData = communityDataList.get(position);
 
-                    selectedCommentNumber = communityData.getCommentNumber();
-                    selectedHeartNumber = communityData.getHeartNumber();
+//                    selectedCommentNumber = communityData.getCommentNumber();
+//                    selectedHeartNumber = communityData.getHeartNumber();
                     communityPosition = position;
                     isComment = false;
                     isHeart = false;
-                    statusHeart = data.isHeart();
+//                    statusHeart = data.isHeart();
 
                     Intent intent = new Intent(getActivity(), CommunityReadActivity.class);
                     intent.putExtra("communityData", communityData);
@@ -169,12 +169,12 @@ public class CommunityFragment extends Fragment implements View.OnClickListener 
                     communityPosition = position;
                     communityData = communityDataList.get(position);
 
-                    selectedCommentNumber = communityData.getCommentNumber();
-                    selectedHeartNumber = communityData.getHeartNumber();
+//                    selectedCommentNumber = communityData.getCommentNumber();
+//                    selectedHeartNumber = communityData.getHeartNumber();
                     communityPosition = position;
                     isComment = false;
                     isHeart = false;
-                    statusHeart = data.isHeart();
+//                    statusHeart = data.isHeart();
 
                     Intent intent = new Intent(getActivity(), CommunityReadActivity.class);
                     intent.putExtra("communityData", communityData);
@@ -299,9 +299,9 @@ public class CommunityFragment extends Fragment implements View.OnClickListener 
     public void getSearchFirebaseToCommunity(String title){
         FirebaseFirestore db = FirebaseFirestore.getInstance();
 
-        CollectionReference citiesRef = db.collection("community");
+        CollectionReference cr = db.collection("community");
 
-        Query query = citiesRef.whereEqualTo("title", title);
+        Query query = cr.whereEqualTo("title", title);
         query.orderBy("timeStamp", Query.Direction.DESCENDING );
         query.get()
                 .addOnCompleteListener(new OnCompleteListener<QuerySnapshot>() {
@@ -337,12 +337,19 @@ public class CommunityFragment extends Fragment implements View.OnClickListener 
         super.onStart();
         if(fragmentStatus == 1){
             fragmentStatus = 0;
-            if(isComment|| isHeart){
-                itemList.get(communityPosition).setCommentNumber(selectedCommentNumber);
-                itemList.get(communityPosition).setHeartNumber(selectedHeartNumber);
-                itemList.get(communityPosition).setHeart(statusHeart);
-                communityDataList.get(communityPosition).setHeart(statusHeart);
-                adapter.notifyItemChanged(communityPosition);
+            if(isComment || isHeart){
+//                Log.i("numberstart", String.valueOf(selectedHeartNumber));
+//                itemList.get(communityPosition).setCommentNumber(selectedCommentNumber);
+//                itemList.get(communityPosition).setHeartNumber(selectedHeartNumber);
+//                itemList.get(communityPosition).setHeart(statusHeart);
+//                communityDataList.get(communityPosition).setHeart(statusHeart);
+//                adapter.notifyItemChanged(communityPosition);
+                int count = itemList.size();
+                itemList.clear();
+                communityDataList.clear();
+                likeList.clear();
+                adapter.notifyItemRangeRemoved(0, count);
+                getFirebaseToCommunity();
             }
         }
         if(fragmentStatus == 2){
@@ -350,6 +357,7 @@ public class CommunityFragment extends Fragment implements View.OnClickListener 
             int count = itemList.size();
             itemList.clear();
             communityDataList.clear();
+            likeList.clear();
             adapter.notifyItemRangeRemoved(0, count);
             getFirebaseToCommunity();
         }
@@ -377,7 +385,7 @@ public class CommunityFragment extends Fragment implements View.OnClickListener 
         hashMap.put("comId", com.getComid());
 
 
-        db.collection("communityUser").document(com.getUid())
+        db.collection("communityUser").document(userData.getUid())
                 .collection("like").document(com.getComid())
                 .set(hashMap)
                 .addOnSuccessListener(new OnSuccessListener<Void>() {
@@ -390,6 +398,9 @@ public class CommunityFragment extends Fragment implements View.OnClickListener 
                                     @Override
                                     public void onSuccess(Void unused) {
                                         long count = com.getHeartNumber() + 1;
+//                                        Log.i("numberfrag", String.valueOf(selectedHeartNumber));
+//                                        Log.i("numberfrag", String.valueOf(count));
+//                                        selectedHeartNumber = count;
                                         communityDataList.get(communityPosition).setHeartNumber(count);
                                         itemList.get(communityPosition).setHeartNumber(count);
                                         adapter.notifyItemChanged(communityPosition);
@@ -416,7 +427,7 @@ public class CommunityFragment extends Fragment implements View.OnClickListener 
     public void setFalseHeartOnFirebase(CommunityMedia com){
         FirebaseFirestore db = FirebaseFirestore.getInstance();
 
-        db.collection("communityUser").document(com.getUid())
+        db.collection("communityUser").document(userData.getUid())
                 .collection("like").document(com.getComid())
                 .delete()
                 .addOnSuccessListener(new OnSuccessListener<Void>() {
@@ -429,6 +440,8 @@ public class CommunityFragment extends Fragment implements View.OnClickListener 
                                     @Override
                                     public void onSuccess(Void unused) {
                                         long count = com.getHeartNumber() - 1;
+                                        Log.i("numberfrag", String.valueOf(count));
+//                                        selectedHeartNumber = count;
                                         communityDataList.get(communityPosition).setHeartNumber(count);
                                         itemList.get(communityPosition).setHeartNumber(count);
                                         adapter.notifyItemChanged(communityPosition);
@@ -460,17 +473,21 @@ public class CommunityFragment extends Fragment implements View.OnClickListener 
                     public void onComplete(@NonNull Task<QuerySnapshot> task) {
                         if (task.isSuccessful()) {
                             for (QueryDocumentSnapshot document : task.getResult()) {
-                                CommunityMedia com = new CommunityMedia();
                                 String comId = document.getId();
                                 likeList.add(comId);
                             }
-
 
                             for(int i = 0; i < itemList.size(); i++){
                                 if(likeList.contains(itemList.get(i).getComId())){
                                     itemList.get(i).setHeart(true);
                                     communityDataList.get(i).setHeart(true);
                                     adapter.notifyItemChanged(i);
+                                }
+                                else{
+                                        itemList.get(i).setHeart(false);
+                                        communityDataList.get(i).setHeart(false);
+                                        adapter.notifyItemChanged(i);
+
                                 }
                             }
                         } else {

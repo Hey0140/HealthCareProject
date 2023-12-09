@@ -821,7 +821,8 @@ public class PetmanageFragment extends Fragment implements View.OnClickListener{
                         }
 
                         int c= (int) Math.round(dayTotal * 6.6);
-                        Sucalorie.setText(String.valueOf(c));
+                        String text = c + "kcal";
+                        Sucalorie.setText(text);
 
                         if (kind == SMALL) {
                             if (dayTotal < 10 || dayTotal > 40) {

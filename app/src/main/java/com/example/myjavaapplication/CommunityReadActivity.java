@@ -233,7 +233,7 @@ public class CommunityReadActivity extends AppCompatActivity implements View.OnC
                                                 itemList.add(data);
                                                 long count = communityData.getCommentNumber() + 1;
                                                 communityData.setCommentNumber(count);
-                                                CommunityFragment.selectedCommentNumber  = count;
+//                                                CommunityFragment.selectedCommentNumber  = count;
                                                 CommunityFragment.isComment = true;
                                                 adapter.notifyItemInserted(itemList.size()-1);
                                                 commentDataList.add(com);
@@ -263,7 +263,7 @@ public class CommunityReadActivity extends AppCompatActivity implements View.OnC
         FirebaseFirestore db = FirebaseFirestore.getInstance();
 
         HashMap<String, Object> hashMap = new HashMap<>();
-        String uid = com.getUid();
+        String uid = userData.getUid();
         hashMap.put("uid", uid);
 
         SimpleDateFormat sdf1 = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
@@ -276,10 +276,14 @@ public class CommunityReadActivity extends AppCompatActivity implements View.OnC
         hashMap.put("image", com.getImageUri());
         hashMap.put("heart", com.isHeart());
         hashMap.put("heartNumber", com.getHeartNumber());
+        Log.i("number", String.valueOf(com.getHeartNumber()));
+
+
         hashMap.put("commentNumber", com.getCommentNumber());
         hashMap.put("comId", com.getComid());
 
-
+        Log.i("check", com.getUid());
+        Log.i("check", com.getComid());
         db.collection("communityUser").document(com.getUid())
                 .collection("like").document(com.getComid())
                 .set(hashMap)
@@ -293,10 +297,12 @@ public class CommunityReadActivity extends AppCompatActivity implements View.OnC
                                     @Override
                                     public void onSuccess(Void unused) {
                                         long count = com.getHeartNumber() + 1;
+                                        Log.i("numberread", String.valueOf(count));
                                         communityData.setHeartNumber(count);
+                                        communityData.setHeart(true);
                                         CommunityFragment.isHeart = true;
-                                        CommunityFragment.selectedHeartNumber = count;
-                                        CommunityFragment.statusHeart = true;
+//                                        CommunityFragment.selectedHeartNumber = count;
+//                                        CommunityFragment.statusHeart = true;
                                     }
                                 })
                                 .addOnFailureListener(new OnFailureListener() {
@@ -320,7 +326,7 @@ public class CommunityReadActivity extends AppCompatActivity implements View.OnC
     public void setFalseHeartOnFirebase(CommunityMedia com){
         FirebaseFirestore db = FirebaseFirestore.getInstance();
 
-        db.collection("communityUser").document(com.getUid())
+        db.collection("communityUser").document(userData.getUid())
                 .collection("like").document(com.getComid())
                 .delete()
                 .addOnSuccessListener(new OnSuccessListener<Void>() {
@@ -333,10 +339,11 @@ public class CommunityReadActivity extends AppCompatActivity implements View.OnC
                                     @Override
                                     public void onSuccess(Void unused) {
                                         long count = com.getHeartNumber() - 1;
+                                        communityData.setHeart(false);
                                         communityData.setHeartNumber(count);
                                         CommunityFragment.isHeart = true;
-                                        CommunityFragment.selectedHeartNumber = count;
-                                        CommunityFragment.statusHeart = false;
+//                                        CommunityFragment.selectedHeartNumber = count;
+//                                        CommunityFragment.statusHeart = false;
                                     }
                                 })
                                 .addOnFailureListener(new OnFailureListener() {

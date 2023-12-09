@@ -38,6 +38,8 @@ import com.google.firebase.storage.UploadTask;
 
 import java.io.InputStream;
 import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.Map;
 
 import de.hdodenhof.circleimageview.CircleImageView;
 
@@ -55,7 +57,7 @@ public class MypageFragment extends Fragment implements View.OnClickListener {
     private UserMedia userData;
     private ArrayList<PetMedia> petDataList;
     private TextView profileName, profileEmail;
-    private View profileImage;
+    private View profileImage, myOwnButton, myPageLove, myFriend;
     private CircleImageView profileView;
     private Uri imageUri;
     private Bitmap image;
@@ -79,9 +81,15 @@ public class MypageFragment extends Fragment implements View.OnClickListener {
         profileEmail = view.findViewById(R.id.profileEmail);
         profileImage = view.findViewById(R.id.profileImage);
         profileView = view.findViewById(R.id.profileView);
+        myOwnButton = view.findViewById(R.id.myOwnPostButton);
+        myPageLove = view.findViewById(R.id.myPageLoveButton);
+        myFriend = view.findViewById(R.id.myPetFriendButton);
 
         logoutButton.setOnClickListener(this);
         profileView.setOnClickListener(this);
+        myOwnButton.setOnClickListener(this);
+        myPageLove.setOnClickListener(this);
+        myFriend.setOnClickListener(this);
 
         petDataList = new ArrayList<>();
 
@@ -185,6 +193,16 @@ public class MypageFragment extends Fragment implements View.OnClickListener {
             intent.setType("image/*");
             intent.setAction(intent.ACTION_GET_CONTENT);
             startActivityForResult(intent, 903);
+        }
+        if(v == myOwnButton){
+            MypageCommunityDialog dialog = new MypageCommunityDialog(mActivity, userData);
+            dialog.setMypageCommunityDialogListener(new MypageCommunityDialog.OnMypageCommunityDialogListener() {
+                @Override
+                public void onItemSelected(CommunityMedia communityMedia) {
+
+                }
+            });
+            dialog.show();
         }
     }
 
