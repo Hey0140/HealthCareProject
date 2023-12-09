@@ -39,7 +39,9 @@ public class CommunityFragment extends Fragment implements View.OnClickListener 
     private MainActivity mActivity;
     private UserMedia userData = new UserMedia();
     private ArrayList<CommunityItemData> itemList = new ArrayList<>();
-    private ArrayList<CommunityMedia> communityData = new ArrayList<>();
+    private ArrayList<CommunityMedia> communityDataList = new ArrayList<>();
+    private int communityPosition = 0;
+    private CommunityMedia communityData = new CommunityMedia();
     private CommunityItemAdapter adapter;
     private View createView;
 
@@ -65,6 +67,7 @@ public class CommunityFragment extends Fragment implements View.OnClickListener 
         userData = (UserMedia) getActivity().getIntent().getSerializableExtra("userData");
 
         itemList.clear();
+        communityDataList.clear();
 
         createView.setOnClickListener(this);
 
@@ -78,12 +81,15 @@ public class CommunityFragment extends Fragment implements View.OnClickListener 
                 if(vg == Code.ViewType.TEXT){
                     View heart = v.findViewById(R.id.communityHeartButton2);
                     CommunityItemData data = itemList.get(position);
+                    CommunityMedia com = communityDataList.get(position);
                     if(data.isHeart()){
                         data.setHeart(false);
+                        com.setHeart(false);
                         heart.setBackgroundResource(R.drawable.not_fill_favorite_icon);
                     }
                     else{
                         data.setHeart(true);
+                        com.setHeart(true);
                         heart.setBackgroundResource(R.drawable.filled_favorite_icon);
                     }
                 }
@@ -95,7 +101,21 @@ public class CommunityFragment extends Fragment implements View.OnClickListener 
             public void onItemSelected(View v, int position, int vg) {
                 if(vg == Code.ViewType.TEXT){
                     CommunityItemData data = itemList.get(position);
-                    Toast.makeText(getContext(), data.getTitle()+ data.getBody(), Toast.LENGTH_SHORT).show();
+                    communityPosition = position;
+                    communityData = communityDataList.get(position);
+                    Intent intent = new Intent(getActivity(), CommunityReadActivity.class);
+                    intent.putExtra("communityData", communityData);
+                    intent.putExtra("userData", userData);
+                    startActivity(intent);
+                }
+                if(vg == Code.ViewType.IMAGE){
+                    CommunityItemData data = itemList.get(position);
+                    communityPosition = position;
+                    communityData = communityDataList.get(position);
+                    Intent intent = new Intent(getActivity(), CommunityReadActivity.class);
+                    intent.putExtra("communityData", communityData);
+                    intent.putExtra("userData", userData);
+                    startActivity(intent);
                 }
             }
         });
@@ -106,8 +126,8 @@ public class CommunityFragment extends Fragment implements View.OnClickListener 
     }
 
     public void setCommunityItemRecyclerList(){
-        for(int i = 0; i < communityData.size(); i++){
-            CommunityMedia com = communityData.get(i);
+        for(int i = 0; i < communityDataList.size(); i++){
+            CommunityMedia com = communityDataList.get(i);
             if(!com.getImageUri().equals("")){
                 CommunityItemData data = new CommunityItemData(Code.ViewType.IMAGE, com.getImageUri());
                 data.setComId(com.getComid());
@@ -132,12 +152,6 @@ public class CommunityFragment extends Fragment implements View.OnClickListener 
         }
         adapter.notifyItemRangeInserted(0, itemList.size());
     }
-
-    public void getImageToStorage(){
-
-
-    }
-
 
     @Override
     public void onAttach(Context context) {
@@ -183,7 +197,7 @@ public class CommunityFragment extends Fragment implements View.OnClickListener 
                                 com.setHeartNumber((Long) map.get("heartNumber"));
                                 com.setCommentNumber((Long) map.get("commentNumber"));
 
-                                communityData.add(com);
+                                communityDataList.add(com);
                             }
                             Log.d("Firesotre", "successs");
                             setCommunityItemRecyclerList();
@@ -193,6 +207,5 @@ public class CommunityFragment extends Fragment implements View.OnClickListener 
                     }
                 });
     }
-
 
 }
