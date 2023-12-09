@@ -6,6 +6,8 @@
     xmlns:app="http://schemas.android.com/apk/res-auto"
     tools:context=".MypageFragment">
 
+
+
     <androidx.constraintlayout.widget.ConstraintLayout
         android:layout_width="match_parent"
         android:layout_height="match_parent">
@@ -126,6 +128,7 @@
             android:orientation="horizontal">
 
         </androidx.recyclerview.widget.RecyclerView>
+
         <TextView
             android:layout_width="match_parent"
             android:layout_height="30dp"
@@ -139,7 +142,7 @@
         <androidx.constraintlayout.widget.ConstraintLayout
             android:id="@+id/mypageConstraintLayout"
             android:layout_width="match_parent"
-            android:layout_height="120dp"
+            android:layout_height="140dp"
             app:layout_constraintBottom_toTopOf="@id/walkRecordButton"
             >
 
@@ -147,37 +150,60 @@
                 android:layout_width="120dp"
                 android:layout_height="match_parent"
                 app:layout_constraintRight_toLeftOf="@id/myPetFriendLayout">
+
+                <View
+                    android:layout_marginTop="-20dp"
+                    android:id="@+id/myOwnPostButton"
+                    android:layout_width="65dp"
+                    android:layout_height="65dp"
+                    app:layout_constraintLeft_toLeftOf="parent"
+                    app:layout_constraintRight_toRightOf="parent"
+                    app:layout_constraintTop_toTopOf="parent"
+                    app:layout_constraintBottom_toBottomOf="parent"
+                    android:background="@drawable/mypage_click_icon"
+                    />
+
+                <View
+                    android:layout_width="45dp"
+                    android:layout_height="45dp"
+                    android:background="@drawable/file_icon"
+                    app:layout_constraintLeft_toLeftOf="@id/myOwnPostButton"
+                    app:layout_constraintRight_toRightOf="@id/myOwnPostButton"
+                    app:layout_constraintTop_toTopOf="@id/myOwnPostButton"
+                    app:layout_constraintBottom_toBottomOf="@id/myOwnPostButton"
+                    />
+
                 <TextView
                     android:id="@+id/myOwnPostTitle"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     app:layout_constraintLeft_toLeftOf="parent"
                     app:layout_constraintRight_toRightOf="parent"
-                    app:layout_constraintTop_toTopOf="parent"
-                    android:layout_marginTop="30dp"
-                    android:text="나의 게시글"
-                    android:textSize="15dp"
+                    app:layout_constraintTop_toBottomOf="@id/myOwnPostButton"
+                    android:layout_marginTop="10dp"
+                    android:text="내 게시글"
+                    android:textSize="13dp"
                     />
 
-                <TextView
-                    android:id="@+id/myOwnPost"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    app:layout_constraintLeft_toLeftOf="parent"
-                    app:layout_constraintRight_toRightOf="parent"
-                    app:layout_constraintTop_toBottomOf="@id/myOwnPostTitle"
-                    android:layout_marginTop="10dp"
-                    android:text="0"
-                    android:textSize="15dp"
-                    />
+<!--                <TextView-->
+<!--                    android:id="@+id/myOwnPost"-->
+<!--                    android:layout_width="wrap_content"-->
+<!--                    android:layout_height="wrap_content"-->
+<!--                    app:layout_constraintLeft_toLeftOf="parent"-->
+<!--                    app:layout_constraintRight_toRightOf="parent"-->
+<!--                    app:layout_constraintTop_toBottomOf="@id/myOwnPostTitle"-->
+<!--                    android:layout_marginTop="10dp"-->
+<!--                    android:text="0"-->
+<!--                    android:textSize="15dp"-->
+<!--                    />-->
             </androidx.constraintlayout.widget.ConstraintLayout>
-            <View
-                android:layout_width="1dp"
-                android:layout_height="90dp"
-                app:layout_constraintRight_toLeftOf="@id/myPetFriendLayout"
-                app:layout_constraintTop_toTopOf="parent"
-                android:layout_marginTop="20dp"
-                android:background="@drawable/mypage_horizontal_line"/>
+<!--            <View-->
+<!--                android:layout_width="1dp"-->
+<!--                android:layout_height="90dp"-->
+<!--                app:layout_constraintRight_toLeftOf="@id/myPetFriendLayout"-->
+<!--                app:layout_constraintTop_toTopOf="parent"-->
+<!--                android:layout_marginTop="20dp"-->
+<!--                android:background="@drawable/mypage_horizontal_line"/>-->
 
             <androidx.constraintlayout.widget.ConstraintLayout
                 android:layout_width="120dp"
@@ -187,74 +213,118 @@
                 app:layout_constraintRight_toRightOf="parent"
                 >
 
-                <TextView
-                    android:id="@+id/myPetFriendTitle"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
+                <View
+                    android:id="@+id/myPageLoveButton"
+                    android:layout_marginTop="-20dp"
+                    android:layout_width="65dp"
+                    android:layout_height="65dp"
                     app:layout_constraintLeft_toLeftOf="parent"
                     app:layout_constraintRight_toRightOf="parent"
                     app:layout_constraintTop_toTopOf="parent"
-                    android:layout_marginTop="30dp"
-                    android:text="좋아요한 게시글"
-                    android:textSize="15dp"
+                    app:layout_constraintBottom_toBottomOf="parent"
+                    android:background="@drawable/mypage_click_icon"
                     />
 
+                <View
+                    android:layout_width="45dp"
+                    android:layout_height="45dp"
+                    app:layout_constraintLeft_toLeftOf="@id/myPageLoveButton"
+                    app:layout_constraintRight_toRightOf="@id/myPageLoveButton"
+                    app:layout_constraintTop_toTopOf="@id/myPageLoveButton"
+                    app:layout_constraintBottom_toBottomOf="@id/myPageLoveButton"
+                    android:background="@drawable/filled_favorite_icon"
+                    android:backgroundTint="@color/pointblue" />
+
                 <TextView
-                    android:id="@+id/myPetFriend"
+                    android:id="@+id/myPageLoveTitle"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     app:layout_constraintLeft_toLeftOf="parent"
                     app:layout_constraintRight_toRightOf="parent"
-                    app:layout_constraintTop_toBottomOf="@id/myPetFriendTitle"
+                    app:layout_constraintTop_toBottomOf="@id/myPageLoveButton"
                     android:layout_marginTop="10dp"
-                    android:text="0"
-                    android:textSize="15dp"
+                    android:text="좋아요"
+                    android:textSize="13dp"
                     />
+
+<!--                <TextView-->
+<!--                    android:id="@+id/myPageLoveText"-->
+<!--                    android:layout_width="wrap_content"-->
+<!--                    android:layout_height="wrap_content"-->
+<!--                    app:layout_constraintLeft_toLeftOf="parent"-->
+<!--                    app:layout_constraintRight_toRightOf="parent"-->
+<!--                    app:layout_constraintTop_toBottomOf="@id/myPageLoveTitle"-->
+<!--                    android:layout_marginTop="10dp"-->
+<!--                    android:text="0"-->
+<!--                    android:textSize="15dp"-->
+<!--                    />-->
             </androidx.constraintlayout.widget.ConstraintLayout>
-            <View
-                android:layout_width="1dp"
-                android:layout_height="90dp"
-                app:layout_constraintLeft_toRightOf="@id/myPetFriendLayout"
-                app:layout_constraintTop_toTopOf="parent"
-                android:layout_marginTop="20dp"
-                android:background="@drawable/mypage_horizontal_line"/>
+<!--            <View-->
+<!--                android:layout_width="1dp"-->
+<!--                android:layout_height="90dp"-->
+<!--                app:layout_constraintLeft_toRightOf="@id/myPetFriendLayout"-->
+<!--                app:layout_constraintTop_toTopOf="parent"-->
+<!--                android:layout_marginTop="20dp"-->
+<!--                android:background="@drawable/mypage_horizontal_line"/>-->
 
             <androidx.constraintlayout.widget.ConstraintLayout
                 android:layout_width="120dp"
                 android:layout_height="match_parent"
                 app:layout_constraintLeft_toRightOf="@id/myPetFriendLayout">
 
-                <TextView
-                    android:id="@+id/myLetterTitle"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
+                <View
+                    android:id="@+id/myPetFriendButton"
+                    android:layout_marginTop="-20dp"
+                    android:layout_width="65dp"
+                    android:layout_height="65dp"
                     app:layout_constraintLeft_toLeftOf="parent"
                     app:layout_constraintRight_toRightOf="parent"
                     app:layout_constraintTop_toTopOf="parent"
-                    android:layout_marginTop="30dp"
-                    android:text="내 펫 친구"
-                    android:textSize="15dp"
+                    app:layout_constraintBottom_toBottomOf="parent"
+                    android:background="@drawable/mypage_click_icon"
                     />
 
+                <View
+                    android:layout_width="45dp"
+                    android:layout_height="45dp"
+                    android:background="@drawable/friend_icon"
+                    app:layout_constraintLeft_toLeftOf="@id/myPetFriendButton"
+                    app:layout_constraintRight_toRightOf="@id/myPetFriendButton"
+                    app:layout_constraintTop_toTopOf="@id/myPetFriendButton"
+                    app:layout_constraintBottom_toBottomOf="@id/myPetFriendButton"/>
+
+
                 <TextView
-                    android:id="@+id/myLetter"
+                    android:id="@+id/myPetFriendTitle"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     app:layout_constraintLeft_toLeftOf="parent"
                     app:layout_constraintRight_toRightOf="parent"
-                    app:layout_constraintTop_toBottomOf="@id/myLetterTitle"
+                    app:layout_constraintTop_toBottomOf="@id/myPetFriendButton"
                     android:layout_marginTop="10dp"
-                    android:text="0"
-                    android:textSize="15dp"
+                    android:text="내 펫 친구"
+                    android:textSize="13dp"
                     />
+
+<!--                <TextView-->
+<!--                    android:id="@+id/myLetter"-->
+<!--                    android:layout_width="wrap_content"-->
+<!--                    android:layout_height="wrap_content"-->
+<!--                    app:layout_constraintLeft_toLeftOf="parent"-->
+<!--                    app:layout_constraintRight_toRightOf="parent"-->
+<!--                    app:layout_constraintTop_toBottomOf="@id/myLetterTitle"-->
+<!--                    android:layout_marginTop="10dp"-->
+<!--                    android:text="0"-->
+<!--                    android:textSize="15dp"-->
+<!--                    />-->
             </androidx.constraintlayout.widget.ConstraintLayout>
 
         </androidx.constraintlayout.widget.ConstraintLayout>
-        <View
-            android:layout_width="match_parent"
-            android:layout_height="1dp"
-            app:layout_constraintBottom_toTopOf="@id/walkRecordButton"
-            android:background="@drawable/mypage_vertical_line"/>
+<!--        <View-->
+<!--            android:layout_width="match_parent"-->
+<!--            android:layout_height="1dp"-->
+<!--            app:layout_constraintBottom_toTopOf="@id/walkRecordButton"-->
+<!--            android:background="@drawable/mypage_vertical_line"/>-->
 
         <androidx.constraintlayout.widget.ConstraintLayout
             android:layout_width="match_parent"
@@ -293,6 +363,7 @@
                 android:layout_marginLeft="20dp"
                 android:text="반려동물 상태 보기"
                 android:textSize="20dp"/>
+
         </androidx.constraintlayout.widget.ConstraintLayout>
 
     </androidx.constraintlayout.widget.ConstraintLayout>

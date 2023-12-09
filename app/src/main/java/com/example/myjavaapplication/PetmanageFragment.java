@@ -374,6 +374,9 @@ public class PetmanageFragment extends Fragment implements View.OnClickListener{
                             Map<String, Object> temp = tempList.get(i);
                             dayTotal += Double.valueOf((String) temp.get("duringTime"));
                         }
+                        int c = (int) Math.round(dayTotal * 6.6);
+                        String text = c+"Kcal";
+                        Mcalorie.setText(text);
 
                         if (kind == SMALL) {
                             if (dayTotal < 10 || dayTotal > 40) {
@@ -415,6 +418,7 @@ public class PetmanageFragment extends Fragment implements View.OnClickListener{
                         }
                     }
                     else{
+                        Mcalorie.setText("00Kcal");
                         weekStatus.setMonday(WORSE);
                         monStatusBox.setBackgroundResource(R.drawable.status_red);
                         if(day == 2){
@@ -445,6 +449,9 @@ public class PetmanageFragment extends Fragment implements View.OnClickListener{
                             Map<String, Object> temp = tempList.get(i);
                             dayTotal += Double.valueOf((String) temp.get("duringTime"));
                         }
+                        int c = (int) Math.round(dayTotal * 6.6);
+                        String text = c+"Kcal";
+                        Tcalorie.setText(text);
 
                         if (kind == SMALL) {
                             if (dayTotal < 10 || dayTotal > 40) {
@@ -485,6 +492,7 @@ public class PetmanageFragment extends Fragment implements View.OnClickListener{
                         }
                     }
                     else{
+                        Tcalorie.setText("00Kcal");
                         weekStatus.setTuesday(WORSE);
                         tueStatusBox.setBackgroundResource(R.drawable.status_red);
                         if(day == 3){
@@ -515,6 +523,9 @@ public class PetmanageFragment extends Fragment implements View.OnClickListener{
                             Map<String, Object> temp = tempList.get(i);
                             dayTotal += Double.valueOf((String) temp.get("duringTime"));
                         }
+                        int c= (int) Math.round(dayTotal * 6.6);
+                        String text = c+"Kcal";
+                        Wcalorie.setText(text);
 
                         if (kind == SMALL) {
                             if (dayTotal < 10 || dayTotal > 40) {
@@ -555,6 +566,7 @@ public class PetmanageFragment extends Fragment implements View.OnClickListener{
                         }
                     }
                     else{
+                        Wcalorie.setText("00Kcal");
                         weekStatus.setWednesday(WORSE);
                         wedStatusBox.setBackgroundResource(R.drawable.status_red);
                         if(day == 4){
@@ -585,6 +597,9 @@ public class PetmanageFragment extends Fragment implements View.OnClickListener{
                             Map<String, Object> temp = tempList.get(i);
                             dayTotal += Double.valueOf((String) temp.get("duringTime"));
                         }
+                        int c= (int) Math.round(dayTotal * 6.6);
+                        String text = c+"Kcal";
+                        Thcalorie.setText(text);
 
                         if (kind == SMALL) {
                             if (dayTotal < 10 || dayTotal > 40) {
@@ -625,6 +640,7 @@ public class PetmanageFragment extends Fragment implements View.OnClickListener{
                         }
                     }
                     else{
+                        Thcalorie.setText("00Kcal");
                         weekStatus.setThursday(WORSE);
                         thuStatusBox.setBackgroundResource(R.drawable.status_red);
                         if(day == 5){
@@ -655,6 +671,9 @@ public class PetmanageFragment extends Fragment implements View.OnClickListener{
                             Map<String, Object> temp = tempList.get(i);
                             dayTotal += Double.valueOf((String) temp.get("duringTime"));
                         }
+                        int c= (int) Math.round(dayTotal * 6.6);
+                        String text = c+"Kcal";
+                        Fcalorie.setText(text);
 
                         if (kind == SMALL) {
                             if (dayTotal < 10 || dayTotal > 40) {
@@ -695,6 +714,7 @@ public class PetmanageFragment extends Fragment implements View.OnClickListener{
                         }
                     }
                     else{
+                        Fcalorie.setText("00Kcal");
                         weekStatus.setFriday(WORSE);
                         friStatusBox.setBackgroundResource(R.drawable.status_red);
                         if(day == 6){
@@ -725,6 +745,9 @@ public class PetmanageFragment extends Fragment implements View.OnClickListener{
                             Map<String, Object> temp = tempList.get(i);
                             dayTotal += Double.valueOf((String) temp.get("duringTime"));
                         }
+                        int c= (int) Math.round(dayTotal * 6.6);
+                        String text = c+"Kcal";
+                        Sacalorie.setText(text);
 
                         if (kind == SMALL) {
                             if (dayTotal < 10 || dayTotal > 40) {
@@ -765,9 +788,10 @@ public class PetmanageFragment extends Fragment implements View.OnClickListener{
                         }
                     }
                     else{
+                        Sacalorie.setText("00Kcal");
                         weekStatus.setSaturday(WORSE);
                         satStatusBox.setBackgroundResource(R.drawable.status_red);
-                        if(day == 1){
+                        if(day == 7){
                             MainActivity.petTodayStatus = weekStatus.getSunday();
                         }
                     }
@@ -796,6 +820,9 @@ public class PetmanageFragment extends Fragment implements View.OnClickListener{
                             dayTotal += Double.valueOf((String) temp.get("duringTime"));
                         }
 
+                        int c= (int) Math.round(dayTotal * 6.6);
+                        Sucalorie.setText(String.valueOf(c));
+
                         if (kind == SMALL) {
                             if (dayTotal < 10 || dayTotal > 40) {
                                 sunStatusBox.setBackgroundResource(R.drawable.status_red);
@@ -832,8 +859,12 @@ public class PetmanageFragment extends Fragment implements View.OnClickListener{
                         }
                     }
                     else{
+                        Sucalorie.setText("00Kcal");
                         weekStatus.setSunday(WORSE);
                         sunStatusBox.setBackgroundResource(R.drawable.status_red);
+                        if(day == 1){
+                            MainActivity.petTodayStatus = WORSE;
+                        }
                     }
                 } else {
                     Log.d("Firebase", "get failed with ", task.getException());

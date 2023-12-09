@@ -26,6 +26,9 @@
         android:theme="@style/Theme.MyJavaApplication"
         tools:targetApi="31">
         <activity
+            android:name=".CommunityReadActivity"
+            android:exported="false" />
+        <activity
             android:name=".CommunityWriteActivity"
             android:exported="false" />
         <activity
