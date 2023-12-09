@@ -126,7 +126,7 @@ public class CommunityWriteActivity extends AppCompatActivity implements View.On
     public void setCommunityData(){
         communityData.setUid(userData.getUid());
         communityData.setTitle(title.getText().toString());
-        communityData.setBody(title.getText().toString());
+        communityData.setBody(body.getText().toString());
         communityData.setCommentNumber(0);
         communityData.setHeartNumber(0);
     }
