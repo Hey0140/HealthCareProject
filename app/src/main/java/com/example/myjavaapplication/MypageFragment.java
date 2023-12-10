@@ -204,6 +204,16 @@ public class MypageFragment extends Fragment implements View.OnClickListener {
             });
             dialog.show();
         }
+        if(v == myPageLove){
+            MypageLoveDialog dialog = new MypageLoveDialog(mActivity, userData);
+            dialog.setMypageLoveDialogListener(new MypageLoveDialog.OnMypageLoveDialogListener() {
+                @Override
+                public void onItemSelected(CommunityMedia communityMedia) {
+
+                }
+            });
+            dialog.show();
+        }
     }
 
     @Override
