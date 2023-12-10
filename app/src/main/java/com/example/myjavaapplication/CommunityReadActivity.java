@@ -282,9 +282,8 @@ public class CommunityReadActivity extends AppCompatActivity implements View.OnC
         hashMap.put("commentNumber", com.getCommentNumber());
         hashMap.put("comId", com.getComid());
 
-        Log.i("check", com.getUid());
-        Log.i("check", com.getComid());
-        db.collection("communityUser").document(com.getUid())
+
+        db.collection("communityUser").document(uid)
                 .collection("like").document(com.getComid())
                 .set(hashMap)
                 .addOnSuccessListener(new OnSuccessListener<Void>() {
