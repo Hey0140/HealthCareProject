@@ -214,6 +214,16 @@ public class MypageFragment extends Fragment implements View.OnClickListener {
             });
             dialog.show();
         }
+        if(v == myFriend){
+            MypageFriendDialog dialog = new MypageFriendDialog(mActivity, userData);
+            dialog.setMyFriendDialogListener(new MypageFriendDialog.OnMyfriendDialogListener() {
+                @Override
+                public void onItemSelected(MypageFriendItemData friendData) {
+
+                }
+            });
+            dialog.show();
+        }
     }
 
     @Override
