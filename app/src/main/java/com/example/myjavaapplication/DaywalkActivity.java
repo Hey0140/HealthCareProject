@@ -53,7 +53,6 @@ public class DaywalkActivity extends AppCompatActivity {
         petDataList = (ArrayList<PetMedia>) intent.getSerializableExtra("petDataList");
         petPosition = intent.getIntExtra("petPosition",0);
 
-
         months = findViewById(R.id.petDayWalkMonth);
         monText = findViewById(R.id.petDayWalkMonText);
         tueText = findViewById(R.id.petDayWalkTueText);
