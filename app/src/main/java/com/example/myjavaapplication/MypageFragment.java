@@ -13,6 +13,7 @@ import android.os.Bundle;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
+import androidx.constraintlayout.widget.ConstraintLayout;
 import androidx.fragment.app.Fragment;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
@@ -27,17 +28,22 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import com.bumptech.glide.Glide;
+import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.OnFailureListener;
 import com.google.android.gms.tasks.OnSuccessListener;
+import com.google.android.gms.tasks.Task;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.firestore.DocumentReference;
+import com.google.firebase.firestore.DocumentSnapshot;
 import com.google.firebase.firestore.FirebaseFirestore;
 import com.google.firebase.storage.FirebaseStorage;
 import com.google.firebase.storage.StorageReference;
 import com.google.firebase.storage.UploadTask;
 
 import java.io.InputStream;
+import java.text.DecimalFormat;
 import java.util.ArrayList;
+import java.util.Calendar;
 import java.util.HashMap;
 import java.util.Map;
 
@@ -57,10 +63,19 @@ public class MypageFragment extends Fragment implements View.OnClickListener {
     private UserMedia userData;
     private ArrayList<PetMedia> petDataList;
     private TextView profileName, profileEmail;
+    private ConstraintLayout walkRecordButton, profileInfo;
     private View profileImage, myOwnButton, myPageLove, myFriend;
     private CircleImageView profileView;
     private Uri imageUri;
     private Bitmap image;
+    private WeekStatusData weekStatus = new WeekStatusData();
+    private int petPosition = 0;
+    private final long SMALL = 21;
+    private final long MIDDLE = 22;
+    private final long BIG = 23;
+    private final long GOOD = 41;
+    private final long NORMAL = 42;
+    private final long WORSE = 43;
 
 //    private ArrayList<String> imageString = new ArrayList<>();
 //    private PetMedia petData = new PetMedia();
@@ -84,17 +99,24 @@ public class MypageFragment extends Fragment implements View.OnClickListener {
         myOwnButton = view.findViewById(R.id.myOwnPostButton);
         myPageLove = view.findViewById(R.id.myPageLoveButton);
         myFriend = view.findViewById(R.id.myPetFriendButton);
+        walkRecordButton = view.findViewById(R.id.walkRecordButton);
+        profileInfo = view.findViewById(R.id.mypageProfileInfoLayout);
+
 
         logoutButton.setOnClickListener(this);
         profileView.setOnClickListener(this);
         myOwnButton.setOnClickListener(this);
         myPageLove.setOnClickListener(this);
         myFriend.setOnClickListener(this);
+        walkRecordButton.setOnClickListener(this);
+        profileInfo.setOnClickListener(this);
 
         petDataList = new ArrayList<>();
 
         userData = (UserMedia) getActivity().getIntent().getSerializableExtra("userData");
         petDataList = (ArrayList<PetMedia>) getActivity().getIntent().getSerializableExtra("petDataList");
+
+
 
         if(userData.getImage() != null){
             if(userData.getImage().equals("")){
@@ -110,6 +132,7 @@ public class MypageFragment extends Fragment implements View.OnClickListener {
 
         list.clear();
 
+        petPosition = MainActivity.petPosition;
         for (int i = 0; i < petDataList.size(); i++) {
             MyPetInfoData mpid = new MyPetInfoData();
             PetMedia petMedia = petDataList.get(i);
@@ -172,6 +195,10 @@ public class MypageFragment extends Fragment implements View.OnClickListener {
         });
         recyclerView.setAdapter(adapter);
 
+        Calendar now = Calendar.getInstance();
+        int day = now.get(Calendar.DAY_OF_WEEK);
+        setWeekStatus(day);
+
         return view;
     }
 
@@ -224,7 +251,26 @@ public class MypageFragment extends Fragment implements View.OnClickListener {
             });
             dialog.show();
         }
+        if(v == walkRecordButton){
+            Intent intent = new Intent(mActivity, DaywalkActivity.class);
+            intent.putExtra("weekStatus", weekStatus);
+            intent.putExtra("petDataList", petDataList);
+            intent.putExtra("petPosition", petPosition);
+            startActivity(intent);
+        }
+        if(v == profileInfo){
+            NameChangeDialog dialog = new NameChangeDialog(mActivity);
+            dialog.setChangeDialogListener(new NameChangeDialog.OnChangeDialogListener() {
+                @Override
+                public void onChangeSelected(String data) {
+                    setProfileChangedName(data);
+                }
+            });
+            dialog.show();
+        }
     }
+
+
 
     @Override
     public void startActivityForResult(Intent intent, int requestCode) {
@@ -346,24 +392,42 @@ public class MypageFragment extends Fragment implements View.OnClickListener {
 
     public void setProfileImage(UserMedia user, Uri uri){
         FirebaseStorage storage = FirebaseStorage.getInstance();
+        FirebaseFirestore db = FirebaseFirestore.getInstance();
+
         String fileName = user.getUid();
         StorageReference storageRef = storage.getReference().child("images/").child("users/").child(fileName);
         UploadTask uploadTask = storageRef.putFile(uri);
 
-        Toast.makeText(getContext(), "업로드 중입니다. 잠시만 기다려주세요.", Toast.LENGTH_SHORT).show();
-        uploadTask.addOnFailureListener(new OnFailureListener() {
-            @Override
-            public void onFailure(@NonNull Exception exception) {
-                Log.i("Firebase Storage", "error");
-            }
-        }).addOnSuccessListener(new OnSuccessListener<UploadTask.TaskSnapshot>() {
-            @Override
-            public void onSuccess(UploadTask.TaskSnapshot taskSnapshot) {
-                Log.i("Firebase Storage", "success");
-                Toast.makeText(getContext(), "업로드 되었습니다!", Toast.LENGTH_SHORT).show();
 
-            }
-        });
+        Toast.makeText(getContext(), "업로드 중입니다. 잠시만 기다려주세요.", Toast.LENGTH_SHORT).show();
+        db.collection("users").document(user.getUid())
+                .update("image", String.valueOf(uri))
+                .addOnSuccessListener(new OnSuccessListener<Void>() {
+                    @Override
+                    public void onSuccess(Void unused) {
+
+                        uploadTask.addOnFailureListener(new OnFailureListener() {
+                            @Override
+                            public void onFailure(@NonNull Exception exception) {
+                                Log.i("Firebase Storage", "error");
+                            }
+                        }).addOnSuccessListener(new OnSuccessListener<UploadTask.TaskSnapshot>() {
+                            @Override
+                            public void onSuccess(UploadTask.TaskSnapshot taskSnapshot) {
+                                Log.i("Firebase Storage", "success");
+                                Toast.makeText(getContext(), "업로드 되었습니다!", Toast.LENGTH_SHORT).show();
+
+                            }
+                        });
+                    }
+                })
+                .addOnFailureListener(new OnFailureListener() {
+                    @Override
+                    public void onFailure(@NonNull Exception e) {
+
+                    }
+                });
+
     }
 
     @Override
@@ -405,4 +469,525 @@ public class MypageFragment extends Fragment implements View.OnClickListener {
             }
         });
     }
+
+
+    public void setWeekStatus(int day){
+        Calendar cal = Calendar.getInstance();
+        Calendar nowTime = Calendar.getInstance();
+        DecimalFormat df = new DecimalFormat("00");
+        String month  = df.format(nowTime.get(Calendar.MONTH) + 1);
+        String year = String.valueOf(nowTime.get(Calendar.YEAR));
+        String mon = "";
+
+        if(day == 1){
+            cal.add(Calendar.DATE, -6);
+            mon = cal.get(Calendar.DATE)<10?"0"+cal.get(Calendar.DATE): String.valueOf(cal.get(Calendar.DATE));
+        }
+        else if (day == 2){
+            mon = cal.get(Calendar.DATE)<10?"0"+cal.get(Calendar.DATE): String.valueOf(cal.get(Calendar.DATE));
+        }
+        else if(day == 3){
+            cal.add(Calendar.DATE, -1);
+            mon = cal.get(Calendar.DATE)<10?"0"+cal.get(Calendar.DATE): String.valueOf(cal.get(Calendar.DATE));
+        }
+        else if(day == 4){
+            cal.add(Calendar.DATE, -2);
+            mon = cal.get(Calendar.DATE)<10?"0"+cal.get(Calendar.DATE): String.valueOf(cal.get(Calendar.DATE));
+        }
+        else if(day == 5){
+            cal.add(Calendar.DATE, -3);
+            mon = cal.get(Calendar.DATE)<10?"0"+cal.get(Calendar.DATE): String.valueOf(cal.get(Calendar.DATE));
+        }
+        else if(day == 6){
+            cal.add(Calendar.DATE, -4);
+            mon = cal.get(Calendar.DATE)<10?"0"+cal.get(Calendar.DATE): String.valueOf(cal.get(Calendar.DATE));
+        }
+        else if(day == 7){
+            cal.add(Calendar.DATE, -5);
+            mon = cal.get(Calendar.DATE)<10?"0"+cal.get(Calendar.DATE): String.valueOf(cal.get(Calendar.DATE));
+        }
+
+        String monday = year + month + mon;
+
+        cal.add(Calendar.DATE, 1);
+        String tue = cal.get(Calendar.DATE)<10?"0"+cal.get(Calendar.DATE): String.valueOf(cal.get(Calendar.DATE));
+        String tuesday = year + month + tue;
+
+        cal.add(Calendar.DATE, 1);
+        String wed = cal.get(Calendar.DATE)<10?"0"+cal.get(Calendar.DATE): String.valueOf(cal.get(Calendar.DATE));
+        String wednesday = year + month + wed;
+
+        cal.add(Calendar.DATE, 1);
+        String thu = cal.get(Calendar.DATE)<10?"0"+cal.get(Calendar.DATE): String.valueOf(cal.get(Calendar.DATE));
+        String thursday = year + month + thu;
+
+        cal.add(Calendar.DATE, 1);
+        String fri = cal.get(Calendar.DATE)<10?"0"+cal.get(Calendar.DATE): String.valueOf(cal.get(Calendar.DATE));
+        String friday = year + month + fri;
+
+        cal.add(Calendar.DATE, 1);
+        String sat = cal.get(Calendar.DATE)<10?"0"+cal.get(Calendar.DATE): String.valueOf(cal.get(Calendar.DATE));
+        String saturday = year + month + sat;
+
+        cal.add(Calendar.DATE, 1);
+        String sun = cal.get(Calendar.DATE)<10?"0"+cal.get(Calendar.DATE): String.valueOf(cal.get(Calendar.DATE));
+        String sunday = year + month + sun;
+
+        String id = userData.getUid();
+        String petId = String.valueOf(petDataList.get(petPosition).getPetId());
+        long kind = petDataList.get(petPosition).getPetKind();
+
+
+        FirebaseFirestore db = FirebaseFirestore.getInstance();
+        DocumentReference docRefm = db.collection("users").document(id)
+                .collection("pet").document(petId).collection("walk").document(monday);
+        docRefm.get().addOnCompleteListener(new OnCompleteListener<DocumentSnapshot>() {
+            @Override
+            public void onComplete(@NonNull Task<DocumentSnapshot> task) {
+                if (task.isSuccessful()) {
+                    DocumentSnapshot document = task.getResult();
+
+                    if (document.exists()) {
+                        Log.d("Firebase", "DocumentSnapshot data: " + document.getData());
+                        Map<String, Object> map = document.getData();
+                        ArrayList<Map<String, Object>> tempList = (ArrayList<Map<String, Object>>) map.get("walkList");
+
+                        double dayTotal = 0;
+                        for (int i = 0; i < tempList.size(); i++) {
+                            Map<String, Object> temp = tempList.get(i);
+                            dayTotal += Double.valueOf((String) temp.get("duringTime"));
+                        }
+
+                        if (kind == SMALL) {
+                            if (dayTotal < 10 || dayTotal > 40) {
+                                weekStatus.setMonday(WORSE);
+                            } else if (dayTotal >= 10 && dayTotal < 20) {
+                                weekStatus.setMonday(NORMAL);
+                            } else if (dayTotal >= 20 && dayTotal <= 40) {
+                                weekStatus.setMonday(GOOD);
+                            }
+                        } else if (kind == MIDDLE) {
+                            if (dayTotal < 30 || dayTotal > 70) {
+                                weekStatus.setMonday(WORSE);
+                            } else if (dayTotal >= 30 && dayTotal < 45) {
+                                weekStatus.setMonday(NORMAL);
+                            } else if (dayTotal >= 45 && dayTotal <= 70) {
+                                weekStatus.setMonday(GOOD);
+                            }
+                        } else if (kind == BIG) {
+                            if (dayTotal < 40 || dayTotal > 130) {
+                                weekStatus.setMonday(WORSE);
+                            } else if (dayTotal >= 40 && dayTotal < 90) {
+                                weekStatus.setMonday(NORMAL);
+                            } else if (dayTotal >= 90 && dayTotal <= 130) {
+                                weekStatus.setMonday(GOOD);
+                            }
+                        }
+
+                        if(day == 2){
+                            MainActivity.petTodayStatus = weekStatus.getMonday();
+                        }
+                    }
+                    else{
+                        weekStatus.setMonday(WORSE);
+                        if(day == 2){
+                            MainActivity.petTodayStatus = WORSE;
+                        }
+                    }
+                } else {
+                    Log.d("Firebase", "get failed with ", task.getException());
+                }
+            }
+        });
+
+        DocumentReference docReft = db.collection("users").document(id)
+                .collection("pet").document(petId).collection("walk").document(tuesday);
+        docReft.get().addOnCompleteListener(new OnCompleteListener<DocumentSnapshot>() {
+            @Override
+            public void onComplete(@NonNull Task<DocumentSnapshot> task) {
+                if (task.isSuccessful()) {
+                    DocumentSnapshot document = task.getResult();
+
+                    if (document.exists()) {
+                        Log.d("Firebase", "DocumentSnapshot data: " + document.getData());
+                        Map<String, Object> map = document.getData();
+                        ArrayList<Map<String, Object>> tempList = (ArrayList<Map<String, Object>>) map.get("walkList");
+
+                        double dayTotal = 0;
+                        for (int i = 0; i < tempList.size(); i++) {
+                            Map<String, Object> temp = tempList.get(i);
+                            dayTotal += Double.valueOf((String) temp.get("duringTime"));
+                        }
+
+                        if (kind == SMALL) {
+                            if (dayTotal < 10 || dayTotal > 40) {
+                                weekStatus.setTuesday(WORSE);
+                            } else if (dayTotal >= 10 && dayTotal < 20) {
+                                weekStatus.setTuesday(NORMAL);
+                            } else if (dayTotal >= 20 && dayTotal <= 40) {
+                                weekStatus.setTuesday(GOOD);
+                            }
+                        } else if (kind == MIDDLE) {
+                            if (dayTotal < 30 || dayTotal > 70) {
+                                weekStatus.setTuesday(WORSE);
+                            } else if (dayTotal >= 30 && dayTotal < 45) {
+                                weekStatus.setTuesday(NORMAL);
+                            } else if (dayTotal >= 45 && dayTotal <= 70) {
+                                weekStatus.setTuesday(GOOD);
+                            }
+                        } else if (kind == BIG) {
+                            if (dayTotal < 40 || dayTotal > 130) {
+                                weekStatus.setTuesday(WORSE);
+                            } else if (dayTotal >= 40 && dayTotal < 90) {
+                                weekStatus.setTuesday(NORMAL);
+                            } else if (dayTotal >= 90 && dayTotal <= 130) {
+                                weekStatus.setTuesday(GOOD);
+                            }
+                        }
+                        if(day == 3){
+                            MainActivity.petTodayStatus = weekStatus.getTuesday();
+                        }
+                    }
+                    else{
+                        weekStatus.setTuesday(WORSE);
+                        if(day == 3){
+                            MainActivity.petTodayStatus = WORSE;
+                        }
+                    }
+                } else {
+                    Log.d("Firebase", "get failed with ", task.getException());
+                }
+            }
+        });
+
+        DocumentReference docRefw = db.collection("users").document(id)
+                .collection("pet").document(petId).collection("walk").document(wednesday);
+        docRefw.get().addOnCompleteListener(new OnCompleteListener<DocumentSnapshot>() {
+            @Override
+            public void onComplete(@NonNull Task<DocumentSnapshot> task) {
+                if (task.isSuccessful()) {
+                    DocumentSnapshot document = task.getResult();
+
+                    if (document.exists()) {
+                        Log.d("Firebase", "DocumentSnapshot data: " + document.getData());
+                        Map<String, Object> map = document.getData();
+                        ArrayList<Map<String, Object>> tempList = (ArrayList<Map<String, Object>>) map.get("walkList");
+
+                        double dayTotal = 0;
+                        for (int i = 0; i < tempList.size(); i++) {
+                            Map<String, Object> temp = tempList.get(i);
+                            dayTotal += Double.valueOf((String) temp.get("duringTime"));
+                        }
+
+                        if (kind == SMALL) {
+                            if (dayTotal < 10 || dayTotal > 40) {
+                                weekStatus.setWednesday(WORSE);
+                            } else if (dayTotal >= 10 && dayTotal < 20) {
+                                weekStatus.setWednesday(NORMAL);
+                            } else if (dayTotal >= 20 && dayTotal <= 40) {
+                                weekStatus.setWednesday(GOOD);
+                            }
+                        } else if (kind == MIDDLE) {
+                            if (dayTotal < 30 || dayTotal > 70) {
+                                weekStatus.setWednesday(WORSE);
+                            } else if (dayTotal >= 30 && dayTotal < 45) {
+                                weekStatus.setWednesday(NORMAL);
+                            } else if (dayTotal >= 45 && dayTotal <= 70) {
+                                weekStatus.setWednesday(GOOD);
+                            }
+                        } else if (kind == BIG) {
+                            if (dayTotal < 40 || dayTotal > 130) {
+                                weekStatus.setWednesday(WORSE);
+                            } else if (dayTotal >= 40 && dayTotal < 90) {
+                                weekStatus.setWednesday(NORMAL);
+                            } else if (dayTotal >= 90 && dayTotal <= 130) {
+                                weekStatus.setWednesday(GOOD);
+                            }
+                        }
+                        if(day == 4){
+                            MainActivity.petTodayStatus = weekStatus.getWednesday();
+                        }
+                    }
+                    else{
+                        weekStatus.setWednesday(WORSE);
+                        if(day == 4){
+                            MainActivity.petTodayStatus = WORSE;
+                        }
+                    }
+                } else {
+                    Log.d("Firebase", "get failed with ", task.getException());
+                }
+            }
+        });
+
+        DocumentReference docRefth = db.collection("users").document(id)
+                .collection("pet").document(petId).collection("walk").document(thursday);
+        docRefth.get().addOnCompleteListener(new OnCompleteListener<DocumentSnapshot>() {
+            @Override
+            public void onComplete(@NonNull Task<DocumentSnapshot> task) {
+                if (task.isSuccessful()) {
+                    DocumentSnapshot document = task.getResult();
+
+                    if (document.exists()) {
+                        Log.d("Firebase", "DocumentSnapshot data: " + document.getData());
+                        Map<String, Object> map = document.getData();
+                        ArrayList<Map<String, Object>> tempList = (ArrayList<Map<String, Object>>) map.get("walkList");
+
+                        double dayTotal = 0;
+                        for (int i = 0; i < tempList.size(); i++) {
+                            Map<String, Object> temp = tempList.get(i);
+                            dayTotal += Double.valueOf((String) temp.get("duringTime"));
+                        }
+
+                        if (kind == SMALL) {
+                            if (dayTotal < 10 || dayTotal > 40) {
+                                weekStatus.setThursday(WORSE);
+                            } else if (dayTotal >= 10 && dayTotal < 20) {
+                                weekStatus.setThursday(NORMAL);
+                            } else if (dayTotal >= 20 && dayTotal <= 40) {
+                                weekStatus.setThursday(GOOD);
+                            }
+                        } else if (kind == MIDDLE) {
+                            if (dayTotal < 30 || dayTotal > 70) {
+                                weekStatus.setThursday(WORSE);
+                            } else if (dayTotal >= 30 && dayTotal < 45) {
+                                weekStatus.setThursday(NORMAL);
+                            } else if (dayTotal >= 45 && dayTotal <= 70) {
+                                weekStatus.setThursday(GOOD);
+                            }
+                        } else if (kind == BIG) {
+                            if (dayTotal < 40 || dayTotal > 130) {
+                                weekStatus.setThursday(WORSE);
+                            } else if (dayTotal >= 40 && dayTotal < 90) {
+                                weekStatus.setThursday(NORMAL);
+                            } else if (dayTotal >= 90 && dayTotal <= 130) {
+                                weekStatus.setThursday(GOOD);
+                            }
+                        }
+                        if(day == 5){
+                            MainActivity.petTodayStatus = weekStatus.getThursday();
+                        }
+                    }
+                    else{
+                        weekStatus.setThursday(WORSE);
+                        if(day == 5){
+                            MainActivity.petTodayStatus = WORSE;
+                        }
+                    }
+                } else {
+                    Log.d("Firebase", "get failed with ", task.getException());
+                }
+            }
+        });
+
+        DocumentReference docReff = db.collection("users").document(id)
+                .collection("pet").document(petId).collection("walk").document(friday);
+        docReff.get().addOnCompleteListener(new OnCompleteListener<DocumentSnapshot>() {
+            @Override
+            public void onComplete(@NonNull Task<DocumentSnapshot> task) {
+                if (task.isSuccessful()) {
+                    DocumentSnapshot document = task.getResult();
+
+                    if (document.exists()) {
+                        Log.d("Firebase", "DocumentSnapshot data: " + document.getData());
+                        Map<String, Object> map = document.getData();
+                        ArrayList<Map<String, Object>> tempList = (ArrayList<Map<String, Object>>) map.get("walkList");
+
+                        double dayTotal = 0;
+                        for (int i = 0; i < tempList.size(); i++) {
+                            Map<String, Object> temp = tempList.get(i);
+                            dayTotal += Double.valueOf((String) temp.get("duringTime"));
+                        }
+
+                        if (kind == SMALL) {
+                            if (dayTotal < 10 || dayTotal > 40) {
+                                weekStatus.setFriday(WORSE);
+                            } else if (dayTotal >= 10 && dayTotal < 20) {
+                                weekStatus.setFriday(NORMAL);
+                            } else if (dayTotal >= 20 && dayTotal <= 40) {
+                                weekStatus.setFriday(GOOD);
+                            }
+                        } else if (kind == MIDDLE) {
+                            if (dayTotal < 30 || dayTotal > 70) {
+                                weekStatus.setFriday(WORSE);
+                            } else if (dayTotal >= 30 && dayTotal < 45) {
+                                weekStatus.setFriday(NORMAL);
+                            } else if (dayTotal >= 45 && dayTotal <= 70) {
+                                weekStatus.setFriday(GOOD);
+                            }
+                        } else if (kind == BIG) {
+                            if (dayTotal < 40 || dayTotal > 130) {
+                                weekStatus.setFriday(WORSE);
+                            } else if (dayTotal >= 40 && dayTotal < 90) {
+                                weekStatus.setFriday(NORMAL);
+                            } else if (dayTotal >= 90 && dayTotal <= 130) {
+                                weekStatus.setFriday(GOOD);
+                            }
+                        }
+                        if(day == 6){
+                            MainActivity.petTodayStatus = weekStatus.getSaturday();
+                        }
+                    }
+                    else{
+                        weekStatus.setFriday(WORSE);
+                        if(day == 6){
+                            MainActivity.petTodayStatus = WORSE;
+                        }
+                    }
+                } else {
+                    Log.d("Firebase", "get failed with ", task.getException());
+                }
+            }
+        });
+
+        DocumentReference docRefsa = db.collection("users").document(id)
+                .collection("pet").document(petId).collection("walk").document(saturday);
+        docRefsa.get().addOnCompleteListener(new OnCompleteListener<DocumentSnapshot>() {
+            @Override
+            public void onComplete(@NonNull Task<DocumentSnapshot> task) {
+                if (task.isSuccessful()) {
+                    DocumentSnapshot document = task.getResult();
+
+                    if (document.exists()) {
+                        Log.d("Firebase", "DocumentSnapshot data: " + document.getData());
+                        Map<String, Object> map = document.getData();
+                        ArrayList<Map<String, Object>> tempList = (ArrayList<Map<String, Object>>) map.get("walkList");
+
+                        double dayTotal = 0;
+                        for (int i = 0; i < tempList.size(); i++) {
+                            Map<String, Object> temp = tempList.get(i);
+                            dayTotal += Double.valueOf((String) temp.get("duringTime"));
+                        }
+                        if (kind == SMALL) {
+                            if (dayTotal < 10 || dayTotal > 40) {
+                                weekStatus.setSaturday(WORSE);
+                            } else if (dayTotal >= 10 && dayTotal < 20) {
+                                weekStatus.setSaturday(NORMAL);
+                            } else if (dayTotal >= 20 && dayTotal <= 40) {
+                                weekStatus.setSaturday(GOOD);
+                            }
+                        } else if (kind == MIDDLE) {
+                            if (dayTotal < 30 || dayTotal > 70) {
+                                weekStatus.setSaturday(WORSE);
+                            } else if (dayTotal >= 30 && dayTotal < 45) {
+                                weekStatus.setSaturday(NORMAL);
+                            } else if (dayTotal >= 45 && dayTotal <= 70) {
+                                weekStatus.setSaturday(GOOD);
+                            }
+                        } else if (kind == BIG) {
+                            if (dayTotal < 40 || dayTotal > 130) {
+                                weekStatus.setSaturday(WORSE);
+                            } else if (dayTotal >= 40 && dayTotal < 90) {
+                                weekStatus.setSaturday(NORMAL);
+                            } else if (dayTotal >= 90 && dayTotal <= 130) {
+                                weekStatus.setSaturday(GOOD);
+                            }
+                        }
+                        if(day == 7){
+                            MainActivity.petTodayStatus = weekStatus.getSaturday();
+                        }
+                    }
+                    else{
+                        weekStatus.setSaturday(WORSE);
+                        if(day == 7){
+                            MainActivity.petTodayStatus = WORSE;
+                        }
+                    }
+                } else {
+                    Log.d("Firebase", "get failed with ", task.getException());
+                }
+            }
+        });
+
+        DocumentReference docRefs = db.collection("users").document(id)
+                .collection("pet").document(petId).collection("walk").document(sunday);
+        docRefs.get().addOnCompleteListener(new OnCompleteListener<DocumentSnapshot>() {
+            @Override
+            public void onComplete(@NonNull Task<DocumentSnapshot> task) {
+                if (task.isSuccessful()) {
+                    DocumentSnapshot document = task.getResult();
+
+                    if (document.exists()) {
+                        Log.d("Firebase", "DocumentSnapshot data: " + document.getData());
+                        Map<String, Object> map = document.getData();
+                        ArrayList<Map<String, Object>> tempList = (ArrayList<Map<String, Object>>) map.get("walkList");
+
+                        double dayTotal = 0;
+                        for (int i = 0; i < tempList.size(); i++) {
+                            Map<String, Object> temp = tempList.get(i);
+                            dayTotal += Double.valueOf((String) temp.get("duringTime"));
+                        }
+
+
+                        if (kind == SMALL) {
+                            if (dayTotal < 10 || dayTotal > 40) {
+                                weekStatus.setSunday(WORSE);
+                            } else if (dayTotal >= 10 && dayTotal < 20) {
+                                weekStatus.setSunday(NORMAL);
+                            } else if (dayTotal >= 20 && dayTotal <= 40) {
+                                weekStatus.setSunday(GOOD);
+                            }
+                        } else if (kind == MIDDLE) {
+                            if (dayTotal < 30 || dayTotal > 70) {
+                                weekStatus.setSunday(WORSE);
+                            } else if (dayTotal >= 30 && dayTotal < 45) {
+                                weekStatus.setSunday(NORMAL);
+                            } else if (dayTotal >= 45 && dayTotal <= 70) {
+                                weekStatus.setSunday(GOOD);
+                            }
+                        } else if (kind == BIG) {
+                            if (dayTotal < 40 || dayTotal > 130) {
+                                weekStatus.setSunday(WORSE);
+                            } else if (dayTotal >= 40 && dayTotal < 90) {
+                                weekStatus.setSunday(NORMAL);
+                            } else if (dayTotal >= 90 && dayTotal <= 130) {
+                                weekStatus.setSunday(GOOD);
+                            }
+                        }
+                        if(day == 1){
+                            MainActivity.petTodayStatus = weekStatus.getSunday();
+                        }
+                    }
+                    else{
+                        weekStatus.setSunday(WORSE);
+                        if(day == 1){
+                            MainActivity.petTodayStatus = WORSE;
+                        }
+                    }
+                } else {
+                    Log.d("Firebase", "get failed with ", task.getException());
+                }
+            }
+        });
+
+    }
+
+
+    public void setProfileChangedName(String name){
+
+        FirebaseFirestore db = FirebaseFirestore.getInstance();
+
+        DocumentReference dr = db.collection("users").document(userData.getUid());
+
+        dr.update("name", name)
+                .addOnSuccessListener(new OnSuccessListener<Void>() {
+                    @Override
+                    public void onSuccess(Void unused) {
+                        userData.setName(name);
+                        MainActivity.userData = userData;
+                        //괜찮은지?
+                        profileName.setText(name);
+                        Toast.makeText(mActivity, "이름이 변경됩니다. 지금까지 작성한 댓글의 이름은 변경되지 않습니다.",Toast.LENGTH_SHORT).show();
+                    }
+                })
+                .addOnFailureListener(new OnFailureListener() {
+                    @Override
+                    public void onFailure(@NonNull Exception e) {
+
+                    }
+                });
+
+    }
+
+
 }

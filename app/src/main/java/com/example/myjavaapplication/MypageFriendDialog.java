@@ -38,7 +38,7 @@ public class MypageFriendDialog extends Dialog implements View.OnClickListener {
     private Context context;
     private int previous = 0;
     private ArrayList<MypageFriendItemData> itemList = new ArrayList<>();
-    private ArrayList<String> emailList = new ArrayList<>();
+    private ArrayList<String> frUidList = new ArrayList<>();
     private ArrayList<MypageFriendItemData> searchItemList = new ArrayList<>();
     private MypageFriendDialog.OnMyfriendDialogListener myfriendDialogListener;
 
@@ -98,7 +98,7 @@ public class MypageFriendDialog extends Dialog implements View.OnClickListener {
 
         itemList.clear();
         searchItemList.clear();
-        emailList.clear();
+        frUidList.clear();
         previous = 0;
 
         recyclerView.setLayoutManager(new LinearLayoutManager(getContext(), LinearLayoutManager.VERTICAL,false));
@@ -160,7 +160,7 @@ public class MypageFriendDialog extends Dialog implements View.OnClickListener {
 
                 int size = itemList.size();
                 itemList.clear();
-                emailList.clear();
+                frUidList.clear();
                 frAdapter.notifyItemRangeRemoved(0, size);
 
                 recyclerView.setAdapter(frAdapter);
@@ -203,22 +203,52 @@ public class MypageFriendDialog extends Dialog implements View.OnClickListener {
                                 String uid = userData.getUid();
 
                                 String frUid = document.getId();
-                                String name= (String) map.get("name");
-                                String email = (String) map.get("email");
-                                String image = (String) map.get("image");
-
-                                MypageFriendItemData data = new MypageFriendItemData();
-                                data.setMyUid(uid);
-                                data.setFrName(name);
-                                Log.i("check", name);
-                                data.setFrUid(frUid);
-                                data.setFrEmail(email);
-                                data.setFrImageUrl(image);
-                                itemList.add(data);
-
-                                emailList.add(email);
+                                frUidList.add(frUid);
                             }
-                            frAdapter.notifyItemRangeInserted(0, itemList.size());
+
+
+                            db.collection("users")
+                                    .get()
+                                    .addOnCompleteListener(new OnCompleteListener<QuerySnapshot>() {
+                                        @Override
+                                        public void onComplete(@NonNull Task<QuerySnapshot> task) {
+                                            if (task.isSuccessful()) {
+                                                for (QueryDocumentSnapshot document : task.getResult()) {
+                                                    Map<String, Object> map = document.getData();
+
+                                                    String uid = userData.getUid(); //내 아이디
+
+                                                    String frUid = document.getId(); //다른 얘 아이디;
+
+                                                    String name= (String) map.get("name");
+                                                    String email = (String) map.get("email");
+                                                    String image = (String) map.get("image");
+
+                                                    if(frUidList.contains(frUid)){
+                                                        //내친구 정보 가져오기
+                                                        MypageFriendItemData data = new MypageFriendItemData();
+                                                        data.setMyUid(uid);
+                                                        data.setFrName(name);
+                                                        data.setFrUid(frUid);
+                                                        data.setFrEmail(email);
+                                                        data.setFrImageUrl(image);
+
+                                                        itemList.add(data);
+                                                    }
+
+                                                }
+
+                                                frAdapter.notifyItemRangeInserted(0, itemList.size());
+
+                                                Log.d("Firesotre", "successs");
+                                            } else {
+                                                Log.d("Firesotre", "Error getting documents: ", task.getException());
+                                            }
+                                        }
+                                    });
+
+
+
 
                             Log.d("Firesotre", "successs");
                         } else {
@@ -257,7 +287,7 @@ public class MypageFriendDialog extends Dialog implements View.OnClickListener {
                                     data.setFrUid(frUid);
                                     data.setFrEmail(email);
                                     data.setFrImageUrl(image);
-                                    if(!emailList.contains(data.getFrEmail())){
+                                    if(!frUidList.contains(frUid)){
                                         searchItemList.add(data);
                                     }
 
@@ -305,7 +335,7 @@ public class MypageFriendDialog extends Dialog implements View.OnClickListener {
                                     data.setFrUid(frUid);
                                     data.setFrEmail(email);
                                     data.setFrImageUrl(image);
-                                    if(!emailList.contains(data.getFrEmail())){
+                                    if(!frUidList.contains(frUid)){
                                         searchItemList.add(data);
                                     }
                                 }
@@ -338,7 +368,7 @@ public class MypageFriendDialog extends Dialog implements View.OnClickListener {
                 .addOnSuccessListener(new OnSuccessListener<Void>() {
                     @Override
                     public void onSuccess(Void unused) {
-                        emailList.add(data.getFrEmail());
+                        frUidList.add(data.getFrUid());
                         itemList.add(data);
                         frAdapter.notifyItemInserted(itemList.size()-1);
                         searchItemList.remove(position);
@@ -364,7 +394,7 @@ public class MypageFriendDialog extends Dialog implements View.OnClickListener {
                 .addOnSuccessListener(new OnSuccessListener<Void>() {
                     @Override
                     public void onSuccess(Void unused) {
-                        emailList.remove(data.getFrEmail());
+                        frUidList.remove(data.getFrUid());
                         itemList.remove(position);
                         frAdapter.notifyItemRemoved(position);
                         searchItemList.add(data);

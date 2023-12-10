@@ -431,7 +431,6 @@ public class LoginActivity extends AppCompatActivity implements View.OnClickList
             idText.setText(email);
             pwText.setText(password);
             onCheckBox(professional);
-            GOOGLE = false;
         }
     }
 

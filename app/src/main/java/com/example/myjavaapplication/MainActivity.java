@@ -60,7 +60,7 @@ public class MainActivity extends AppCompatActivity {
     private PetStatusFragment petStatusFragment = new PetStatusFragment();
     private CommunityFragment communityFragment = new CommunityFragment();
     private FirebaseAuth auth;
-    private UserMedia userData;
+    public static UserMedia userData;
     public static int petPosition = 0;
     public static long petTodayStatus = 0;
     public static HospitalMedia hospitalData = new HospitalMedia();
