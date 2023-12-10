@@ -30,7 +30,7 @@
 
             <EditText
                 android:id="@+id/mycommunitySearchText"
-                android:layout_width="170dp"
+                android:layout_width="175dp"
                 android:layout_height="20dp"
                 android:layout_marginLeft="7dp"
                 android:background="@null"
