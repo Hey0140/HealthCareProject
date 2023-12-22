@@ -195,9 +195,12 @@ public class MypageFragment extends Fragment implements View.OnClickListener {
         });
         recyclerView.setAdapter(adapter);
 
-        Calendar now = Calendar.getInstance();
-        int day = now.get(Calendar.DAY_OF_WEEK);
-        setWeekStatus(day);
+        if(petDataList.size() > 0){
+            Calendar now = Calendar.getInstance();
+            int day = now.get(Calendar.DAY_OF_WEEK);
+            setWeekStatus(day);
+        }
+
 
         return view;
     }
@@ -252,11 +255,17 @@ public class MypageFragment extends Fragment implements View.OnClickListener {
             dialog.show();
         }
         if(v == walkRecordButton){
-            Intent intent = new Intent(mActivity, DaywalkActivity.class);
-            intent.putExtra("weekStatus", weekStatus);
-            intent.putExtra("petDataList", petDataList);
-            intent.putExtra("petPosition", petPosition);
-            startActivity(intent);
+            if (petDataList.size() > 0){
+                Intent intent = new Intent(mActivity, DaywalkActivity.class);
+                intent.putExtra("weekStatus", weekStatus);
+                intent.putExtra("petDataList", petDataList);
+                intent.putExtra("petPosition", petPosition);
+                startActivity(intent);
+            }
+            else {
+                Toast.makeText(getContext(), "펫을 먼저 등록해주세요.", Toast.LENGTH_SHORT).show();
+            }
+
         }
         if(v == profileInfo){
             NameChangeDialog dialog = new NameChangeDialog(mActivity);
